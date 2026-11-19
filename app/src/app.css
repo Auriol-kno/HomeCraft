@@ -1,0 +1,56 @@
+@layer app{
+:root{--body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:ui-monospace,SFMono-Regular,monospace;--r-card:20px;--r-ctl:12px}
+:root[data-theme="studio"]{--body:ui-monospace,SFMono-Regular,monospace;--timer:ui-monospace,SFMono-Regular,monospace}
+body{height:100dvh;overflow:hidden;background:var(--bg)}
+button,input,summary{touch-action:manipulation}
+button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.app-shell{height:100dvh;max-width:540px;margin:auto;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:radial-gradient(ellipse 28rem 24rem at 100% 0,var(--wash),transparent),var(--bg)}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 20px 10px;min-height:68px;border-bottom:1px solid var(--line)}
+.brand-button{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-size:20px;font-weight:500;letter-spacing:-.7px}
+.brand-button b{font-weight:750}.brand-mark{display:grid;place-items:center;background:var(--accent);color:var(--on-accent);width:36px;height:36px;border-radius:12px;font:italic 30px Georgia,serif}
+.settings-trigger{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:50%;background:var(--surface)}
+.settings-trigger svg,.home-note svg{width:22px;height:22px}
+.app-content{overflow-y:auto;overscroll-behavior-y:contain;padding:22px 18px 24px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.screen-heading{margin-bottom:20px}.overline{font-size:10px;font-weight:750;letter-spacing:1.8px;color:var(--accent);margin:0 0 7px}
+.screen-heading h1{font-size:26px;font-weight:650;letter-spacing:-1px;line-height:1.2;margin:0;outline:none}
+.screen{display:grid;gap:14px;animation:enter .2s ease-out}.engine-panel{min-width:0}.engine-panel>.card{margin:0}
+.engine-panel:has(>.recipe){display:grid;gap:12px}.recipe{padding:18px;gap:14px;border-radius:22px}
+.recipe h1{font-size:17px;letter-spacing:-.3px;font-family:var(--body);font-weight:600;color:var(--soft)}
+.recipe .tabs{gap:7px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.recipe .tabs button{display:flex;flex-direction:column;justify-content:center;gap:7px;min-height:78px;font-size:11px;border-radius:14px;transition:background .15s,transform .15s}
+.recipe .tabs button svg{width:25px;height:25px;margin:0}
+.recipe .tabs button[aria-selected="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);box-shadow:0 3px 10px var(--wash)}
+.recipe .tabs button:active,.bottom-nav button:active{transform:scale(.96)}
+.presets{margin:0;padding:4px;border-radius:12px}.presets button{font-size:12px;padding:7px 3px;min-height:44px}.presets button small{font-size:10px}
+.tiles{margin:0;padding:12px 0}.tile b{font-size:24px}.tile>div{font-size:9px}
+.guide-cta{min-height:52px;padding:9px 12px;border-radius:14px}.guide-cta small{font-size:10px}.guide-cta b{font-size:14px}
+.timer-link{min-height:40px;font-size:13px}.brew-choices{gap:4px}
+.tip{display:none}.wide-link{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);font-size:13px;font-weight:650;text-align:left}
+.wide-link span{font-size:20px;color:var(--accent)}
+.home-note{display:flex;gap:12px;align-items:center;justify-content:center;color:var(--accent);padding:3px 10px}.home-note p{font-size:12px;color:var(--soft);margin:0;line-height:1.6}.home-note span{font-size:10px;color:var(--muted)}
+.bottom-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--surface);z-index:10}
+.bottom-nav button{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:54px;border:0;border-radius:14px;background:none;color:var(--muted);font-size:10px;font-weight:650}
+.nav-icon{position:relative;display:grid;place-items:center;width:48px;height:30px;border-radius:12px}.nav-icon svg{width:21px;height:21px}.bottom-nav button[aria-current="page"]{color:var(--accent)}.bottom-nav button[aria-current="page"] .nav-icon{background:var(--wash)}
+.nav-icon i,.live-pill>span{height:6px;width:6px;border-radius:50%;background:var(--good);position:absolute;right:6px;top:2px}
+.live-pill{display:inline-flex;align-items:center;position:relative;gap:7px;margin-top:12px;border:1px solid var(--good);border-radius:20px;padding:7px 10px;background:var(--surface);color:var(--good);font-size:11px}.live-pill>span{position:static}
+.screen[aria-label="Parzenie"]>.engine-panel{display:grid;gap:14px}
+.brew{padding:22px 16px;border:1px solid var(--line);border-radius:22px;background:var(--surface);grid-template-columns:minmax(0,1.4fr) 1px minmax(0,1fr);gap:14px;min-height:208px}
+.b-time b{font-size:clamp(46px,16vw,72px);font-weight:550;letter-spacing:-3px;line-height:1.2}.b-time small{font-size:14px}.b-time{gap:4px}.b-target{font-size:11px}.b-lbl{font-size:10px}.b-val b{font-size:24px}
+.b-ph{font-size:12px}.b-right svg{max-width:125px}.actions{position:sticky;bottom:0;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) 80px;gap:8px;background:var(--bg);border-radius:15px}.actions .btn{height:56px;min-height:56px;border-radius:15px;font-size:20px}.actions .btn.ghost{font-size:13px}.alerts{gap:5px;justify-content:space-between}.alerts button{min-height:40px;padding:0 9px;font-size:10px}.alerts svg{width:15px}
+.details-card{padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.details-card summary{display:flex;justify-content:space-between;align-items:center;min-height:24px;list-style:none;font-size:13px;font-weight:650;cursor:pointer}.details-card summary::-webkit-details-marker{display:none}.details-card summary span{color:var(--accent);font-size:19px}.details-card[open] summary{margin-bottom:14px}.details-card>.engine-panel>.card{border:0;padding:0;box-shadow:none}.subtle{font-size:11px;color:var(--muted);line-height:1.6}.visual-details .gauge{display:none}.visual-details .scene{margin:12px 0}.visual-details .stats{margin-top:10px}
+.segment{display:flex;padding:4px;background:var(--surface-2);border-radius:13px;gap:4px;position:sticky;top:-10px;z-index:3}.segment button{flex:1;min-height:42px;border:0;background:none;border-radius:10px;font-size:12px;font-weight:600}.segment button[aria-pressed="true"]{background:var(--surface);color:var(--accent);box-shadow:0 2px 7px #0000000c}
+.screen .card{border-radius:20px;padding:18px}.screen[aria-label="Sprzęt i parametry"] input[type="range"]{min-height:40px}.notice{font-size:13px;line-height:1.7;color:var(--soft);padding:20px}
+.backup-actions{display:flex;gap:8px}.backup-actions button{flex:1;min-height:44px;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;font-size:12px;font-weight:600}
+.settings{overflow-y:auto}.guide{z-index:50}.guide-in{max-width:540px;padding-bottom:calc(24px + env(safe-area-inset-bottom))}.guide .g-nav{position:sticky;bottom:0;padding-top:10px;background:var(--bg)}.flash{z-index:100}.toast{z-index:110;bottom:calc(88px + env(safe-area-inset-bottom))}
+@keyframes enter{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(min-width:700px){body{background:var(--surface-2)}.app-shell{border-inline:1px solid var(--line)}}
+@media(max-width:360px){.app-content{padding:16px 12px}.screen-heading{margin-bottom:14px}.screen-heading h1{font-size:23px}.recipe{padding:14px}.recipe .tabs button{min-height:68px;font-size:10px}.home-note{display:none}.brew{gap:8px;padding:14px 10px}.b-time b{font-size:48px}}
+@media(prefers-reduced-motion:reduce){.screen{animation:none}*{scroll-behavior:auto}}
+/* Grid children must shrink around the native range controls on narrow phones. */
+.screen{grid-template-columns:minmax(0,1fr)}
+.screen>*,.screen .card,.screen .card>*,.gsel>*,.kpro>*{min-width:0}
+.screen input{max-width:100%}.segment button{min-width:0}
+.kpro-head{flex-wrap:wrap;row-gap:4px}.lcal>div input{width:0;min-width:0;flex:1}
+
+}

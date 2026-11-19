@@ -1,0 +1,11 @@
+/* Declarations that must win over every theme layer (they always won in the old !important cascade).
+   Keep this list short: prefer fixing the rule in its own layer. */
+@layer overrides{
+/* from legacy.css */ input[type=range]{touch-action:pan-y}
+/* from legacy.css */ @media (prefers-reduced-motion: reduce){*{transition:none}}
+/* from legacy.css */ @media (prefers-reduced-motion: reduce){*{animation:none}}
+/* from palarnia.css */ .screen[aria-label="Parzenie"] .actions .btn.main{box-shadow:none}
+/* from palarnia.css */ :root .settings{max-height:calc(100dvh - 32px)}
+/* from appearance.css */ 
+/* from appearance.css */ :root[data-theme="soft"] .screen .card,:root[data-theme="soft"] .details-card,:root[data-theme="soft"] .settings{background:var(--surface)}
+}

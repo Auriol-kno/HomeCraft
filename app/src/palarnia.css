@@ -1,0 +1,112 @@
+@layer palarnia{
+/* Palarnia — warm paper, oxblood ink, bold type, purposeful rules. */
+:root:root{
+ color-scheme:light;--bg:#f5eee2;--surface:#faf5ec;--surface-2:#eee3d3;--track:#dfd2c0;--line:#bea89a;
+ --ink:#1d1715;--soft:#4c3730;--muted:#725d50;--dim:#796456;--accent:#771b2d;--on-accent:#fff9ee;
+ --good:#597044;--bad:#9d2725;--cool:#365e76;--wash:#771b2d0d;--stop:#771b2d;--on-stop:#fff9ee;
+ --body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--title:var(--body);--timer:var(--body);
+ --scene-top:#583d27;--scene-bottom:#271c16;--tint-near:#f6e4b8;--tint-stop:#e0ead5;--tint-over:#f8d8ce;--tint-step:#efe3d2;
+ --r-card:3px;--r-ctl:3px;
+}
+:root .app-shell,:root body{background:var(--bg)}
+:root .app-header{border-color:var(--accent);margin:0 18px;padding-inline:0;min-height:72px}
+:root .brand-button{font-size:24px;letter-spacing:-1px;color:var(--accent);font-weight:800}
+:root .brand-button b{font-weight:800}
+:root .brand-mark{display:none}
+:root .settings-trigger{border:0;background:none;border-radius:0;color:var(--accent)}
+:root .screen-heading h1{font-weight:800;letter-spacing:-1px;font-size:28px}
+:root .overline{color:var(--accent);font-weight:750;letter-spacing:1.4px}
+:root .card,:root .recipe{border-radius:3px;box-shadow:none;background:transparent;border-color:var(--line)}
+:root .recipe h1{font-size:20px;font-weight:750;color:var(--ink)}
+.recipe .tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.recipe .tabs button{min-height:88px;font-size:14px;gap:7px}
+.recipe .tabs button svg{width:28px;height:28px}
+:root .recipe .tabs{background:none;border:0}
+:root .recipe .tabs button{border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--ink);box-shadow:none}
+:root .recipe .tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:none}
+:root .presets{border-radius:0;background:none;border-block:1px solid var(--accent);padding-block:6px}
+.presets button{min-height:52px;font-size:14px}
+:root .presets button{border-radius:0}
+:root .tiles{border-color:var(--accent)}
+.guide-cta{min-height:64px;padding:12px}.guide-cta b{font-size:18px}.guide-cta small{font-size:12px}
+.timer-link{min-height:52px;font-size:16px}
+:root .guide-cta{background:var(--accent);color:var(--on-accent);border-color:var(--accent);border-radius:3px}
+:root .guide-cta small,:root .guide-cta em{color:var(--on-accent)}
+.settings-trigger{width:52px;height:52px}
+.wide-link{min-height:56px;font-size:15px;padding:12px 14px}
+.bottom-nav button{min-height:60px;font-size:12px}.nav-icon{height:32px}.nav-icon svg{width:24px;height:24px}
+:root .bottom-nav{border-color:var(--accent);background:var(--bg)}
+:root .nav-icon{background:none;border-radius:0}
+:root .bottom-nav button{border-radius:0}
+:root .bottom-nav button[aria-current="page"]{box-shadow:inset 0 -3px var(--accent)}
+:root .wide-link,:root .details-card,:root .segment{border-radius:3px;background:transparent;box-shadow:none}
+:root .segment{border-block:1px solid var(--accent);padding:5px 0}
+.segment button{min-height:52px;font-size:14px}
+:root .segment button{border-radius:0}
+:root .segment button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);box-shadow:none}
+/* Open timer composition: all space goes to the count and the touch controls. */
+.screen[aria-label="Parzenie"] .brew{display:flex;flex-direction:column;align-items:stretch;min-height:0;border-radius:0;padding:0 0 18px;border:0;border-bottom:1px solid var(--line);background:none;gap:0}
+.screen[aria-label="Parzenie"] .b-div,.screen[aria-label="Parzenie"] .b-right{display:none}
+.screen[aria-label="Parzenie"] .b-left{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.screen[aria-label="Parzenie"] .b-time{order:0;width:100%;white-space:nowrap;gap:7px;margin:2px 0 5px}
+.screen[aria-label="Parzenie"] .b-time b{font-family:var(--timer);font-size:clamp(76px,23vw,110px);line-height:1.05;letter-spacing:-5px;font-weight:800;font-variant-numeric:tabular-nums}
+.screen[aria-label="Parzenie"] .b-time small{font-size:24px;font-weight:500}
+.screen[aria-label="Parzenie"] .b-ph{order:1;font-size:19px;flex:1}
+.screen[aria-label="Parzenie"] .b-target{order:2;font-size:13px;white-space:nowrap}
+.screen[aria-label="Parzenie"] .brew-progress{order:3;width:100%;height:12px;margin-top:10px;background:var(--track);border-radius:2px;overflow:hidden}
+.screen[aria-label="Parzenie"] .brew-progress::before{background:var(--accent);border-radius:0}
+.screen[aria-label="Parzenie"] .actions{position:static;display:flex;flex-direction:column;background:none;gap:10px}
+.screen[aria-label="Parzenie"] .actions .btn.main{min-height:80px;height:80px;font-size:32px;}
+.screen[aria-label="Parzenie"] .actions .btn.ghost{min-height:56px;height:56px;font-size:20px;}
+:root .btn.main,:root .btn.main.run{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:3px}
+:root .btn.ghost{border:1px solid var(--accent);background:none;border-radius:3px}
+.screen[aria-label="Parzenie"] .alerts{flex-wrap:wrap;justify-content:flex-start;gap:8px}
+.screen[aria-label="Parzenie"] .alerts button{min-height:44px;font-size:13px;padding:0 12px}
+:root .alerts button{border-radius:3px;background:none}
+.details-card summary{min-height:40px;font-size:15px}
+.visual-details .gauge{display:block}.visual-details .gauge .t-main{display:none}
+:root .b-target{border:0;padding:0;color:var(--soft)}
+:root .screen-heading{padding-bottom:12px;border-bottom:1px solid var(--accent)}
+:root .home-note{display:none}
+:root .settings{border-radius:3px}
+.theme-option.palarnia{--swatch-bg:#f5eee2;--swatch-accent:#771b2d}
+.theme-option{min-height:64px}
+@media(max-width:360px){.recipe .tabs button{min-height:80px;font-size:13px}.screen[aria-label="Parzenie"] .b-time b{font-size:76px;letter-spacing:-4px}.screen[aria-label="Parzenie"] .b-time small{font-size:20px}.screen[aria-label="Parzenie"] .b-ph{font-size:17px}.screen[aria-label="Parzenie"] .b-target{font-size:12px}:root .screen-heading h1{font-size:24px}}
+
+.app-shell[data-screen="home"] .screen-heading{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* One control language across screens and every guide step. */
+:root .app-shell button,
+:root .app-shell input:not([type="range"]),
+:root .app-shell .g-list li,
+:root .app-shell :is(.g-big,.g-live,.g-warn,.fixed-note,.warm,.pidrow,.mano,.step,.h,.advice,.g-list li b.n){border-radius:3px}
+:root .app-shell .sw::after{border-radius:2px}
+:root .g-choice button{min-height:60px;letter-spacing:0;line-height:1.3}
+:root .g-choice button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+:root :is(#gGrinders,#gsel) button{background:#e6efec;color:#214f50;border:1px solid #71928b;box-shadow:none}
+:root :is(#gGrinders button[aria-pressed="true"],#gsel button[aria-checked="true"]){background:#21595b;color:#fffaf0;border-color:#21595b;box-shadow:inset 0 -3px #133c3e}
+:root :is(#gMilk,#milkChips) button{background:#f5e7d0;color:#70400f;border:1px solid #b18a50;box-shadow:none}
+:root :is(#gMilk,#milkChips) button[aria-pressed="true"]{background:#8a4a18;color:#fffaf0;border-color:#8a4a18;box-shadow:inset 0 -3px #5b300f}
+:root #gPresets{border-block:1px solid var(--line);padding-block:12px}
+:root #gMethods{padding-bottom:12px;border-bottom:1px solid var(--accent)}
+:root #gsel button{height:auto;min-height:62px}
+:root #gsel button small{color:inherit;opacity:.85}
+:root #milkChips{margin-top:8px}
+:root #milkChips button{padding-inline:12px}
+:root .settings{overflow-y:auto}
+.alert-settings .alerts{display:grid;grid-template-columns:1fr;gap:10px;justify-items:stretch;margin:12px 0}
+.alert-settings .alerts button{justify-content:flex-start;min-height:56px;padding:10px 14px;font-size:16px;width:100%;border:1px solid var(--line)}
+.alert-settings .alerts button svg{height:22px}
+.alert-settings .alerts button[aria-pressed="true"]{background:#e6efec;border-color:#21595b;color:#214f50}
+.alert-settings .alerts button[aria-pressed="true"]::after{content:'Włączone';margin-left:auto;font-size:12px;font-weight:650}
+.alert-settings .alerts button[aria-pressed="false"]::after{content:'Wyłączone';margin-left:auto;font-size:12px;color:var(--muted)}
+.alert-settings #alTest{justify-content:center;background:var(--surface-2);font-size:14px}
+.settings-links button{min-height:52px;font-size:14px}
+.alert-settings #alTest{display:flex}
+
+/* Child labels must inherit the selected grinder color instead of legacy burgundy. */
+:root :is(#gGrinders button[aria-pressed="true"],#gsel button[aria-checked="true"]){background:#17494c;color:#fffaf0;border-color:#17494c}
+:root :is(#gGrinders,#gsel) button :is(b,small){color:inherit;opacity:1}
+
+}
+
+@layer palarnia{:root .details-card>.engine-panel>.card{border:0}}

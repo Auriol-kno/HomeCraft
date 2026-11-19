@@ -1,0 +1,79 @@
+@layer polish{
+/* Review fixes: visible primary actions, clearer states, docked brew controls. */
+/* Home: "Prowadź mnie" and "Sam timer" stay reachable without scrolling. */
+.screen[aria-label="Wybór kawy"] .brew-choices{position:sticky;bottom:-24px;z-index:4;background:var(--bg);padding:10px 0 24px;margin-bottom:-24px;box-shadow:0 -10px 14px -10px var(--bg)}
+/* sticky edge = content padding, so nothing peeks out underneath */
+:root[data-density="compact"] .screen[aria-label="Wybór kawy"] .brew-choices{bottom:-12px;padding-bottom:12px;margin-bottom:-12px}
+/* Hints */
+.hint-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-card,6px);background:var(--surface);font-size:13px;line-height:1.45;color:var(--soft)}
+.hint-card p{margin:0;flex:1}.hint-card b{color:var(--ink)}
+.hint-card button{flex:none;min-width:36px;height:36px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:var(--r-ctl,6px);font-size:18px;line-height:1}
+.hint-card.warn{border-color:var(--accent)}
+.hint-card .hint-action{width:auto;padding:0 12px;font-size:14px;font-weight:700;background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+/* Extraction preview: the dial no longer repeats the big timer above it. */
+.visual-details .readout{display:none}
+/* Chips that used to be cut at the edge now wrap. */
+#roastChips,#milkChips{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0}
+/* Stars: outline until chosen. */
+.stars button:not(.on) svg{fill:none;stroke:currentColor;stroke-width:1.6}
+.stars button:not(.on){color:var(--muted)}
+/* After STOP: rate while the taste is fresh. */
+.rate-prompt{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border:2px solid var(--accent);border-radius:var(--r-card,6px);background:var(--wash);color:var(--soft);font-size:14px}
+.rate-prompt[hidden]{display:none}
+.rate-prompt span{flex:1 1 180px}.rate-prompt b{color:var(--ink)}
+.rate-prompt button{min-height:48px;padding:0 16px;border:0;background:var(--accent);color:var(--on-accent);font:800 16px var(--body)}
+/* History: delete one entry. */
+.h-act{flex-wrap:wrap}
+.h-act .h-del{margin-left:auto;color:var(--bad);border-color:transparent;background:transparent}
+.pid-note{margin:2px 0 0}
+/* Docked Start/Stop + Reset while the extraction preview is open. */
+.control-dock{margin:0 8px 8px;z-index:11;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,.9fr);gap:8px;align-items:center;padding:8px;border:1px solid var(--accent);border-radius:var(--r-card,6px);background:var(--surface);box-shadow:0 -8px 22px -14px #0007}
+/* The dock takes its own grid row between the content and the navigation, so it never covers either. */
+.app-shell[data-dock="on"]{grid-template-rows:auto minmax(0,1fr) auto auto}
+.dock-time{display:flex;flex-direction:column;padding-left:6px;min-width:0}
+.dock-time b{font:800 26px/1 var(--timer,var(--body));font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.dock-time span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dock-main,.dock-reset{min-height:56px;font:800 19px var(--body)}
+.dock-main{border:1px solid var(--stop,var(--accent));background:var(--stop,var(--accent));color:var(--on-stop,var(--on-accent))}
+.dock-reset{border:1px solid var(--line);background:transparent;color:var(--ink)}
+:root[data-density="compact"] .dock-main,:root[data-density="compact"] .dock-reset{min-height:46px;font-size:16px}
+
+}
+
+/* Coffee database: picker at rating, row on the home card, thumbnails in history and "Twoje kawy". */
+@layer polish{
+.coffee-pick{display:grid;gap:8px}
+.coffee-chips{flex-wrap:wrap}
+.coffee-chips button{display:inline-flex;align-items:center;gap:6px;max-width:100%}
+.coffee-chips button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip-thumb{width:22px;height:22px;border-radius:6px;object-fit:cover;flex:none}
+.coffee-new{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.coffee-new input{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink);font:inherit;font-size:16px}
+.coffee-new .sbtn{min-height:44px;padding:0 16px}
+.coffee-photo{display:flex;align-items:center;gap:10px}
+.coffee-photo .sbtn{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;cursor:pointer}
+.pick-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;display:block;border:1px solid var(--line)}
+.coffee-row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}
+.coffee-row label{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.coffee-row select{min-height:44px;width:100%;padding:0 10px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--surface);color:var(--ink);font:inherit;font-size:16px}
+.coffee-hint{display:flex;align-items:center;gap:10px;justify-content:space-between;font-size:13px;line-height:1.35;color:var(--soft)}
+.coffee-hint button,.cf-m button{flex:none;min-height:40px;padding:0 14px;border:1px solid var(--accent);border-radius:var(--r-ctl);background:none;color:var(--accent);font:inherit;font-weight:700}
+.h-coffee{display:flex;align-items:center;gap:8px;font-weight:650;font-size:14px;color:var(--ink);margin:2px 0}
+.h-thumb{width:36px;height:36px;border-radius:8px;object-fit:cover;flex:none;border:1px solid var(--line)}
+#coffees{display:grid;gap:14px}
+.cf{display:grid;gap:8px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.cf:last-child{border-bottom:0;padding-bottom:0}
+.cf-top{display:flex;align-items:center;gap:12px}
+.cf-thumb{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none;border:1px solid var(--line)}
+.cf-none{display:grid;place-items:center;background:var(--surface-2);color:var(--muted)}
+.cf-none{font-size:26px;font-weight:800;font-family:var(--title,inherit)}
+.cf-stars{font-style:normal;color:var(--accent);letter-spacing:1px;margin-left:4px}
+.cf-name{display:grid;gap:2px;min-width:0}
+.cf-name b{font-size:16px;overflow-wrap:anywhere}
+.cf-name small{color:var(--muted);font-size:12px}
+.cf-m{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+.cf-m>div{display:grid;gap:2px;min-width:0}
+.cf-m span{color:var(--soft);font-size:12px}
+.cf-m small{color:var(--muted)}
+.cf-photo{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-ctl);font-size:13px;font-weight:600;cursor:pointer}
+}

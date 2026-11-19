@@ -1,0 +1,57 @@
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-espresso" viewBox="0 0 24 24"><path d="M5 9h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M3 21h16"/><path d="M8 3v3M12 3v3"/></symbol>
+    <symbol id="i-aeropress" viewBox="0 0 24 24"><path d="M8 3h8"/><path d="M12 3v4"/><rect x="7" y="7" width="10" height="11" rx="1"/><path d="M5 18h14"/><path d="M10 18v3h4v-3"/></symbol>
+    <symbol id="i-v60" viewBox="0 0 24 24"><path d="M4 5h16l-6 8h-4z"/><path d="M10 13v2h4v-2"/><path d="M7 21l1-6h8l1 6z"/></symbol>
+    <symbol id="i-french" viewBox="0 0 24 24"><path d="M12 2v5"/><path d="M9 2h6"/><rect x="6" y="6" width="10" height="15" rx="1.5"/><path d="M16 9h2a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><path d="M8 12h6"/></symbol>
+    <symbol id="i-turkish" viewBox="0 0 24 24"><path d="M6 21l1-9q4-2 8 0l1 9z"/><path d="M14.5 13l7-4"/><path d="M9 7c-1-1 1-2 0-3M12 7c-1-1 1-2 0-3"/></symbol>
+    <symbol id="i-moka" viewBox="0 0 24 24"><path d="M7 21l1-7h8l1 7z"/><path d="M8 13l1-7h6l1 7"/><path d="M9 6l3-2 3 2"/><path d="M16 8c3 0 3 5 0 5"/><path d="M15 7l3-2"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></symbol>
+  </defs>
+</svg>
+
+<dialog class="settings" id="settingsDialog" aria-labelledby="settingsTitle">
+  <form method="dialog">
+    <div class="card-head">
+      <h2 id="settingsTitle">Ustawienia</h2>
+      <button class="g-x" type="submit" aria-label="Zamknij ustawienia" autofocus>×</button>
+    </div>
+    <fieldset class="appearance-settings">
+      <legend>Wygląd i język</legend>
+      <label for="appTheme">Motyw aplikacji</label>
+      <select id="appTheme"><option value="palarnia">Palarnia · krem i bordo</option><option value="bar">Kawiarnia · szkło i karmel</option><option value="soft">Soft · jasny relief</option></select>
+      <label for="appMode">Tryb kolorów</label>
+      <select id="appMode"><option value="system">Systemowy · jak w telefonie</option><option value="light">Dzień · jasny</option><option value="dark">Noc · ciemny</option></select>
+      <label for="appDensity">Wielkość interfejsu</label>
+      <select id="appDensity"><option value="standard">Standardowy</option><option value="compact">Kompaktowy</option></select>
+      <label for="appLanguage">Język aplikacji</label>
+      <select id="appLanguage"><option value="pl">Polski</option><option value="en">English</option></select>
+    </fieldset>
+    <fieldset class="alert-settings">
+      <legend>Alerty parzenia</legend>
+      <p class="subtle">Wybierz, jak aplikacja ma sygnalizować kolejne etapy i koniec parzenia.</p>
+      <div class="alerts" role="group" aria-label="Alerty podczas parzenia">
+    <button type="button" data-al="sound" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>Dźwięk</button>
+    <button type="button" data-al="voice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Głos</button>
+    <button type="button" data-al="flash" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 14l5-5 4 4 3-3 4 4"/></svg>Kolor</button>
+    <button type="button" class="test" id="alTest">Przetestuj alerty</button>
+  </div>
+    </fieldset>
+    <div class="settings-links">
+      <button type="button" data-jump="brewParameters">Parametry i młynki</button>
+      <button type="button" data-jump="historyCard">Historia</button>
+    </div>
+  </form>
+</dialog>
+<div class="guide" id="guide" role="dialog" aria-modal="true" aria-labelledby="gTitle" hidden>
+  <div class="guide-in">
+    <div class="g-top"><span class="eyebrow" id="gStepNo">KROK 1 Z 6</span><button type="button" class="g-x" id="gClose" aria-label="Zamknij prowadzenie">×</button></div>
+    <div class="g-dots" id="gDots"></div>
+    <h2 class="g-title" id="gTitle"></h2>
+    <div class="g-body" id="gBody"></div>
+    <div class="g-nav"><button type="button" id="gBack">WSTECZ</button><button type="button" id="gNext">DALEJ</button></div>
+  </div>
+</div>
+<div class="flash" id="flash" role="alert" hidden><div class="flash-in"><small id="flSub"></small><b id="flMain"></b><span id="flHint"></span><em>stuknij, aby zamknąć</em></div></div>
+<div class="toast" id="toast" role="status"></div>

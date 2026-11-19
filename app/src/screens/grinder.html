@@ -1,0 +1,68 @@
+<section class="card" id="brewParameters" aria-label="Parametry">
+    <div class="eyebrow">PARAMETRY</div>
+    <div>
+      <div class="label">MŁYNEK</div>
+      <div class="gsel" role="radiogroup" aria-label="Młynek" id="gsel">
+        <button type="button" role="radio" data-g="kpro"><b>1Zpresso K-Pro</b><small>ręczny · 10 klik.</small></button>
+        <button type="button" role="radio" data-g="lelit"><b>Lelit William</b><small>elektryczny · na czas</small></button>
+      </div>
+      <div class="fixed-note" id="lelitOnly" style="margin-top:8px" hidden>Lelit William jest młynkiem tylko do espresso. Dla tej metody mielisz na K-Pro, ustawienia Lelita czekają na espresso.</div>
+    </div>
+    <div id="sliders" style="display:flex; flex-direction:column"></div>
+    <div class="fixed-note" id="mokaNote" hidden><b>Nie wiesz, jaki masz rozmiar?</b> Zmierz kawiarkę Venus razem z pokrywką: ok. <b>17 cm</b> to Venus 4 (170 ml), ok. <b>20 cm</b> to Venus 6 (235 ml), ok. <b>23 cm</b> to Venus 10 (460 ml). Możesz też nalać wodę do zaworu i zmierzyć ją miarką.</div>
+    <div class="fixed-note" id="coldNote" hidden>Kawa po turecku: startujesz z zimnej wody i grzejesz powoli na małym ogniu, dlatego nie ustawiasz temperatury.</div>
+    <div class="kpro lelit" id="lelitBox" hidden>
+      <div class="kpro-head"><b>Lelit William PL72</b><span>POKRĘTŁO 1–10 · CO ½</span></div>
+      <div class="ldial" id="ldial" aria-hidden="true"></div>
+      <div class="kread" id="lread"></div>
+      <input type="range" id="lDial" min="1" max="10" step="0.5" aria-label="Pozycja pokrętła Lelit William">
+      <div class="klik">
+        <button type="button" id="lFine">½ · FINE (drobniej)</button>
+        <button type="button" id="lCoarse">½ · COARSE (grubiej)</button>
+      </div>
+      <div class="sl" style="margin-top:10px">
+        <div class="sl-head"><span id="lab-ltime">Czas mielenia · 2 dawki</span><output id="lTimeOut"></output></div>
+        <input type="range" id="lTime" min="2" max="20" step="0.1" aria-labelledby="lab-ltime">
+        <div class="sl-foot"><span>2 s</span><span id="lTimeHint"></span><span>20 s</span></div>
+      </div>
+      <div class="klik">
+        <button type="button" id="lTminus">− 0,1 s</button>
+        <button type="button" id="lTplus">+ 0,1 s</button>
+      </div>
+      <div class="lmatch" id="lMatch"></div>
+      <div class="lcal">
+        <label for="lWeigh">Zważ zmieloną kawę (g)</label>
+        <div><input id="lWeigh" type="text" inputmode="decimal" autocomplete="off" placeholder="np. 17,4"><button type="button" id="lCalBtn">Kalibruj</button></div>
+        <small id="lRateTxt"></small>
+      </div>
+      <details class="lhow">
+        <summary>Jak ustawić czas na młynku</summary>
+        <ol>
+          <li>Naciśnij <b>„−”</b> dwa razy. Na ekranie pojawi się ikona 2 dawek i czas (raz = 1 dawka).</li>
+          <li>Naciśnij <b>„+”</b>, żeby wejść w edycję, potem <b>„−”/„+”</b> zmieniaj czas.</li>
+          <li>Odczekaj 3 s bez dotykania, a młynek sam zapisze ustawienie.</li>
+          <li>Kolbą naciśnij przycisk pod wylotem: <b>1×</b> pojedyncza, <b>2× w ciągu 2 s</b> podwójna. Gdy pojawi się „OK”, zdejmij kolbę.</li>
+          <li>Brakuje kawy? Dosyp przyciskiem na górze, obok pokrętła. Tym samym przyciskiem zatrzymasz mielenie.</li>
+        </ol>
+        <p><b>Ważne:</b> pokrętło kręć tylko podczas mielenia, nie schodź poniżej 1, czyść żarna co ok. 4 kg kawy. Reset: wyłącz młynek, przytrzymaj „+” i włącz. Pojawi się „Preset done” (fabrycznie 3,0 s i 5,5 s).</p>
+        <div class="switch">
+          <div><b>Liczba przy ▲ w stronę FINE</b><span id="lDirTxt">maleje (np. 5,5 → 5)</span></div>
+          <button type="button" class="sw" role="switch" aria-checked="true" aria-label="Liczby maleją w stronę FINE" id="lDirSw"></button>
+        </div>
+      </details>
+    </div>
+    <div class="kpro" id="kproBox">
+      <div class="kpro-head"><b>Skala 1Zpresso K-Pro</b><span>10 KLIK. = 1 LICZBA</span></div>
+      <div class="kread" id="kread"></div>
+      <div class="zones" id="zones" aria-hidden="true"></div>
+      <div class="znums" id="znums" aria-hidden="true"></div>
+      <div class="klik">
+        <button type="button" id="kMinus" aria-label="Drobniej o jedno kliknięcie">− 1 klik · drobniej</button>
+        <button type="button" id="kPlus" aria-label="Grubiej o jedno kliknięcie">+ 1 klik · grubiej</button>
+      </div>
+    </div>
+    <div class="switch" id="preRow">
+      <div><b>Preinfuzja</b><span>Anna nie ma preinfuzji, zostaw wyłączone. Włącz tylko, jeśli robisz ją ręcznie.</span></div>
+      <button type="button" class="sw" role="switch" aria-checked="true" aria-label="Preinfuzja" id="preSw"></button>
+    </div>
+  </section>

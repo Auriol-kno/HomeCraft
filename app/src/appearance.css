@@ -1,0 +1,91 @@
+@layer appearance{
+/* Appearance and layout density are independent. All palettes use readable states. */
+
+
+
+
+
+
+
+:root[data-theme="soft"]{color-scheme:light;--bg:#e7e7e5;--surface:#e7e7e5;--surface-2:#d7d8da;--track:#c7c9ce;--line:#a5a8b0;--ink:#24272d;--soft:#424650;--muted:#5c606b;--dim:#666b76;--accent:#224d8c;--on-accent:#fff;--good:#3e6b4c;--bad:#9c352d;--cool:#224d8c;--wash:#224d8c0c;--stop:#224d8c;--on-stop:#fff;--body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--timer:var(--body)}
+:root[data-theme="soft"] .app-shell{background:var(--bg)}
+:root[data-theme="soft"] .screen .card,:root[data-theme="soft"] .details-card,:root[data-theme="soft"] .settings{border-radius:18px;border:1px solid #f4f4f0;box-shadow:5px 5px 12px #b4b5b780,-5px -5px 12px #ffffffb0}
+:root[data-theme="soft"] .app-shell button,:root[data-theme="soft"] .app-shell select{border-radius:14px;box-shadow:3px 3px 7px #b4b5b780,-3px -3px 7px #ffffffa0}
+:root[data-theme="soft"] .app-shell button:active{box-shadow:inset 2px 2px 5px #999b9f66,inset -2px -2px 5px #ffffff88}
+:root[data-theme="soft"] .app-shell button:disabled{box-shadow:none;opacity:.6}
+:root[data-theme="soft"] .recipe .tabs button[aria-selected="true"],:root[data-theme="soft"] .g-choice button[aria-pressed="true"]{background:var(--accent);color:white;box-shadow:inset 2px 2px 4px #12325b80}
+:root[data-theme="soft"] .app-shell .sw::after{border-radius:50%}
+:root[data-theme="soft"] .app-shell .bottom-nav button{box-shadow:none;background:none}
+.appearance-settings{display:grid;gap:7px}.appearance-settings label{font-size:13px;font-weight:650;color:var(--soft)}
+.appearance-settings select{width:100%;min-height:46px;padding:8px 12px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);font:500 15px var(--body);margin-bottom:6px;border-radius:3px}
+.settings fieldset+fieldset{border-top:1px solid var(--line);padding-top:14px}
+.settings{max-height:calc(100dvh - 24px);overflow:auto}
+:root[lang="en"] .alert-settings .alerts button[aria-pressed="true"]::after{content:'On'}
+:root[lang="en"] .alert-settings .alerts button[aria-pressed="false"]::after{content:'Off'}
+:root[data-density="compact"]{--h-ctl:36px;--h-chip:34px}
+:root[data-density="compact"] body{font-size:13px}
+:root[data-density="compact"] .app-header{min-height:52px;padding-top:calc(5px + env(safe-area-inset-top));padding-bottom:5px;margin-inline:12px}
+:root[data-density="compact"] .brand-button{font-size:20px}
+:root[data-density="compact"] .settings-trigger{width:44px;height:44px}
+:root[data-density="compact"] .app-content{padding:12px}
+:root[data-density="compact"] .screen{gap:8px}
+:root[data-density="compact"] .screen-heading{margin-bottom:10px;padding-bottom:7px}
+:root[data-density="compact"] .screen-heading h1{font-size:23px}
+:root[data-density="compact"] .overline{font-size:9px;margin-bottom:4px}
+:root[data-density="compact"] .app-shell .screen .card{padding:12px}
+:root[data-density="compact"] .app-shell .recipe{gap:9px}
+:root[data-density="compact"] .app-shell .recipe h1{font-size:18px}
+:root[data-density="compact"] .app-shell .recipe .tabs{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+:root[data-density="compact"] .app-shell .recipe .tabs button{min-height:60px;padding:6px 3px;font-size:11px;gap:3px}
+:root[data-density="compact"] .app-shell .recipe .tabs button svg{width:22px;height:22px}
+:root[data-density="compact"] .app-shell .presets button{min-height:40px;font-size:12px}
+:root[data-density="compact"] .app-shell .tiles{padding:8px 0}
+:root[data-density="compact"] .app-shell .tile b{font-size:21px}
+:root[data-density="compact"] .app-shell .guide-cta{min-height:48px;padding:8px}
+:root[data-density="compact"] .app-shell .guide-cta b{font-size:15px}
+:root[data-density="compact"] .app-shell .guide-cta small{font-size:10px}
+:root[data-density="compact"] .app-shell .timer-link{min-height:44px;font-size:14px}
+:root[data-density="compact"] .app-shell .wide-link{min-height:44px;padding:8px 10px;font-size:13px}
+:root[data-density="compact"] .app-shell .bottom-nav{padding:3px 8px calc(3px + env(safe-area-inset-bottom))}
+:root[data-density="compact"] .app-shell .bottom-nav button{min-height:44px;font-size:10px;gap:1px}
+:root[data-density="compact"] .app-shell .nav-icon{height:26px}.app-shell select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+:root[data-density="compact"] .app-shell .nav-icon svg{width:20px;height:20px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .b-time b{font-size:clamp(54px,17vw,72px);letter-spacing:-3px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .b-time small{font-size:17px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .b-ph{font-size:15px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .brew{padding-bottom:10px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .actions .btn.main{height:56px;min-height:56px;font-size:24px}
+:root[data-density="compact"] .app-shell .screen[aria-label] .actions .btn.ghost{height:44px;min-height:44px;font-size:16px}
+:root[data-density="compact"] .app-shell .details-card{padding:9px 11px}.details-card{min-width:0}
+:root[data-density="compact"] .app-shell .details-card summary{min-height:28px;font-size:13px}
+:root[data-density="compact"] .app-shell .segment button{min-height:44px;font-size:12px}
+:root[data-density="compact"] .app-shell :is(.gsel,#gsel) button{min-height:46px;padding:6px 8px}
+:root[data-density="compact"] .app-shell .gsel button b{font-size:12px}
+:root[data-density="compact"] .app-shell .gsel button small{font-size:10px}
+:root[data-density="compact"] .app-shell .g-title{font-size:25px}
+:root[data-density="compact"] .app-shell .guide-in{gap:10px;padding-inline:12px}
+:root[data-density="compact"] .app-shell .g-choice{gap:6px}
+:root[data-density="compact"] .app-shell .g-choice button{min-height:46px;font-size:13px;padding:7px 9px}
+:root[data-density="compact"] .app-shell .g-nav button{height:44px;font-size:15px}
+:root[data-density="compact"] .app-shell .g-body{font-size:14px;gap:9px}
+:root[data-density="compact"] .app-shell .g-big{padding:12px 8px}
+:root[data-density="compact"] .app-shell .g-big b{font-size:46px}
+:root[data-density="compact"] .app-shell .g-list li{padding:8px 10px}
+:root[data-density="compact"] .app-shell .settings{padding:13px}
+:root[data-density="compact"] .app-shell .settings h2{font-size:21px}
+:root[data-density="compact"] .appearance-settings{gap:4px}
+:root[data-density="compact"] .appearance-settings select{min-height:44px;font-size:13px;margin-bottom:3px}
+:root[data-density="compact"] .app-shell .alert-settings .alerts{gap:7px}
+:root[data-density="compact"] .app-shell .alert-settings .alerts button{min-height:44px;padding:8px 10px;font-size:14px}
+:root[data-density="compact"] .app-shell .settings-links button{min-height:44px;font-size:12px}
+:root[data-density="compact"] .app-shell .recipe .tabs button{white-space:normal;}
+
+}
+
+/* Grinder and milk buttons keep their look over theme-wide button shadows. */
+@layer appearance{
+:root :is(#gGrinders,#gsel) button{box-shadow:none}
+:root :is(#gGrinders button[aria-pressed="true"],#gsel button[aria-checked="true"]){box-shadow:inset 0 -3px #133c3e}
+:root :is(#gMilk,#milkChips) button{box-shadow:none}
+:root :is(#gMilk,#milkChips) button[aria-pressed="true"]{box-shadow:inset 0 -3px #5b300f}
+}

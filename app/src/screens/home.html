@@ -1,0 +1,29 @@
+<section class="card recipe" aria-label="Przepis">
+    <h1>Co dziś parzysz?</h1>
+    <div class="tabs" role="tablist" aria-label="Metoda parzenia" id="tabs">
+      <button type="button" role="tab" data-m="espresso"><svg><use href="#i-espresso"/></svg>Espresso</button>
+      <button type="button" role="tab" data-m="aeropress"><svg><use href="#i-aeropress"/></svg>AeroPress</button>
+      <button type="button" role="tab" data-m="v60"><svg><use href="#i-v60"/></svg>V60</button>
+      <button type="button" role="tab" data-m="french"><svg><use href="#i-french"/></svg>French press</button>
+      <button type="button" role="tab" data-m="turkish"><svg><use href="#i-turkish"/></svg>Po turecku</button>
+      <button type="button" role="tab" data-m="moka"><svg><use href="#i-moka"/></svg>Kawiarka</button>
+    </div>
+
+    <div class="presets" id="presets"></div>
+    <div class="coffee-row" id="coffeeRow" hidden><label for="homeCoffee">Kawa</label><select id="homeCoffee"></select></div>
+    <div class="coffee-hint" id="coffeeHint" hidden></div>
+    <div class="tiles">
+      <div class="tile"><div>DAWKA</div><b id="tDose">18<span> g</span></b></div>
+      <div class="tile hi"><div id="tWaterK">CEL NAPARU</div><b id="tWater">36<span> g</span></b></div>
+      <div class="tile"><div id="tTempK">TEMP.</div><b id="tTemp">93<span> °C</span></b></div>
+    </div>
+    <div class="brew-choices">
+      <button type="button" class="guide-cta" id="guideCta">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l14 8-14 8z"/></svg>
+        <span><b>Prowadź mnie</b><small id="guideCtaSub">krok po kroku: od młynka do filiżanki</small></span>
+        <em aria-hidden="true">›</em>
+      </button>
+      <button type="button" class="link timer-link" id="timerLink">Sam timer</button>
+    </div>
+  </section>
+<div class="tip"><span class="eyebrow">WSKAZÓWKA</span><p id="tip"></p></div>

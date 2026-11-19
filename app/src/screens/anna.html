@@ -1,0 +1,32 @@
+<section class="card" aria-labelledby="annaH" id="annaCard">
+    <div class="card-head"><div class="eyebrow" id="annaH">EKSPRES · LELIT ANNA PL41TEM</div><span class="brewinfo">1 kocioł · 57 mm</span></div>
+
+    <div class="warm" id="warmBox"></div>
+
+    <div>
+      <div class="label">PID · TEMPERATURA KOTŁA</div>
+      <div class="pidrow">
+        <button type="button" class="pidb" id="pidMinus" aria-label="PID o 1 °C mniej">▼</button>
+        <div class="pidv"><b id="pidVal">94</b><span>°C</span></div>
+        <button type="button" class="pidb" id="pidPlus" aria-label="PID o 1 °C więcej">▲</button>
+      </div>
+      <div class="chips" id="roastChips" style="margin-top:10px"></div>
+      <p class="g-note" style="margin-top:8px">Na ekspresie: strzałka przy wyświetlaczu, po 3 s PID zapisze. Fabrycznie 95 °C.</p>
+    </div>
+
+    <div class="mano">
+      <svg viewBox="0 0 120 70" aria-hidden="true">
+        <path d="M14 62 A48 48 0 0 1 106 62" fill="none" style="stroke:var(--track)" stroke-width="9"/>
+        <path id="manoGreen" d="" fill="none" style="stroke:var(--good)" stroke-width="9"/>
+        <line id="manoNeedle" x1="60" y1="62" x2="60" y2="20" style="stroke:var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="60" cy="62" r="5" style="fill:var(--accent)"/>
+      </svg>
+      <div><b>Manometr: zielone pole 8–12 bar</b><span>Niżej: za grubo lub za mało kawy. Wyżej: za drobno lub za mocno ubite.</span></div>
+    </div>
+
+    <div id="milkBox">
+      <div class="label">NAPÓJ Z MLEKIEM</div>
+      <div class="chips" id="milkChips"></div>
+      <div id="milkSteps"></div>
+    </div>
+  </section>

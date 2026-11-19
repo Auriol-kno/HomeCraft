@@ -1,0 +1,51 @@
+name: App checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: test-results/
+          if-no-files-found: ignore
+
+  # GitHub Pages serves main / (root). After a merge, build on GitHub and commit the
+  # generated files, so pull requests stay readable (no hashed bundles in the diff).
+  publish:
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Commit the built site
+        run: |
+          git add -A index.html assets icon.png icon-192.png icon-512.png manifest.webmanifest sw.js
+          if git diff --cached --quiet; then echo "Site already up to date"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Zbuduj stronę z ${GITHUB_SHA::7}"
+          git push

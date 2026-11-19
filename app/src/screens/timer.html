@@ -1,0 +1,25 @@
+<section class="brew" id="brewTimer" aria-label="Timer parzenia">
+    <div class="b-left">
+      <div class="b-ph"><i id="bDot"></i><span id="bPh" aria-live="polite">Gotowy</span></div>
+      <div class="b-time"><b id="bTime">0,0</b><small id="bTimeU">s</small></div>
+      <span class="b-target" id="bTarget">Cel 25–30 s</span>
+      <div class="brew-progress" id="brewProgress" role="progressbar" aria-label="Postęp czasu parzenia" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+    </div>
+    <div class="b-div" aria-hidden="true"></div>
+    <div class="b-right">
+      <span class="b-lbl" id="bLbl">Ciśnienie</span>
+      <svg viewBox="0 0 140 80" aria-hidden="true">
+        <path d="M18 72A52 52 0 0 1 122 72" fill="none" style="stroke:var(--track)" stroke-width="7" stroke-linecap="round"/>
+        <path id="bBand" d="" fill="none" style="stroke:var(--good)" stroke-width="7" stroke-linecap="round"/>
+        <g id="bTicksG" style="stroke:var(--muted)" stroke-width="1.6" stroke-linecap="round"></g>
+        <line id="bNeedle" x1="70" y1="72" x2="70" y2="30" style="stroke:var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="70" cy="72" r="6.5" style="fill:var(--bg);stroke:var(--accent)" stroke-width="3"/>
+      </svg>
+      <div class="b-val"><b id="bVal">0,0</b><span id="bUnit">bar</span></div>
+    </div>
+  </section>
+<div class="actions">
+    <button type="button" class="btn main" id="mainBtn"></button>
+    <button type="button" class="btn ghost" id="resetBtn">Zeruj</button>
+  </div>
+<div class="rate-prompt" id="ratePrompt" hidden><span><b>Jak smakowało?</b> Oceń teraz, póki pamiętasz smak.</span><button type="button" id="ratePromptBtn">Oceń kawę →</button></div>

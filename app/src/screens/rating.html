@@ -1,0 +1,30 @@
+<section class="card" aria-labelledby="rateH" id="rateCard">
+    <div class="card-head"><div class="eyebrow" id="rateH">OCENA NAPARU</div><span class="brewinfo" id="brewInfo"></span></div>
+    <div class="coffee-pick">
+      <div class="label">KAWA</div>
+      <div class="chips coffee-chips" id="coffeeChips"></div>
+      <div class="coffee-new"><input id="coffeeName" type="text" maxlength="60" placeholder="Nowa kawa" autocomplete="off" enterkeyhint="done" aria-label="Marka i nazwa nowej kawy"><button type="button" class="sbtn" id="coffeeAdd">Dodaj</button></div>
+      <div class="coffee-photo" id="coffeePhotoRow"><span id="coffeeThumbBox"></span><label class="sbtn" for="coffeePhoto" id="coffeePhotoLbl">Zrób zdjęcie opakowania</label><input type="file" id="coffeePhoto" accept="image/*" capture="environment" hidden></div>
+    </div>
+    <div>
+      <div class="label">OCENA OGÓLNA</div>
+      <div class="stars" id="stars"></div>
+    </div>
+    <div>
+      <div class="label">SMAK</div>
+      <div class="chips" id="tasteChips"></div>
+    </div>
+    <div>
+      <div class="label">MOC</div>
+      <div class="chips" id="bodyChips"></div>
+    </div>
+    <div id="advBox" hidden>
+      <div class="verdict" id="verdict" data-z="ok" style="margin-bottom:8px"></div>
+      <dl class="advice" id="advice" style="margin:0"></dl>
+    </div>
+    <p class="empty" id="advHint" style="margin:0">Po parzeniu wybierz smak i moc. Podpowiem, co zmienić w następnej kawie.</p>
+    <div class="row2">
+      <button type="button" class="sbtn" id="applyBtn" disabled>Zastosuj zmiany</button>
+      <button type="button" class="sbtn fill" id="saveBtn" disabled>Zapisz do historii</button>
+    </div>
+  </section>
