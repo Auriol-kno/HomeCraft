@@ -913,10 +913,6 @@ settingsDialog.addEventListener('click',e=>{
   settingsDialog.close();
   navigate(target.dataset.jump==='historyCard'?'history':'equipment');
 });
-$('timerLink').addEventListener('click',()=>{
-  $('mainBtn').focus({preventScroll:true});
-  navigate('timer');
-});
 $('guideCta').addEventListener('click',openGuide);
 $('gClose').addEventListener('click',closeGuide);
 $('gBack').addEventListener('click',()=>{GI--; renderGuide();});

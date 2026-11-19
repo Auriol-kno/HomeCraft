@@ -106,7 +106,6 @@ Kawa|Coffee
 Młynek|Grinder
 Serwis|Maintenance
 Prowadź mnie|Guide me
-Sam timer|Timer only
 krok po kroku: od młynka do filiżanki|step by step: from grinder to cup
 Przepis|Recipe
 Metoda parzenia|Brewing method
