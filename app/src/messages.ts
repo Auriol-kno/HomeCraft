@@ -59,6 +59,7 @@ Motyw aplikacji|App theme
 Palarnia · krem i bordo|Roastery · cream and burgundy
 Kawiarnia · szkło i karmel|Café · glass and caramel
 Soft · jasny relief|Soft · light relief
+Linia · cienka kreska|Line · thin outline
 Wielkość interfejsu|Interface size
 Standardowy|Standard
 Kompaktowy|Compact

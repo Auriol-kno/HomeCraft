@@ -11,7 +11,7 @@ Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w t
   - **Miarki:** przelicznik szklanka / łyżka / łyżeczka / ml / g / dag / kg dla 30 produktów (np. szklanka cukru = 220 g = 22 dag), tabela miarek, °C ↔ °F, bezpieczne temperatury mięs.
   - **Timery:** wspólne dla wszystkich działów. Przetrwają odświeżenie, trzymają ekran włączony, dzwonią i wibrują, a pływający znacznik czasu jest widoczny też w dziale Kawa.
 
-Motywy (Palarnia, Kawiarnia, Soft), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
+Motywy (Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
 
 ## Uruchomienie i rozwój
 

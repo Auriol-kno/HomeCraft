@@ -19,7 +19,7 @@ let browser;
 
  // 1. Day / night / system: every theme gets a dark palette, system follows the phone.
  {const p=await open({colorScheme:'light'});
-  for(const theme of ['palarnia','bar','soft']){
+  for(const theme of ['palarnia','bar','soft','line']){
    await p.click('#settingsBtn');await p.selectOption('#appTheme',theme);await p.selectOption('#appMode','dark');await p.locator('#settingsDialog button[type=submit]').click();
    assert.equal(await p.evaluate(()=>document.documentElement.dataset.mode),'dark');
    assert(luminance(await bg(p))<.05,`${theme} night background is dark`);
@@ -110,5 +110,5 @@ let browser;
   const back=await p.evaluate(()=>[JSON.parse(localStorage.getItem('cremalab.coffees.v1')||'null'),Object.keys(JSON.parse(localStorage.getItem('cremalab.photos.v1')||'{}')).length]);
   assert.equal(back[0]?.list[0]?.name,'Hayb Brazylia');assert.equal(back[1],1);
   await p.context().close();}
- assert.deepEqual(errors,[]);console.log('PASS: night/day/system mode for 3 themes, docked controls during preview, rating prompt, history delete, missed alert after lock, manifest + offline start, guide button above the fold, coffee database with photo.');
+ assert.deepEqual(errors,[]);console.log('PASS: night/day/system mode for 4 themes, docked controls during preview, rating prompt, history delete, missed alert after lock, manifest + offline start, guide button above the fold, coffee database with photo.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill('SIGTERM');});

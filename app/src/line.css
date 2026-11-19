@@ -1,0 +1,79 @@
+/* Linia (id "line"): technical monoline look. Pale sage paper, black hairlines, monospaced
+   capitals, big rounded corners, no shadows or fills; the active item is simply inverted. */
+@layer appearance{
+:root[data-theme="line"]{
+ color-scheme:light;
+ --bg:#eceee6;--surface:#eceee6;--surface-2:#e2e5da;--track:#d3d7ca;--line:#1b1d1a;
+ --ink:#1b1d1a;--soft:#2c2f2a;--muted:#555a50;--dim:#5e6358;--accent:#1b1d1a;--on-accent:#eceee6;
+ --good:#2f6b3d;--bad:#a3302a;--cool:#2c5f7a;--wash:#1b1d1a12;--stop:#1b1d1a;--on-stop:#eceee6;
+ --body:ui-monospace,'SF Mono','JetBrains Mono',Menlo,Consolas,'Liberation Mono',monospace;--title:var(--body);--timer:var(--body);--mono:var(--body);
+ --scene-top:#3a3d36;--scene-bottom:#171916;--tint-near:#e9e3c4;--tint-stop:#d9e6d3;--tint-over:#efd6cf;--tint-step:#e2e5da;
+ --r-card:26px;--r-ctl:999px;
+ --nm-d:transparent;--nm-l:transparent;
+}
+:root[data-theme="line"][data-mode="dark"]{
+ color-scheme:dark;
+ --bg:#151714;--surface:#151714;--surface-2:#20231e;--track:#31342d;--line:#e6e9de;
+ --ink:#e6e9de;--soft:#cfd3c5;--muted:#a3a999;--dim:#9aa090;--accent:#e6e9de;--on-accent:#151714;
+ --good:#9cc9a3;--bad:#f0968c;--cool:#8bbad0;--wash:#e6e9de1a;--stop:#e6e9de;--on-stop:#151714;
+ --tint-near:#2e2b16;--tint-stop:#1c2c1f;--tint-over:#3a1f1b;--tint-step:#20231e;
+}
+@media(prefers-color-scheme:dark){:root[data-theme="line"][data-mode="system"]{
+ color-scheme:dark;
+ --bg:#151714;--surface:#151714;--surface-2:#20231e;--track:#31342d;--line:#e6e9de;
+ --ink:#e6e9de;--soft:#cfd3c5;--muted:#a3a999;--dim:#9aa090;--accent:#e6e9de;--on-accent:#151714;
+ --good:#9cc9a3;--bad:#f0968c;--cool:#8bbad0;--wash:#e6e9de1a;--stop:#e6e9de;--on-stop:#151714;
+ --tint-near:#2e2b16;--tint-stop:#1c2c1f;--tint-over:#3a1f1b;--tint-step:#20231e;
+}}
+.theme-option.line{--swatch-bg:#eceee6;--swatch-accent:#1b1d1a}
+}
+@layer overrides{
+:root[data-theme="line"] .app-shell,:root[data-theme="line"] body{background:var(--bg)}
+:root[data-theme="line"] .app-shell{font-family:var(--body)}
+:root[data-theme="line"] .app-shell *{box-shadow:none}
+:root[data-theme="line"] .app-header{margin:0 18px;padding-inline:0;border-bottom:1.5px solid var(--ink)}
+:root[data-theme="line"] .brand-button{color:var(--ink);font:700 20px var(--body);letter-spacing:.02em;text-transform:uppercase}
+:root[data-theme="line"] .brand-button b{color:var(--ink);font-weight:700}
+:root[data-theme="line"] .brand-mark{background:none;color:var(--ink);border:1.5px solid var(--ink);border-radius:12px}
+:root[data-theme="line"] .brand-mark svg circle{fill:var(--bg)}
+:root[data-theme="line"] .settings-trigger{border:1.5px solid var(--ink);background:none;border-radius:50%;color:var(--ink)}
+:root[data-theme="line"] .screen-heading{border-bottom:1.5px solid var(--ink);padding-bottom:12px}
+:root[data-theme="line"] .screen-heading h1{font:700 26px/1.1 var(--body);letter-spacing:-.01em;text-transform:uppercase}
+:root[data-theme="line"] .overline{color:var(--muted);font:600 11px var(--body);letter-spacing:.14em}
+:root[data-theme="line"] .card,:root[data-theme="line"] .recipe,:root[data-theme="line"] .details-card,:root[data-theme="line"] .hc-card,:root[data-theme="line"] .settings,:root[data-theme="line"] .hint-card{background:transparent;border:1.5px solid var(--ink);border-radius:26px 26px 26px 26px;box-shadow:none}
+:root[data-theme="line"] .screen .card,:root[data-theme="line"] .details-card{border-radius:30px 30px 18px 18px}
+:root[data-theme="line"] summary,:root[data-theme="line"] .hc-h3,:root[data-theme="line"] .hc-tag{font-family:var(--body);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+:root[data-theme="line"] .app-shell button,:root[data-theme="line"] .app-shell select{box-shadow:none;font-family:var(--body)}
+:root[data-theme="line"] .btn,:root[data-theme="line"] .hc-primary,:root[data-theme="line"] .hc-ghost,:root[data-theme="line"] .guide-cta,:root[data-theme="line"] .wide-link{border:1.5px solid var(--ink);border-radius:999px;box-shadow:none;text-transform:uppercase;letter-spacing:.05em}
+:root[data-theme="line"] .btn.main,:root[data-theme="line"] .btn.main.run,:root[data-theme="line"] .hc-primary,:root[data-theme="line"] .guide-cta{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:root[data-theme="line"] .btn.ghost,:root[data-theme="line"] .hc-ghost,:root[data-theme="line"] .wide-link{background:transparent;color:var(--ink)}
+:root[data-theme="line"] .recipe .tabs button,:root[data-theme="line"] .presets button,:root[data-theme="line"] .segment button,:root[data-theme="line"] .hc-seg button,:root[data-theme="line"] .hc-chip,:root[data-theme="line"] .hc-quick button,:root[data-theme="line"] .hc-fine button,:root[data-theme="line"] .hc-chips button,:root[data-theme="line"] .hc-toggle{background:transparent;border:1.5px solid var(--ink);border-radius:22px;color:var(--ink);box-shadow:none}
+:root[data-theme="line"] .hc-seg{background:none;border:1.5px solid var(--ink);border-radius:999px;padding:3px}
+:root[data-theme="line"] .hc-seg button{border:0;border-radius:999px}
+:root[data-theme="line"] .recipe .tabs button[aria-selected="true"],:root[data-theme="line"] .presets button[aria-pressed="true"],:root[data-theme="line"] .segment button[aria-pressed="true"],:root[data-theme="line"] .hc-seg button[aria-pressed="true"],:root[data-theme="line"] .hc-chip[aria-pressed="true"],:root[data-theme="line"] .hc-quick button[aria-pressed="true"],:root[data-theme="line"] .hc-chips button[aria-pressed="true"],:root[data-theme="line"] .hc-toggle[aria-pressed="true"],:root[data-theme="line"] .g-choice button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:root[data-theme="line"] .presets,:root[data-theme="line"] .segment,:root[data-theme="line"] .tiles{background:none;border-color:var(--ink)}
+:root[data-theme="line"] .hc-input,:root[data-theme="line"] input,:root[data-theme="line"] select,:root[data-theme="line"] textarea{background:transparent;border:1.5px solid var(--ink);border-radius:999px;color:var(--ink);font-family:var(--body)}
+:root[data-theme="line"] .hc-adv{background:transparent;border:1.5px solid var(--ink);border-radius:22px}
+:root[data-theme="line"] .hc-table td,:root[data-theme="line"] .hc-table th,:root[data-theme="line"] .hc-items li{border-color:var(--ink)}
+/* top module bar: outlined, the current department is inverted */
+:root[data-theme="line"] .module-bar{background:transparent;border:1.5px solid var(--ink);border-radius:999px}
+:root[data-theme="line"] .module-bar>button.mod{color:var(--ink);opacity:1;text-transform:uppercase;letter-spacing:.03em;font-size:11.5px}
+:root[data-theme="line"] .module-bar>button.mod[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+:root[data-theme="line"] .app-header .hc-pill{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+/* bottom nav: outlined tiles, current tab inverted */
+:root[data-theme="line"] .app-shell .bottom-nav{background:var(--bg);border-top:1.5px solid var(--ink);gap:8px}
+:root[data-theme="line"] .app-shell .bottom-nav button{border:1.5px solid var(--ink);border-radius:22px;background:transparent;box-shadow:none;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;font-size:10px}
+:root[data-theme="line"] .app-shell .bottom-nav button:active,:root[data-theme="line"] .app-shell .bottom-nav button[aria-current="page"]{background:var(--ink);color:var(--bg);box-shadow:none}
+:root[data-theme="line"] .hc-dial .d-face{fill:none;stroke:var(--ink);stroke-width:1.5}
+:root[data-theme="line"] .hc-dial .d-track{stroke:var(--track)}
+:root[data-theme="line"] .hc-dial .d-m .d-prog,:root[data-theme="line"] .hc-dial .d-m .d-knob{stroke:var(--ink);fill:var(--ink)}
+:root[data-theme="line"] .hc-dial .d-m .d-prog{fill:none}
+:root[data-theme="line"] .hc-dial .d-s .d-prog{stroke:var(--muted)}:root[data-theme="line"] .hc-dial .d-s .d-knob{fill:var(--muted)}
+:root[data-theme="line"] .hc-dial .d-h .d-prog{stroke:var(--soft)}:root[data-theme="line"] .hc-dial .d-h .d-knob{fill:var(--soft)}
+:root[data-theme="line"] .hc-timer{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+:root[data-theme="line"] .hc-timer-ctrl button{border-color:var(--ink);color:var(--ink);background:transparent}
+:root[data-theme="line"] .hc-timer-ctrl button.hot{background:var(--ink);color:var(--bg)}
+:root[data-theme="line"] .hc-ring .r-track{stroke:var(--track)}:root[data-theme="line"] .hc-ring .r-prog{stroke:var(--ink)}:root[data-theme="line"] .hc-ring b{color:var(--ink)}
+:root[data-theme="line"] .hc-bar{background:var(--track)}:root[data-theme="line"] .hc-bar i{background:var(--ink)}
+:root[data-theme="line"] .hc-tick{border-color:var(--ink)}:root[data-theme="line"] .hc-tick.on{background:var(--ink)}
+}
