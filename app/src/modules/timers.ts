@@ -6,7 +6,10 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 export interface KTimer {
   id: string; name: string; total: number; endAt: number; paused: boolean; remain: number;
   marks: number[]; fired: number[]; act: string; meta: string; done: boolean; ack: boolean;
+  /** Advanced options (all optional so older saved timers keep working). */
+  pre?: number; rep?: number; rnd?: number; mute?: boolean; vib?: boolean;
 }
+export interface TimerOptions { marks?: number[]; act?: string; meta?: string; pre?: number; rep?: number; mute?: boolean; vib?: boolean }
 const KEY = 'homecraft.timers.v1';
 const load = (): KTimer[] => {
   try {
@@ -56,9 +59,9 @@ function beep(freq: number, dur: number, when = 0) {
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
   o.connect(g).connect(ac.destination); o.start(t); o.stop(t + dur + 0.02);
 }
-const vibrate = (p: number[]) => { try { navigator.vibrate?.(p); } catch { /* unsupported */ } };
-export const soundMark = () => { beep(988, .12); beep(988, .12, .18); vibrate([150, 80, 150]); };
-export const soundDone = () => { [0, .2, .4].forEach(w => beep(1319, .14, w)); [.8, 1, 1.2].forEach(w => beep(1568, .14, w)); vibrate([300, 120, 300, 120, 300]); };
+const vibrate = (p: number[], on = true) => { if (!on) return; try { navigator.vibrate?.(p); } catch { /* unsupported */ } };
+export const soundMark = (mute = false, vib = true) => { if (!mute) { beep(988, .12); beep(988, .12, .18); } vibrate([150, 80, 150], vib); };
+export const soundDone = (mute = false, vib = true) => { if (!mute) { [0, .2, .4].forEach(w => beep(1319, .14, w)); [.8, 1, 1.2].forEach(w => beep(1568, .14, w)); } vibrate([300, 120, 300, 120, 300], vib); };
 
 // ---- wake lock ---------------------------------------------------------------------------
 let wl: WakeLockSentinel | null = null;
@@ -72,9 +75,12 @@ async function syncWake() {
 if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') void syncWake(); });
 
 // ---- actions -----------------------------------------------------------------------------
-export function addTimer(name: string, total: number, marks: number[] = [], act = 'Potrząśnij kosz', meta = '') {
+export function addTimer(name: string, total: number, marksOrOpts: number[] | TimerOptions = [], act = 'Potrząśnij kosz', meta = '') {
   unlockAudio();
-  timers.unshift({ id: Date.now() + Math.random().toString(36).slice(2, 6), name: name || 'Timer', total, endAt: Date.now() + total * 1000, paused: false, remain: total, marks, fired: [], act, meta, done: false, ack: false });
+  const o: TimerOptions = Array.isArray(marksOrOpts) ? { marks: marksOrOpts, act, meta } : marksOrOpts;
+  const rep = Math.max(1, Math.min(20, Math.round(o.rep || 1)));
+  timers.unshift({ id: Date.now() + Math.random().toString(36).slice(2, 6), name: name || 'Timer', total, endAt: Date.now() + total * 1000, paused: false, remain: total, marks: o.marks || [], fired: [], act: o.act ?? 'Potrząśnij kosz', meta: o.meta ?? '', done: false, ack: false,
+    pre: o.pre && o.pre < total ? o.pre : 0, rep, rnd: 1, mute: !!o.mute, vib: o.vib !== false });
   if (timers.length > 20) timers.length = 20;
   emit(); void syncWake();
 }
@@ -84,7 +90,7 @@ export function actOn(id: string, a: TimerAction) {
   if (a === 'pause') { if (t.paused) { t.endAt = Date.now() + t.remain * 1000; t.paused = false; } else { t.remain = remaining(t); t.paused = true; } }
   if (a === 'plus1') { if (t.paused) t.remain += 60; else t.endAt += 60000; t.total += 60; }
   if (a === 'plus2') { t.total += 120; t.endAt = Date.now() + 120000; t.remain = 120; t.done = false; t.ack = false; t.paused = false; t.marks = []; }
-  if (a === 'reset') { t.endAt = Date.now() + t.total * 1000; t.remain = t.total; t.paused = false; t.fired = []; t.done = false; t.ack = false; }
+  if (a === 'reset') { t.rnd = 1; t.endAt = Date.now() + t.total * 1000; t.remain = t.total; t.paused = false; t.fired = []; t.done = false; t.ack = false; }
   if (a === 'ack' || a === 'del') timers = timers.filter(x => x.id !== id);
   emit(); void syncWake();
 }
@@ -92,17 +98,24 @@ export function actOn(id: string, a: TimerAction) {
 // ---- engine tick (module level, runs once) -----------------------------------------------
 export const TOAST_EVENT = 'homecraft:toast';
 const toast = (message: string) => window.dispatchEvent(new CustomEvent(TOAST_EVENT, { detail: message }));
+export const PRE_MSG = (sec: number) => sec >= 60 ? `${Math.round(sec / 60)} min` : `${sec} s`;
 let ringing: ReturnType<typeof setInterval> | null = null;
 function tick() {
   let changed = false;
   for (const t of timers) {
     if (t.paused || t.done) continue;
     const r = remaining(t), el = t.total - r;
-    for (const m of t.marks) if (el >= m && !t.fired.includes(m) && r > 3) { t.fired.push(m); changed = true; soundMark(); toast(`${t.act} — ${t.name}`); }
-    if (r <= 0) { t.done = true; changed = true; }
+    for (const m of t.marks) if (el >= m && !t.fired.includes(m) && r > 3) { t.fired.push(m); changed = true; soundMark(t.mute, t.vib); toast(`${t.act} — ${t.name}`); }
+    if (t.pre && r <= t.pre && !t.fired.includes(-1) && r > 0) { t.fired.push(-1); changed = true; soundMark(t.mute, t.vib); toast(`Zostało ${PRE_MSG(t.pre)} — ${t.name}`); }
+    if (r <= 0) {
+      changed = true;
+      if ((t.rnd || 1) < (t.rep || 1)) { t.rnd = (t.rnd || 1) + 1; t.endAt = Date.now() + t.total * 1000; t.fired = []; soundMark(t.mute, t.vib); toast(`${t.name}: ${t.rnd}/${t.rep}`); }
+      else t.done = true;
+    }
   }
   const anyRinging = timers.some(t => t.done && !t.ack);
-  if (anyRinging && !ringing) { soundDone(); let n = 0; ringing = setInterval(() => { if (++n > 40 || !timers.some(t => t.done && !t.ack)) { clearInterval(ringing!); ringing = null; return; } soundDone(); }, 2200); }
+  const loud = () => { const r = timers.filter(t => t.done && !t.ack); soundDone(r.every(t => t.mute), r.some(t => t.vib !== false)); };
+  if (anyRinging && !ringing) { loud(); let n = 0; ringing = setInterval(() => { if (++n > 40 || !timers.some(t => t.done && !t.ack)) { clearInterval(ringing!); ringing = null; return; } loud(); }, 2200); }
   if (changed) { emit(); void syncWake(); }
 }
 if (typeof window !== 'undefined') { setInterval(tick, 250); void syncWake(); }

@@ -15,7 +15,8 @@
 :root[data-theme="soft"] .app-shell button:disabled{box-shadow:none;opacity:.6}
 :root[data-theme="soft"] .recipe .tabs button[aria-selected="true"],:root[data-theme="soft"] .g-choice button[aria-pressed="true"]{background:var(--accent);color:white;box-shadow:inset 2px 2px 4px #12325b80}
 :root[data-theme="soft"] .app-shell .sw::after{border-radius:50%}
-:root[data-theme="soft"] .app-shell .bottom-nav button{box-shadow:none;background:none}
+:root .app-shell .bottom-nav button{box-shadow:none;background:none;border-radius:14px}
+:root .app-shell .bottom-nav button[aria-current="page"]{box-shadow:none}
 .appearance-settings{display:grid;gap:7px}.appearance-settings label{font-size:13px;font-weight:650;color:var(--soft)}
 .appearance-settings select{width:100%;min-height:46px;padding:8px 12px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);font:500 15px var(--body);margin-bottom:6px;border-radius:3px}
 .settings fieldset+fieldset{border-top:1px solid var(--line);padding-top:14px}

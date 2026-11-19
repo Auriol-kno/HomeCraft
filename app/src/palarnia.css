@@ -1,9 +1,9 @@
 @layer palarnia{
-/* Palarnia — warm paper, oxblood ink, bold type, purposeful rules. */
+/* Palarnia — warm paper, terracotta ink, bold type, purposeful rules. */
 :root:root{
  color-scheme:light;--bg:#f5eee2;--surface:#faf5ec;--surface-2:#eee3d3;--track:#dfd2c0;--line:#bea89a;
- --ink:#1d1715;--soft:#4c3730;--muted:#725d50;--dim:#796456;--accent:#771b2d;--on-accent:#fff9ee;
- --good:#597044;--bad:#9d2725;--cool:#365e76;--wash:#771b2d0d;--stop:#771b2d;--on-stop:#fff9ee;
+ --ink:#1d1715;--soft:#4c3730;--muted:#725d50;--dim:#796456;--accent:#b85328;--on-accent:#fff9ee;
+ --good:#597044;--bad:#9d2725;--cool:#365e76;--wash:#b853280d;--stop:#b85328;--on-stop:#fff9ee;
  --body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--title:var(--body);--timer:var(--body);
  --scene-top:#583d27;--scene-bottom:#271c16;--tint-near:#f6e4b8;--tint-stop:#e0ead5;--tint-over:#f8d8ce;--tint-step:#efe3d2;
  --r-card:3px;--r-ctl:3px;
@@ -35,10 +35,6 @@
 .settings-trigger{width:52px;height:52px}
 .wide-link{min-height:56px;font-size:15px;padding:12px 14px}
 .bottom-nav button{min-height:60px;font-size:12px}.nav-icon{height:32px}.nav-icon svg{width:24px;height:24px}
-:root .bottom-nav{border-color:var(--accent);background:var(--bg)}
-:root .nav-icon{background:none;border-radius:0}
-:root .bottom-nav button{border-radius:0}
-:root .bottom-nav button[aria-current="page"]{box-shadow:inset 0 -3px var(--accent)}
 :root .wide-link,:root .details-card,:root .segment{border-radius:3px;background:transparent;box-shadow:none}
 :root .segment{border-block:1px solid var(--accent);padding:5px 0}
 .segment button{min-height:52px;font-size:14px}
@@ -69,7 +65,7 @@
 :root .screen-heading{padding-bottom:12px;border-bottom:1px solid var(--accent)}
 :root .home-note{display:none}
 :root .settings{border-radius:3px}
-.theme-option.palarnia{--swatch-bg:#f5eee2;--swatch-accent:#771b2d}
+.theme-option.palarnia{--swatch-bg:#f5eee2;--swatch-accent:#b85328}
 .theme-option{min-height:64px}
 @media(max-width:360px){.recipe .tabs button{min-height:80px;font-size:13px}.screen[aria-label="Parzenie"] .b-time b{font-size:76px;letter-spacing:-4px}.screen[aria-label="Parzenie"] .b-time small{font-size:20px}.screen[aria-label="Parzenie"] .b-ph{font-size:17px}.screen[aria-label="Parzenie"] .b-target{font-size:12px}:root .screen-heading h1{font-size:24px}}
 

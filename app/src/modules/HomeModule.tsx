@@ -3,12 +3,13 @@ import { t } from './en';
 import { cToF, convert, EGG_BOIL, EGG_OTHER, EGG_SIZES, EGG_START, EGG_STEAM, EGG_TIPS, eggSeconds, fToC, FOODS, FOOD_CATEGORIES, INGREDIENTS, kitchenGrams, METHODS, ML, num, OVEN_C, OVEN_NOTES, UNITS, type EggMethod, type MethodId, type Unit } from './home-data';
 import { norm, SAFE_TEMPS } from './fryer-data';
 import { addTimer, useTimers } from './timers';
-import { ICONS, Icon, TimersScreen } from './ui';
+import { ICONS, Icon } from './ui';
+import { TimersScreen } from './TimersScreen';
 
 export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers';
 export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
-  { id: 'eggs', label: 'Jajka', icon: ICONS.egg }, { id: 'cook', label: 'Gotowanie', icon: ICONS.pot },
-  { id: 'measures', label: 'Miarki', icon: ICONS.scale }, { id: 'timers', label: 'Timery', icon: ICONS.timer },
+  { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'eggs', label: 'Jajka', icon: ICONS.egg },
+  { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
 ];
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 function Pills<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: { id: T; n: string }[]; onChange: (v: T) => void }) {
@@ -122,7 +123,7 @@ export function HomeModule({ active, tab, onTab }: { active: boolean; tab: HomeT
       {tab === 'eggs' && <Eggs onTimer={toTimers} />}
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'measures' && <Measures />}
-      {tab === 'timers' && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
     </main>
     {active && <nav className="bottom-nav hc-nav" aria-label={t('Nawigacja Dom')}>
       {homeTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>

@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DISHES, MODES, MODE_ORDER, FRYER_CATEGORIES, norm } from '../app/src/modules/fryer-data.ts';
+import { CATS, STAPLES, guessCat, parseEntry, listText } from '../app/src/modules/shopping-data.ts';
 import { convert, INGREDIENTS, eggSeconds, EGG_BOIL, FOODS, FOOD_CATEGORIES, METHODS, cToF, fToC, num, kitchenGrams } from '../app/src/modules/home-data.ts';
 
 // --- Air Fryer: the 37 dishes of the original cheat sheet ---
@@ -51,6 +52,19 @@ for (const f of FOODS) {
 
 // --- Temperatures ---
 assert.equal(cToF(180), 356); assert.equal(Math.round(fToC(350)), 177);
+
+// --- Shopping list: quantity parsing, aisle guessing, shareable text ---
+assert.deepEqual(parseEntry('2 l mleko'), { name: 'mleko', qty: '2 l' });
+assert.deepEqual(parseEntry('pomidory 1 kg'), { name: 'pomidory', qty: '1 kg' });
+assert.deepEqual(parseEntry('chleb'), { name: 'chleb', qty: '' });
+assert.deepEqual(parseEntry('jajka x10'), { name: 'jajka', qty: '10' });
+assert.equal(guessCat('Pierś z kurczaka'), 'Mięso i ryby');
+assert.equal(guessCat('płyn do naczyń'), 'Dom i chemia');
+assert.equal(guessCat('coś dziwnego'), 'Inne');
+const mismatched = CATS.flatMap(c => STAPLES[c].filter(n => guessCat(n) !== c));
+assert(mismatched.length <= 6, 'staples mostly land in their own aisle: ' + mismatched.join(', '));
+const txt = listText([{ id: '1', name: 'Mleko', qty: '2 l', cat: 'Nabiał i jajka', done: false }, { id: '2', name: 'Chleb', qty: '', cat: 'Pieczywo', done: true }]);
+assert.equal(txt, 'NABIAŁ I JAJKA\n- Mleko (2 l)');
 
 // --- English dictionary has no duplicate keys (a duplicate silently overrides the first) ---
 const src = readFileSync(new URL('../app/src/modules/en.ts', import.meta.url), 'utf8');

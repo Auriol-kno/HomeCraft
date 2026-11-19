@@ -1,6 +1,6 @@
 @layer mode{
 /* Day / night / system. Each theme has a dark palette; the mode is independent of the theme. */
-:root[data-mode="dark"][data-theme="palarnia"]{color-scheme:dark;--bg:#1b1512;--surface:#231b17;--surface-2:#2e241f;--track:#3b2e28;--line:#5c483e;--ink:#f3e9dc;--soft:#d9c9b8;--muted:#b09d8c;--dim:#a08e7d;--accent:#b5364e;--on-accent:#fff6ec;--good:#9cbf86;--bad:#f08a7c;--cool:#8bbad6;--wash:#b5364e1f;--stop:#b5364e;--on-stop:#fff6ec;--tint-near:#3a2f16;--tint-stop:#1f3020;--tint-over:#3d1d18;--tint-step:#2a211b}
+:root[data-mode="dark"][data-theme="palarnia"]{color-scheme:dark;--bg:#1b1512;--surface:#231b17;--surface-2:#2e241f;--track:#3b2e28;--line:#5c483e;--ink:#f3e9dc;--soft:#d9c9b8;--muted:#b09d8c;--dim:#a08e7d;--accent:#e0804f;--on-accent:#1b120c;--good:#9cbf86;--bad:#f08a7c;--cool:#8bbad6;--wash:#e0804f1f;--stop:#d0683a;--on-stop:#1b120c;--tint-near:#3a2f16;--tint-stop:#1f3020;--tint-over:#3d1d18;--tint-step:#2a211b}
 
 :root[data-mode="dark"][data-theme="soft"]{color-scheme:dark;--bg:#1f2125;--surface:#1f2125;--surface-2:#2a2d33;--track:#363a41;--line:#4b5059;--ink:#e8e9ec;--soft:#c8cbd2;--muted:#a1a6b0;--dim:#90959f;--accent:#8db2ec;--on-accent:#10131a;--good:#8cc79f;--bad:#f0907f;--cool:#8db2ec;--wash:#8db2ec12;--stop:#8db2ec;--on-stop:#10131a;--tint-near:#33301c;--tint-stop:#1c2f25;--tint-over:#3a201c;--tint-step:#262931}
 
@@ -20,7 +20,7 @@
 :root[data-mode="dark"][data-theme="soft"] .app-shell button:active{box-shadow:inset 2px 2px 5px #0d0e10,inset -2px -2px 5px #2c2f36}
 :root[data-mode="dark"][data-theme="soft"] .recipe .tabs button[aria-selected="true"],:root[data-mode="dark"][data-theme="soft"] .g-choice button[aria-pressed="true"]{color:#10131a;box-shadow:inset 2px 2px 4px #3d5f9480}
 @media (prefers-color-scheme: dark){
-:root[data-mode="system"][data-theme="palarnia"]{color-scheme:dark;--bg:#1b1512;--surface:#231b17;--surface-2:#2e241f;--track:#3b2e28;--line:#5c483e;--ink:#f3e9dc;--soft:#d9c9b8;--muted:#b09d8c;--dim:#a08e7d;--accent:#b5364e;--on-accent:#fff6ec;--good:#9cbf86;--bad:#f08a7c;--cool:#8bbad6;--wash:#b5364e1f;--stop:#b5364e;--on-stop:#fff6ec;--tint-near:#3a2f16;--tint-stop:#1f3020;--tint-over:#3d1d18;--tint-step:#2a211b}
+:root[data-mode="system"][data-theme="palarnia"]{color-scheme:dark;--bg:#1b1512;--surface:#231b17;--surface-2:#2e241f;--track:#3b2e28;--line:#5c483e;--ink:#f3e9dc;--soft:#d9c9b8;--muted:#b09d8c;--dim:#a08e7d;--accent:#e0804f;--on-accent:#1b120c;--good:#9cbf86;--bad:#f08a7c;--cool:#8bbad6;--wash:#e0804f1f;--stop:#d0683a;--on-stop:#1b120c;--tint-near:#3a2f16;--tint-stop:#1f3020;--tint-over:#3d1d18;--tint-step:#2a211b}
 
 :root[data-mode="system"][data-theme="soft"]{color-scheme:dark;--bg:#1f2125;--surface:#1f2125;--surface-2:#2a2d33;--track:#363a41;--line:#4b5059;--ink:#e8e9ec;--soft:#c8cbd2;--muted:#a1a6b0;--dim:#90959f;--accent:#8db2ec;--on-accent:#10131a;--good:#8cc79f;--bad:#f0907f;--cool:#8db2ec;--wash:#8db2ec12;--stop:#8db2ec;--on-stop:#10131a;--tint-near:#33301c;--tint-stop:#1c2f25;--tint-over:#3a201c;--tint-step:#262931}
 

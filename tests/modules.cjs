@@ -28,7 +28,7 @@ let browser;
  assert.match(await p.locator('.hc-device').innerText(),/AIR FRY/);
  await p.getByRole('button',{name:/Start timera 20 min/}).click();
  await p.waitForSelector('.hc-timer');
- assert.match(await p.locator('.hc-timer-time').first().innerText(),/^(19:5\d|20:00)$/);
+ assert.match(await p.locator('.hc-timer [role=timer]').first().innerText(),/^(19:5\d|20:00)$/);
  assert.equal(await p.locator('.hc-bar b').count(),2,'two shake marks for frytki');
  await fryerNav.getByRole('button',{name:'Dania'}).click();
  await p.locator('.hc-dish').first().click();await p.locator('.hc-sheet').getByRole('button',{name:'Ulubione'}).click();await p.keyboard.press('Escape');
@@ -36,9 +36,35 @@ let browser;
 
  // Dom: eggs
  await tab('Dom');
+ // Kitchen timers are the first Dom tab: round dial, quick times, advanced options, stopwatch.
+ assert.equal(await p.locator('h1:visible').first().innerText(),'Timery kuchenne');
+ assert.equal(await domNav.getByRole('button').first().innerText(),'Timery');
+ const dial=p.getByRole('slider',{name:'Pokrętło czasu'});
+ await dial.focus();for(let i=0;i<5;i++)await p.keyboard.press('ArrowRight');
+ assert.equal(await dial.getAttribute('aria-valuenow'),'900','dial: 10 min + 5 steps = 15 min');
+ await p.locator('.hc-adv summary').click();
+ await p.getByRole('button',{name:'Więcej rund'}).click();
+ await p.getByRole('button',{name:'30 s'}).click();
+ await p.getByLabel('Nazwa timera').fill('Interwał');
+ await p.getByRole('button',{name:'Uruchom timer'}).click();
+ const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.timers.v1'))[0]);
+ assert.equal(saved.total,900);assert.equal(saved.rep,2);assert.equal(saved.pre,30);assert.equal(saved.name,'Interwał');
+ await p.getByRole('button',{name:'Usuń',exact:true}).first().click();
+ // Stopwatch with laps persists across reloads.
+ await p.getByRole('button',{name:'Stoper',exact:true}).click();
+ await p.getByRole('button',{name:'Start',exact:true}).click();await p.waitForTimeout(400);
+ await p.getByRole('button',{name:'Okrążenie',exact:true}).click();await p.waitForTimeout(250);
+ assert.equal(await p.locator('.hc-laps tbody tr').count(),1);
+ await p.getByRole('button',{name:'Pauza',exact:true}).click();
+ await p.reload();await p.waitForSelector('.module-bar');await tab('Dom');await p.getByRole('button',{name:'Stoper',exact:true}).click();
+ assert.equal(await p.locator('.hc-laps tbody tr').count(),1,'laps survive a reload');
+ await p.getByRole('button',{name:'Zeruj'}).click();
+ await p.getByRole('button',{name:'Minutnik',exact:true}).click();
+ // Dom: eggs
+ await domNav.getByRole('button',{name:'Jajka'}).click();
  await p.getByRole('button',{name:/Start timera Na twardo/}).click();
  assert.equal(await p.locator('.hc-timer').count(),2);
- assert.match(await p.locator('.hc-timer-time').first().innerText(),/^(09:2\d|09:30)$/);
+ assert.match(await p.locator('.hc-timer [role=timer]').first().innerText(),/^(09:2\d|09:30)$/);
  // Dom: measures
  await domNav.getByRole('button',{name:'Miarki'}).click();
  const big=await p.locator('.hc-big').innerText();assert.match(big,/220 g/);assert.match(big,/22 dag/);
@@ -48,6 +74,38 @@ let browser;
  const all=await p.locator('.hc-card').count();
  await p.getByRole('button',{name:'Na parze',exact:true}).click();
  const steam=await p.locator('.hc-card').count();assert(steam>5&&steam<all,'method filter narrows the list');
+
+ // Shopping list: add, group by aisle, tick, quick products, persistence.
+ await tab('Zakupy');
+ const shop=p.getByRole('navigation',{name:'Nawigacja Zakupy'});
+ for(const x of ['2 l mleko','chleb','pomidory 1 kg','płyn do naczyń']){await p.getByLabel('Nowy produkt').fill(x);await p.getByLabel('Nowy produkt').press('Enter');}
+ assert.equal(await p.locator('.hc-items li').count(),4);
+ assert.deepEqual(await p.locator('.hc-aisle .hc-h3').allInnerTexts().then(a=>a.map(x=>x.replace(/\s*\d+$/,''))),['Warzywa i owoce','Pieczywo','Nabiał i jajka','Dom i chemia']);
+ assert.match(await p.locator('.hc-iname').filter({hasText:'Mleko'}).innerText(),/2 l/);
+ await p.getByRole('checkbox',{name:/Kupione: Chleb/}).click();
+ assert.match(await p.locator('.hc-shop-prog').innerText(),/1\/4/);
+ await shop.getByRole('button',{name:'Produkty'}).click();await p.getByRole('button',{name:'Jajka',exact:true}).click();
+ await shop.getByRole('button',{name:'Lista'}).click();assert.equal(await p.locator('.hc-items li').count(),5);
+ await p.getByLabel('Nowy produkt').fill('jajka');await p.getByLabel('Nowy produkt').press('Enter');assert.equal(await p.locator('.hc-items li').count(),5,'no duplicates');
+ await p.reload();await p.waitForSelector('.module-bar');await tab('Zakupy');
+ assert.equal(await p.locator('.hc-items li').count(),5,'list survives a reload');
+ await p.getByRole('button',{name:'Usuń kupione'}).click();assert.equal(await p.locator('.hc-items li').count(),4);
+
+ // One bottom-nav look (Soft) in every theme and mode, and a dark module bar that contrasts with the page.
+ for(const [th,mo] of [['palarnia','light'],['bar','light'],['soft','light'],['palarnia','dark'],['bar','dark'],['soft','dark']]){
+  await p.evaluate(([a,b])=>{document.documentElement.dataset.theme=a;document.documentElement.dataset.mode=b;},[th,mo]);
+  const look=await p.evaluate(()=>{const nav=document.querySelector('nav.bottom-nav:not([hidden])'),btn=nav.querySelector('button'),cur=nav.querySelector('[aria-current=page] .nav-icon');return {sh:getComputedStyle(btn).boxShadow,r:getComputedStyle(btn).borderRadius,navR:getComputedStyle(nav).borderRadius,bg:getComputedStyle(cur).backgroundColor};});
+  assert.equal(look.sh,'none',`${th}/${mo} nav buttons are flat`);assert.equal(look.navR,'0px',`${th}/${mo} nav is a plain bar`);assert.notEqual(look.bg,'rgba(0, 0, 0, 0)',`${th}/${mo} active tab has a wash`);
+  const bar=await p.evaluate(()=>{const b=getComputedStyle(document.querySelector('.module-bar')).backgroundColor,pg=getComputedStyle(document.querySelector('.app-shell')).backgroundColor;return [b,pg];});
+  assert.notEqual(bar[0],bar[1],`${th}/${mo} module bar contrasts with the page`);
+ }
+ await p.evaluate(()=>{document.documentElement.dataset.theme='palarnia';document.documentElement.dataset.mode='light';});
+ assert.equal(await p.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()),'#b85328','terracotta from the icon');
+ // Extraction preview: pressure gauge and visualization sit side by side.
+ await tab('Kawa');await p.evaluate(()=>{location.hash='timer'});await p.locator('.visual-details summary').click();
+ const [g,sc]=await Promise.all([p.locator('.visual-details .gauge').boundingBox(),p.locator('.visual-details .scene').boundingBox()]);
+ assert(sc.x>g.x+g.width-2&&Math.abs(g.y-sc.y)<4,'gauge and scene are side by side');
+ await p.evaluate(()=>{location.hash='home'});
 
  // The running kitchen timer is reachable from the coffee module; coffee data is untouched.
  await tab('Kawa');
@@ -67,8 +125,8 @@ let browser;
  await p.click('#settingsBtn');await p.selectOption('#appLanguage','en');await p.selectOption('#appTheme','bar');await p.selectOption('#appMode','dark');await p.locator('#settingsDialog button[type=submit]').click();
  assert.equal(await p.getByRole('tab',{name:'Home'}).count(),1);
  await p.setViewportSize({width:320,height:640});
- for(const m of ['Air Fryer','Home'])for(let i=0;i<3;i++){await p.getByRole('tab',{name:m}).click();await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
+ for(const [m,n] of [['Air Fryer',3],['Home',4],['Shopping',2]])for(let i=0;i<n;i++){await p.getByRole('tab',{name:m}).click();await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
   const over=await p.evaluate(()=>[...document.querySelectorAll('.app-content:not([hidden]) *')].filter(e=>!e.closest('.hc-chips,.module-bar')&&e.getBoundingClientRect().right>document.documentElement.clientWidth+1).length);assert.equal(over,0,`${m} tab ${i} fits 320 px`);}
  assert.deepEqual(errors,[]);
- console.log('PASS: modules — switching, 37 dishes, device settings and shake timers, eggs, measures (szklanka cukru = 220 g = 22 dag), cooking times, timers across modules and reloads, alarm, English, 320 px, zero JS errors.');
+ console.log('PASS: modules — switching, round timer + stopwatch, shopping list, one nav look in every theme, side-by-side preview, 37 dishes, device settings and shake timers, eggs, measures (szklanka cukru = 220 g = 22 dag), cooking times, timers across modules and reloads, alarm, English, 320 px, zero JS errors.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
 import { DISHES, FRYER_CATEGORIES, FRYER_RULES, MODES, MODE_ORDER, SAFE_TEMPS, fmtMin, norm, type Dish } from './fryer-data';
 import { addTimer, useTimers } from './timers';
-import { ICONS, Icon, Sheet, TimersScreen } from './ui';
+import { ICONS, Icon, Sheet } from './ui';
+import { TimersScreen } from './TimersScreen';
 
 export type FryerTab = 'dishes' | 'timers' | 'modes';
 export const fryerTabs: { id: FryerTab; label: string; icon: string }[] = [
@@ -77,7 +78,7 @@ export function FryerModule({ active, tab, onTab }: { active: boolean; tab: Frye
           </button>)}
         </div>
       </section>}
-      {tab === 'timers' && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
       {tab === 'modes' && <section className="screen" aria-label={t('Tryby')}>
         <div className="hc-card"><h3 className="hc-h3">{t('Bezpieczna temperatura w środku')}</h3><table className="hc-table"><tbody>{SAFE_TEMPS.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td>{b}</td></tr>)}</tbody></table></div>
         {MODE_ORDER.map(k => { const M = MODES[k]; const n = DISHES.filter(d => d.m === k).length; return <div key={k} className="hc-card"><p className="hc-tag">{M.tag}</p><h3 className="hc-h3">{t(M.pl)}</h3><p>{t(M.d)}</p><p className="hc-range">{M.range}{n ? ` · ${n} ${t('dań w ściądze')}` : ''}</p></div>; })}

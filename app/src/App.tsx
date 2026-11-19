@@ -17,16 +17,17 @@ import './modules/modules.css';
 import { t as tm } from './modules/en';
 import { FryerModule, fryerTabs, type FryerTab } from './modules/FryerModule';
 import { HomeModule, homeTabs, type HomeTab } from './modules/HomeModule';
+import { ShoppingModule, SHOP_ICON, shopTabs, type ShopTab } from './modules/ShoppingModule';
 import { ICONS, Icon as ModIcon, KitchenAlarm, TimerPill, Toaster } from './modules/ui';
 
 type Screen = 'home' | 'timer' | 'equipment' | 'history' | 'rating';
 type Equipment = 'grinder' | 'anna' | 'service';
-type Module = 'coffee' | 'fryer' | 'dom';
-const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'fryer',label:'Air Fryer',icon:ICONS.fryer},{id:'dom',label:'Dom',icon:ICONS.home}];
+type Module = 'coffee' | 'fryer' | 'dom' | 'shop';
+const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'fryer',label:'Air Fryer',icon:ICONS.fryer},{id:'dom',label:'Dom',icon:ICONS.home},{id:'shop',label:'Zakupy',icon:SHOP_ICON}];
 // Hash routes: coffee keeps its own (#timer, #history ...); the new modules use #fryer/<tab> and #dom/<tab>.
-function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab} {
+function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; shop: ShopTab} {
  const [a,b]=location.hash.slice(1).split('/');
- return {module:a==='fryer'?'fryer':a==='dom'?'dom':'coffee',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:homeTabs.some(x=>x.id===b)?b as HomeTab:'eggs'};
+ return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':'coffee',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:homeTabs.some(x=>x.id===b)?b as HomeTab:'timers',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
 }
 interface BrewStatus { running: boolean; method: string; seconds: number }
 const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?'};
@@ -47,6 +48,7 @@ export function App() {
  const [module,setModule]=useState<Module>(()=>parseHash().module);
  const [fryerTab,setFryerTab]=useState<FryerTab>(()=>parseHash().fryer);
  const [homeTab,setHomeTab]=useState<HomeTab>(()=>parseHash().dom);
+ const [shopTab,setShopTab]=useState<ShopTab>(()=>parseHash().shop);
  const [equipment,setEquipment]=useState<Equipment>('grinder');
  const [status,setStatus]=useState<BrewStatus>({running:false,method:'Espresso',seconds:0});
  const engine=useRef<ReturnType<typeof initBrewing> | null>(null);
@@ -65,7 +67,7 @@ export function App() {
   const settings=document.getElementById('settingsDialog')!;
   const preferenceChange=(event:Event)=>{const el=event.target as HTMLSelectElement;const fields:Record<string,keyof Preferences>={appTheme:'theme',appMode:'mode',appDensity:'density',appLanguage:'language'};const field=fields[el.id];if(field)savePreferences({...readPreferences(),[field]:el.value});};
   sync();settings.addEventListener('change',preferenceChange);window.addEventListener('crema:preferences',sync);
-  const change=()=>{const h=parseHash();setModule(h.module);if(h.module==='fryer')setFryerTab(h.fryer);else if(h.module==='dom')setHomeTab(h.dom);else setScreen(initialScreen());};window.addEventListener('hashchange',change);
+  const change=()=>{const h=parseHash();setModule(h.module);if(h.module==='fryer')setFryerTab(h.fryer);else if(h.module==='dom')setHomeTab(h.dom);else if(h.module==='shop')setShopTab(h.shop);else setScreen(initialScreen());};window.addEventListener('hashchange',change);
   return ()=>{window.removeEventListener('hashchange',change);settings.removeEventListener('change',preferenceChange);window.removeEventListener('crema:preferences',sync);stopLocalization();};
  },[navigate]);
  useEffect(()=>{
@@ -82,9 +84,10 @@ export function App() {
   const check=()=>{const n=savedCount(),last=lastBackup();setBackupDue(n>=3&&Date.now()-last>21*864e5);};
   check();window.addEventListener('crema:data',check);return ()=>window.removeEventListener('crema:data',check);
  },[]);
- const go=(m:Module,tab?:FryerTab|HomeTab)=>{
+ const go=(m:Module,tab?:FryerTab|HomeTab|ShopTab)=>{
   if(m==='fryer'){const x=(tab as FryerTab)||fryerTab;setFryerTab(x);setModule('fryer');location.hash=`fryer/${x}`;}
   else if(m==='dom'){const x=(tab as HomeTab)||homeTab;setHomeTab(x);setModule('dom');location.hash=`dom/${x}`;}
+  else if(m==='shop'){const x=(tab as ShopTab)||shopTab;setShopTab(x);setModule('shop');location.hash=`shop/${x}`;}
   else {setModule('coffee');location.hash=screen;}
  };
  const viewingTimers=(module==='fryer'&&fryerTab==='timers')||(module==='dom'&&homeTab==='timers');
@@ -92,13 +95,13 @@ export function App() {
  const dismissHint=()=>{try{localStorage.setItem(hintKey,'1');}catch{}setInstallHint(false);};
  return <div className="app-shell" data-screen={module==='coffee'?screen:module} data-dock={dock&&module==='coffee'?'on':undefined}>
   <header className="app-header">
-   <button className="brand-button" onClick={()=>navigate('home')} aria-label={t('HomeCraft — ekran główny')}><span className="brand-mark">h.</span><span>Home<b>Craft</b></span></button>
+   <button className="brand-button" onClick={()=>navigate('home')} aria-label={t('HomeCraft — ekran główny')}><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M5 20 20 6l15 14h-3v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V20Z" fill="currentColor"/><path d="M27 11V7h4v8Z" fill="currentColor" opacity=".7"/><circle cx="20" cy="24" r="7" fill="var(--accent)"/><path d="M20 20v4.5l3 1.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg></span><span>Home<b>Craft</b></span></button>
    <span id="chip" hidden/>
+   {!viewingTimers&&<TimerPill onOpen={()=>go(module==='fryer'?'fryer':'dom','timers')}/>}
    <button id="settingsBtn" className="settings-trigger" aria-label={t('Ustawienia')} aria-haspopup="dialog"><Icon name="settings"/></button>
   </header>
   <div className="module-bar" role="tablist" aria-label={t('Dział aplikacji')}>
    {modules.map(m=><button key={m.id} role="tab" className="mod" aria-selected={module===m.id} onClick={()=>go(m.id)}><ModIcon d={m.icon}/><span>{m.id==='coffee'?t(m.label):tm(m.label)}</span>{m.id==='coffee'&&status.running&&module!=='coffee'&&<i className="dot" aria-label={t('Parzenie trwa')}/>}</button>)}
-   {!viewingTimers&&<TimerPill onOpen={()=>go(module==='fryer'?'fryer':'dom','timers')}/>}
   </div>
   <main ref={main} hidden={module!=='coffee'} className="app-content" id="app-content">
    <div className="screen-heading">{(screen==='home'||screen==='timer')&&<p className="overline">{screen==='home'?t('ZACZNIJ OD FILIŻANKI'):t('PARZENIE')}</p>}<h1 id="screen-title" tabIndex={-1}>{t(screen==='timer'?status.method:titles[screen])}</h1>{status.running&&screen!=='timer'&&<button className="live-pill" onClick={()=>navigate('timer')}><span/>{t('Parzenie trwa')} · {clock(status.seconds)} →</button>}</div>
@@ -133,6 +136,7 @@ export function App() {
   <nav className="bottom-nav" hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
   <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)}/>
   <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)}/>
+  <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <BrewingPanel html={overlays}/>
   <KitchenAlarm/><Toaster/>
  </div>

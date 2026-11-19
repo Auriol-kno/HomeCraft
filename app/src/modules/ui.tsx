@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { t } from './en';
-import { actOn, addTimer, clock, remaining, TOAST_EVENT, unlockAudio, useTick, useTimers, type KTimer } from './timers';
+import { actOn, clock, remaining, TOAST_EVENT, useTick, useTimers } from './timers';
 
 export function Icon({ d }: { d: string }) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>;
@@ -37,54 +37,6 @@ export function Sheet({ overline, title, onClose, children, headExtra }: { overl
       </div>
       {children}
     </div>
-  </div>;
-}
-
-const quick = [1, 3, 5, 8, 10, 12, 15, 20, 25, 30];
-function TimerCard({ tm }: { tm: KTimer }) {
-  const r = remaining(tm), pct = Math.min(100, Math.max(0, (1 - r / tm.total) * 100));
-  return <div className={'hc-timer' + (tm.done ? ' done' : '') + (tm.paused ? ' paused' : '')}>
-    <div className="hc-timer-top"><b>{tm.name}</b><span>{tm.meta}</span></div>
-    <div className="hc-timer-time" role="timer" aria-label={tm.name}>{tm.done ? t('GOTOWE') : clock(r)}</div>
-    <div className="hc-bar" aria-hidden="true"><i style={{ width: pct + '%' }} />{tm.marks.map(m => <b key={m} style={{ left: m / tm.total * 100 + '%' }} />)}</div>
-    <div className="hc-timer-ctrl">
-      {tm.done
-        ? <><button className="hot" onClick={() => actOn(tm.id, 'ack')}>{t('OK, wyłącz')}</button><button onClick={() => actOn(tm.id, 'plus2')}>+2 min</button></>
-        : <><button onClick={() => actOn(tm.id, 'pause')}>{tm.paused ? t('Wznów') : t('Pauza')}</button><button onClick={() => actOn(tm.id, 'plus1')}>+1 min</button><button onClick={() => actOn(tm.id, 'reset')}>{t('Od nowa')}</button></>}
-      <button onClick={() => actOn(tm.id, 'del')}>{t('Usuń')}</button>
-    </div>
-  </div>;
-}
-
-/** Independent timers with an optional "shake / turn" reminder halfway. Shared by Air Fryer and Dom. */
-export function TimersScreen() {
-  const timers = useTimers();
-  useTick(timers.some(x => !x.paused && !x.done));
-  const [name, setName] = useState(''), [min, setMin] = useState('10'), [sec, setSec] = useState('0'), [shake, setShake] = useState(true), [err, setErr] = useState('');
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const total = (parseInt(min) || 0) * 60 + (parseInt(sec) || 0);
-    if (total <= 0) { setErr(t('Ustaw czas dłuższy niż 0 sekund')); return; }
-    setErr('');
-    addTimer(name.trim() || 'Timer', total, shake && total >= 60 ? [Math.round(total / 2)] : [], 'Potrząśnij lub obróć', shake && total >= 60 ? t('przypomnienie w połowie') : '');
-    setName('');
-  };
-  return <div className="hc-stack">
-    <form className="hc-card hc-form" onSubmit={submit}>
-      <input className="hc-input" value={name} onChange={e => setName(e.target.value)} placeholder={t('Nazwa (np. Frytki)')} maxLength={40} aria-label={t('Nazwa timera')} />
-      <div className="hc-row">
-        <input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={999} value={min} onChange={e => setMin(e.target.value)} aria-label={t('Minuty')} /><span>min</span>
-        <input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={59} value={sec} onChange={e => setSec(e.target.value)} aria-label={t('Sekundy')} /><span>s</span>
-      </div>
-      <div className="hc-quick">{quick.map(m => <button type="button" key={m} onClick={() => { setMin(String(m)); setSec('0'); }}>{m} min</button>)}</div>
-      <label className="hc-check"><input type="checkbox" checked={shake} onChange={e => setShake(e.target.checked)} /> {t('Przypomnij w połowie, żeby potrząsnąć / obrócić')}</label>
-      {err && <p className="hc-err" role="alert">{err}</p>}
-      <button className="hc-primary" type="submit" onClick={unlockAudio}>{t('Uruchom timer')}</button>
-    </form>
-    <div className="hc-stack">
-      {timers.length === 0 ? <p className="hc-empty">{t('Brak aktywnych timerów. Wybierz danie albo ustaw czas powyżej.')}</p> : timers.map(tm => <TimerCard key={tm.id} tm={tm} />)}
-    </div>
-    <p className="subtle">{t('Timer działa niezależnie od urządzenia. Zostaw aplikację otwartą: ekran nie zgaśnie, dopóki timer odlicza. Pierwsze dotknięcie włącza dźwięk.')}</p>
   </div>;
 }
 
