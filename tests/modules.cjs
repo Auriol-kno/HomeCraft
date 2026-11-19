@@ -91,11 +91,11 @@ let browser;
  assert.equal(await p.locator('.hc-items li').count(),5,'list survives a reload');
  await p.getByRole('button',{name:'Usuń kupione'}).click();assert.equal(await p.locator('.hc-items li').count(),4);
 
- // One bottom-nav look (Soft) in every theme and mode, and a dark module bar that contrasts with the page.
+ // One soft, raised bottom-nav look in every theme and mode, and a dark module bar that contrasts with the page.
  for(const [th,mo] of [['palarnia','light'],['bar','light'],['soft','light'],['palarnia','dark'],['bar','dark'],['soft','dark']]){
   await p.evaluate(([a,b])=>{document.documentElement.dataset.theme=a;document.documentElement.dataset.mode=b;},[th,mo]);
-  const look=await p.evaluate(()=>{const nav=document.querySelector('nav.bottom-nav:not([hidden])'),btn=nav.querySelector('button'),cur=nav.querySelector('[aria-current=page] .nav-icon');return {sh:getComputedStyle(btn).boxShadow,r:getComputedStyle(btn).borderRadius,navR:getComputedStyle(nav).borderRadius,bg:getComputedStyle(cur).backgroundColor};});
-  assert.equal(look.sh,'none',`${th}/${mo} nav buttons are flat`);assert.equal(look.navR,'0px',`${th}/${mo} nav is a plain bar`);assert.notEqual(look.bg,'rgba(0, 0, 0, 0)',`${th}/${mo} active tab has a wash`);
+  const look=await p.evaluate(()=>{const nav=document.querySelector('nav.bottom-nav:not([hidden])'),btn=nav.querySelector('button'),cur=nav.querySelector('[aria-current=page]');return {sh:getComputedStyle(btn).boxShadow,r:getComputedStyle(btn).borderRadius,act:getComputedStyle(cur).boxShadow};});
+  assert.notEqual(look.sh,'none',`${th}/${mo} nav buttons are raised`);assert.match(look.act,/inset/,`${th}/${mo} active tab is pressed in`);assert.equal(look.r,'20px');
   const bar=await p.evaluate(()=>{const b=getComputedStyle(document.querySelector('.module-bar')).backgroundColor,pg=getComputedStyle(document.querySelector('.app-shell')).backgroundColor;return [b,pg];});
   assert.notEqual(bar[0],bar[1],`${th}/${mo} module bar contrasts with the page`);
  }

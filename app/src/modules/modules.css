@@ -257,11 +257,16 @@ select.hc-input{appearance:auto}
 @media(max-width:350px){.module-bar>button.mod svg{display:none}.module-bar>button.mod{padding:0 7px}.module-bar{margin-inline:10px}}
 }
 
-/* Jedno dolne menu (wygląd Soft) w każdym motywie i trybie: bez cieni, aktywna zakładka na tle --wash. */
+/* Jedno dolne menu (miękkie, wypukłe przyciski) w każdym motywie i trybie; aktywna zakładka jest wciśnięta. */
 @layer overrides{
-:root .app-shell .bottom-nav button,:root .app-shell .bottom-nav button:active{box-shadow:none;background:none;border-radius:14px}
-:root .app-shell .bottom-nav button[aria-current="page"] .nav-icon{background:var(--wash);border-radius:12px}
-:root .app-shell .bottom-nav{border-radius:0;margin:0;background:var(--surface);border-top:1px solid var(--line);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+:root{--nm-d:#5a3c2a38;--nm-l:#ffffffd9}
+:root[data-mode="dark"]{--nm-d:#000000a6;--nm-l:#ffffff12}
+@media(prefers-color-scheme:dark){:root[data-mode="system"]{--nm-d:#000000a6;--nm-l:#ffffff12}}
+:root .app-shell .bottom-nav{display:grid;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border:0;border-radius:0;margin:0;background:var(--bg);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+:root .app-shell .bottom-nav button{min-height:58px;border:0;border-radius:20px;background:var(--bg);color:var(--muted);box-shadow:5px 5px 11px var(--nm-d),-5px -5px 11px var(--nm-l);transition:box-shadow .15s}
+:root .app-shell .bottom-nav button:active,:root .app-shell .bottom-nav button[aria-current="page"]{box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+:root .app-shell .bottom-nav button[aria-current="page"]{color:var(--accent)}
+:root .app-shell .bottom-nav .nav-icon,:root .app-shell .bottom-nav button[aria-current="page"] .nav-icon{background:none;width:auto}
 .hc-dial-mid.sm .hc-dial-time{font-size:32px}.hc-dial-mid.sm .hc-dial-time small{font-size:17px}
 }
 
