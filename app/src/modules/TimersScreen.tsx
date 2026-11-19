@@ -4,41 +4,56 @@ import { actOn, addTimer, clock, remaining, unlockAudio, useTick, useTimers, typ
 
 const R = 112, C = 2 * Math.PI * R;
 const pad = (n: number) => String(n).padStart(2, '0');
-const MAX = 99 * 60;
+const MAX = 12 * 3600 + 59 * 60 + 59;
 
-/** Dial with 60 minute ticks. Drag the knob (or use arrow keys) to set minutes; fine tuning below. */
+/** Three concentric rings: outer = minutes, middle = seconds, inner = hours. Drag a ring (or use arrow keys on it). */
+const RINGS = [
+  { id: 'm', r: 124, w: 16, max: 59, label: 'Minuty', unit: 'min' },
+  { id: 's', r: 94, w: 14, max: 59, label: 'Sekundy', unit: 's' },
+  { id: 'h', r: 67, w: 12, max: 12, label: 'Godziny', unit: 'h' },
+] as const;
+type RingId = typeof RINGS[number]['id'];
+const parts = (sec: number) => ({ h: Math.floor(sec / 3600), m: Math.floor(sec % 3600 / 60), s: sec % 60 });
+const join = (p: { h: number; m: number; s: number }) => Math.min(MAX, p.h * 3600 + p.m * 60 + p.s);
+const polar = (r: number, frac: number) => { const a = frac * 2 * Math.PI - Math.PI / 2; return [140 + r * Math.cos(a), 140 + r * Math.sin(a)] as const; };
+
 function Dial({ value, onChange, children }: { value: number; onChange: (sec: number) => void; children: React.ReactNode }) {
   const svg = useRef<SVGSVGElement>(null);
-  const dragging = useRef(false);
-  const frac = (value % 3600) / 3600 || (value >= 3600 ? 1 : 0);
-  const ang = frac * 2 * Math.PI - Math.PI / 2;
-  const set = (e: PEvent) => {
+  const active = useRef<RingId | null>(null);
+  const p = parts(value);
+  const setRing = (id: RingId, v: number) => { const ring = RINGS.find(x => x.id === id)!; onChange(join({ ...p, [id]: Math.min(ring.max, Math.max(0, v)) })); };
+  const pick = (e: PEvent): RingId => {
+    const b = svg.current!.getBoundingClientRect();
+    const d = Math.hypot(e.clientX - (b.left + b.width / 2), e.clientY - (b.top + b.height / 2)) / (b.width / 280);
+    return d > 109 ? 'm' : d > 80 ? 's' : 'h';
+  };
+  const drag = (e: PEvent, id: RingId) => {
     const b = svg.current!.getBoundingClientRect();
     const a = Math.atan2(e.clientY - (b.top + b.height / 2), e.clientX - (b.left + b.width / 2)) + Math.PI / 2;
-    let m = Math.round(((a + 2 * Math.PI) % (2 * Math.PI)) / (2 * Math.PI) * 60);
-    const prev = Math.floor(value / 60) % 60;
-    const hours = Math.floor(value / 3600);
-    if (m === 60) m = 0;
-    // crossing 12 o'clock carries into the hour counter so the dial reaches 99 min
-    let h = hours;
-    if (prev > 45 && m < 15) h = Math.min(1, hours + 1);
-    else if (prev < 15 && m > 45) h = Math.max(0, hours - 1);
-    onChange(Math.min(MAX, Math.max(0, (h * 60 + m) * 60 + (value % 60))));
+    const frac = ((a + 2 * Math.PI) % (2 * Math.PI)) / (2 * Math.PI);
+    const ring = RINGS.find(x => x.id === id)!;
+    const n = id === 'h' ? Math.round(frac * 12) : Math.round(frac * 60) % 60;
+    setRing(id, id === 'h' ? Math.min(ring.max, n) : n);
   };
-  const key = (e: KEvent) => {
-    const d = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 60 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -60 : e.key === 'PageUp' ? 600 : e.key === 'PageDown' ? -600 : 0;
-    if (d) { e.preventDefault(); onChange(Math.min(MAX, Math.max(0, value + d))); }
+  const key = (e: KEvent, id: RingId) => {
+    const step = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -1 : e.key === 'PageUp' ? 5 : e.key === 'PageDown' ? -5 : 0;
+    if (step) { e.preventDefault(); const ring = RINGS.find(x => x.id === id)!; setRing(id, (p[id] + step + (ring.max + 1)) % (ring.max + 1)); }
   };
   return <div className="hc-dial">
-    <svg ref={svg} viewBox="0 0 280 280" role="slider" tabIndex={0} aria-label={t('Pokrętło czasu')} aria-valuemin={0} aria-valuemax={MAX} aria-valuenow={value} aria-valuetext={clock(value)}
-      onKeyDown={key} onPointerDown={e => { dragging.current = true; (e.target as Element).setPointerCapture?.(e.pointerId); set(e); }} onPointerMove={e => { if (dragging.current) set(e); }} onPointerUp={() => { dragging.current = false; }} onPointerCancel={() => { dragging.current = false; }}>
-      <circle cx="140" cy="140" r="132" className="d-face" />
-      <circle cx="140" cy="140" r={R} className="d-track" />
-      <circle cx="140" cy="140" r={R} className="d-prog" strokeDasharray={`${frac * C} ${C}`} transform="rotate(-90 140 140)" />
-      {Array.from({ length: 60 }, (_, i) => { const a = i / 60 * 2 * Math.PI - Math.PI / 2, big = i % 5 === 0, r1 = big ? 90 : 95; return <line key={i} className={big ? 'd-tick big' : 'd-tick'} x1={140 + r1 * Math.cos(a)} y1={140 + r1 * Math.sin(a)} x2={140 + 101 * Math.cos(a)} y2={140 + 101 * Math.sin(a)} />; })}
-      {[0, 15, 30, 45].map(n => { const a = n / 60 * 2 * Math.PI - Math.PI / 2; return <text key={n} className="d-num" x={140 + 78 * Math.cos(a)} y={140 + 78 * Math.sin(a) + 4} textAnchor="middle">{n === 0 ? 60 : n}</text>; })}
-      <circle cx={140 + R * Math.cos(ang)} cy={140 + R * Math.sin(ang)} r="13" className="d-knob" />
-      <circle cx={140 + R * Math.cos(ang)} cy={140 + R * Math.sin(ang)} r="4" className="d-knob-dot" />
+    <svg ref={svg} viewBox="0 0 280 280" role="group" aria-label={t('Pokrętło czasu')}
+      onPointerDown={e => { active.current = pick(e); (e.target as Element).setPointerCapture?.(e.pointerId); drag(e, active.current); }}
+      onPointerMove={e => { if (active.current) drag(e, active.current); }} onPointerUp={() => { active.current = null; }} onPointerCancel={() => { active.current = null; }}>
+      <circle cx="140" cy="140" r="138" className="d-face" />
+      {RINGS.map(ring => {
+        const val = p[ring.id], steps = ring.id === 'h' ? 12 : 60, frac = val / steps, C2 = 2 * Math.PI * ring.r, [kx, ky] = polar(ring.r, frac);
+        return <g key={ring.id} className={'d-ring d-' + ring.id} role="slider" tabIndex={0} aria-label={`${t(ring.label)}`} aria-valuemin={0} aria-valuemax={ring.max} aria-valuenow={val} aria-valuetext={`${val} ${ring.unit}`} onKeyDown={e => key(e, ring.id)}>
+          <circle cx="140" cy="140" r={ring.r} className="d-track" strokeWidth={ring.w} />
+          <circle cx="140" cy="140" r={ring.r} className="d-prog" strokeWidth={ring.w} strokeDasharray={`${frac * C2} ${C2}`} transform="rotate(-90 140 140)" />
+          {Array.from({ length: steps }, (_, i) => { if (i % (ring.id === 'h' ? 3 : 5)) return null; const [x1, y1] = polar(ring.r - ring.w / 2, i / steps), [x2, y2] = polar(ring.r + ring.w / 2, i / steps); return <line key={i} className="d-tick" x1={x1} y1={y1} x2={x2} y2={y2} />; })}
+          <circle cx={kx} cy={ky} r={ring.w / 2 + 3} className="d-knob" />
+          <circle cx={kx} cy={ky} r="3" className="d-knob-dot" />
+        </g>;
+      })}
     </svg>
     <div className="hc-dial-mid">{children}</div>
   </div>;
@@ -72,14 +87,14 @@ function TimerCard({ tm }: { tm: KTimer }) {
 }
 
 const PRE = [0, 10, 30, 60, 120];
-const QUICK = [1, 3, 5, 10, 15, 20, 30, 45];
+const QUICK = [1, 3, 5, 10, 15, 20, 30, 45, 60];
 
 function Minutnik() {
   const timers = useTimers();
   useTick(timers.some(x => !x.paused && !x.done));
   const [sec, setSec] = useState(600), [name, setName] = useState(''), [err, setErr] = useState('');
   const [half, setHalf] = useState(false), [pre, setPre] = useState(0), [rep, setRep] = useState(1), [sound, setSound] = useState(true), [vib, setVib] = useState(true);
-  const m = Math.floor(sec / 60), s = sec % 60;
+  const { h, m, s } = parts(sec);
   const adj = (d: number) => setSec(v => Math.min(MAX, Math.max(0, v + d)));
   const start = () => {
     if (sec <= 0) { setErr(t('Ustaw czas dłuższy niż 0 sekund')); return; }
@@ -91,19 +106,21 @@ function Minutnik() {
   return <div className="hc-stack">
     <div className="hc-card hc-setter">
       <Dial value={sec} onChange={setSec}>
-        <b className="hc-dial-time">{pad(m)}:{pad(s)}</b>
-        <span>{t('min : s')}</span>
+        <b className="hc-dial-time" style={h > 0 ? { fontSize: 24 } : undefined}>{h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`}</b>
+        <span>{h > 0 ? t('godz : min : s') : t('min : s')}</span>
       </Dial>
+      <div className="hc-legend" aria-hidden="true"><span><i style={{ background: 'var(--accent)' }} />{t('Minuty')}</span><span><i style={{ background: 'var(--cool)' }} />{t('Sekundy')}</span><span><i style={{ background: 'var(--good)' }} />{t('Godziny')}</span></div>
       <div className="hc-fine" role="group" aria-label={t('Dokładny czas')}>
         <button type="button" onClick={() => adj(-60)} aria-label="−1 min">−1m</button><button type="button" onClick={() => adj(-10)} aria-label="−10 s">−10s</button>
         <button type="button" onClick={() => adj(10)} aria-label="+10 s">+10s</button><button type="button" onClick={() => adj(60)} aria-label="+1 min">+1m</button>
       </div>
-      <div className="hc-quick">{QUICK.map(q => <button type="button" key={q} onClick={() => setSec(q * 60)} aria-pressed={sec === q * 60}>{q} min</button>)}</div>
+      <div className="hc-quick">{QUICK.map(q => <button type="button" key={q} onClick={() => setSec(q * 60)} aria-pressed={sec === q * 60}>{q === 60 ? '1 h' : q + ' min'}</button>)}</div>
       <input className="hc-input" value={name} onChange={e => setName(e.target.value)} placeholder={t('Nazwa (np. Frytki)')} maxLength={40} aria-label={t('Nazwa timera')} />
       <details className="hc-adv"><summary>{t('Opcje zaawansowane')}</summary>
         <div className="hc-row wrap">
-          <label className="hc-field"><span>{t('Minuty')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={99} value={m} onChange={e => setSec(Math.min(99, Math.max(0, parseInt(e.target.value) || 0)) * 60 + s)} aria-label={t('Minuty')} /></label>
-          <label className="hc-field"><span>{t('Sekundy')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={59} value={s} onChange={e => setSec(m * 60 + Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} aria-label={t('Sekundy')} /></label>
+          <label className="hc-field"><span>{t('Godziny')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={12} value={h} onChange={e => setSec(join({ h: Math.min(12, Math.max(0, parseInt(e.target.value) || 0)), m, s }))} aria-label={t('Godziny')} /></label>
+          <label className="hc-field"><span>{t('Minuty')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={99} value={m} onChange={e => setSec(join({ h, m: Math.min(59, Math.max(0, parseInt(e.target.value) || 0)), s }))} aria-label={t('Minuty')} /></label>
+          <label className="hc-field"><span>{t('Sekundy')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={59} value={s} onChange={e => setSec(join({ h, m, s: Math.min(59, Math.max(0, parseInt(e.target.value) || 0)) }))} aria-label={t('Sekundy')} /></label>
         </div>
         <div className="hc-field"><span>{t('Alert przed końcem')}</span>
           <div className="hc-seg" role="group" aria-label={t('Alert przed końcem')}>{PRE.map(p => <button type="button" key={p} aria-pressed={pre === p} onClick={() => setPre(p)}>{p === 0 ? t('Brak') : p >= 60 ? p / 60 + ' min' : p + ' s'}</button>)}</div></div>

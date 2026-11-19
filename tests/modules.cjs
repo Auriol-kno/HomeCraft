@@ -39,9 +39,14 @@ let browser;
  // Kitchen timers are the first Dom tab: round dial, quick times, advanced options, stopwatch.
  assert.equal(await p.locator('h1:visible').first().innerText(),'Timery kuchenne');
  assert.equal(await domNav.getByRole('button').first().innerText(),'Timery');
- const dial=p.getByRole('slider',{name:'Pokrętło czasu'});
- await dial.focus();for(let i=0;i<5;i++)await p.keyboard.press('ArrowRight');
- assert.equal(await dial.getAttribute('aria-valuenow'),'900','dial: 10 min + 5 steps = 15 min');
+ const mins=p.getByRole('slider',{name:'Minuty'}),secs=p.getByRole('slider',{name:'Sekundy'}),hrs=p.getByRole('slider',{name:'Godziny'});
+ await mins.focus();for(let i=0;i<5;i++)await p.keyboard.press('ArrowRight');
+ await secs.focus();for(let i=0;i<30;i++)await p.keyboard.press('ArrowRight');
+ await hrs.focus();await p.keyboard.press('ArrowRight');
+ assert.deepEqual([await hrs.getAttribute('aria-valuenow'),await mins.getAttribute('aria-valuenow'),await secs.getAttribute('aria-valuenow')],['1','15','30'],'three rings set hours, minutes and seconds');
+ assert.match(await p.locator('.hc-dial-time').innerText(),/^1:15:30$/);
+ await hrs.focus();await p.keyboard.press('ArrowLeft');
+ await secs.focus();for(let i=0;i<30;i++)await p.keyboard.press('ArrowLeft');
  await p.locator('.hc-adv summary').click();
  await p.getByRole('button',{name:'Więcej rund'}).click();
  await p.getByRole('button',{name:'30 s'}).click();
