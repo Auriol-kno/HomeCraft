@@ -55,7 +55,7 @@ const en: Record<string, string> = {
   'Piekarnik z termoobiegiem': 'Fan oven', 'Obniż temperaturę o ok. 20 °C względem przepisu na tryb góra-dół.': 'Lower the temperature by about 20 °C compared with a top-and-bottom recipe.',
   'Przepis z piekarnika → Air Fryer': 'Oven recipe → Air Fryer', 'Obniż temperaturę o ok. 20 °C i skróć czas o ok. 20%.': 'Lower the temperature by about 20 °C and shorten the time by about 20%.',
   // shopping, dial timer and stopwatch
-  'Godziny': 'Hours', 'godz : min : s': 'h : min : s',
+  'zewnętrzny': 'outer', 'wewnętrzny': 'inner',
   'Zakupy': 'Shopping',
   'Lista': 'List',
   'Produkty': 'Products',
