@@ -2,14 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
 import { cToF, convert, EGG_BOIL, EGG_OTHER, EGG_SIZES, EGG_START, EGG_STEAM, EGG_TIPS, eggSeconds, fToC, FOODS, FOOD_CATEGORIES, INGREDIENTS, kitchenGrams, METHODS, ML, num, OVEN_C, OVEN_NOTES, UNITS, type EggMethod, type MethodId, type Unit } from './home-data';
 import { norm, SAFE_TEMPS } from './fryer-data';
-import { addTimer, useTimers } from './timers';
+import { addTimer, setPreset, useTimers } from './timers';
+import { settingText, TM_CATEGORIES, TM_RECIPES, TM_RULES } from './thermomix-data';
 import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
 
-export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers';
+export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix';
 export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
   { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'eggs', label: 'Jajka', icon: ICONS.egg },
-  { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
+  { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'thermomix', label: 'Thermomix', icon: ICONS.mixer }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
 ];
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 function Pills<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: { id: T; n: string }[]; onChange: (v: T) => void }) {
@@ -58,10 +59,38 @@ function Cooking({ onTimer }: { onTimer: () => void }) {
       <p className="hc-tag">{t(f.c)}</p><h3 className="hc-h3">{t(f.n)}</h3>
       <div className="hc-list">{METHODS.filter(m => f.ways[m.id] && (method === 'all' || method === m.id)).map(m => { const w = f.ways[m.id]!; return <div key={m.id} className="hc-item">
         <div><b>{t(m.n)}</b><p className="subtle">{w.t}{w.extra ? ` · ${w.extra}` : ''}</p></div>
-        <button className="hc-chip-btn" onClick={() => { addTimer(`${f.n} (${t(m.n).toLowerCase()})`, w.min * 60, [], 'Sprawdź jedzenie', w.t); onTimer(); }} aria-label={`${t('Start timera')} ${f.n} ${w.min} min`}>⏱ {w.min} min</button></div>; })}</div>
+        <button className="hc-chip-btn" onClick={() => { setPreset({ sec: w.min * 60, name: `${f.n} (${t(m.n).toLowerCase()})`, meta: w.t }); onTimer(); }} aria-label={`${t('Ustaw timer')} ${f.n} ${w.min} min`}>⏱ {w.min} min</button></div>; })}</div>
       {f.note && <p className="hc-tip">{t(f.note)}</p>}
     </div>)}
-    <p className="subtle">{t('Czasy orientacyjne: zależą od wielkości kawałków, garnka i płyty. Przycisk uruchamia timer z wartością środkową.')}</p>
+    <p className="subtle">{t('Czasy orientacyjne: zależą od wielkości kawałków, garnka i płyty. Dotknięcie czasu ustawia go w minutniku.')}</p>
+  </section>;
+}
+
+function Thermomix({ onTimer }: { onTimer: () => void }) {
+  const [cat, setCat] = useState<string>('Wszystkie'), [q, setQ] = useState('');
+  const nq = norm(q.trim());
+  const list = TM_RECIPES.filter(r => (cat === 'Wszystkie' || r.c === cat) && (!nq || norm(r.n + ' ' + r.c + ' ' + r.ing.join(' ')).includes(nq)));
+  return <section className="screen" aria-label={t('Thermomix')}>
+    <p className="subtle">{t('Podstawowe ustawienia Thermomix TM6, które ustawisz ręcznie na urządzeniu: czas, temperatura i obroty. Działają bez Cookidoo i bez internetu.')}</p>
+    <details className="details-card"><summary>{t('Zasady TM6')} <span>+</span></summary>
+      <table className="hc-table"><tbody>{TM_RULES.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td className="left">{t(b)}</td></tr>)}</tbody></table>
+    </details>
+    <input className="hc-input" type="search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('Szukaj: ryż, zupa, pizza…')} aria-label={t('Szukaj przepisu')} autoComplete="off" />
+    <div className="hc-chips" role="group" aria-label={t('Kategorie')}>{TM_CATEGORIES.map(c => <button key={c} aria-pressed={cat === c} onClick={() => setCat(c)}>{t(c)}</button>)}</div>
+    {list.length === 0 && <p className="hc-empty">{t('Nic nie pasuje.')}</p>}
+    {list.map(r => <details key={r.id} className="details-card hc-tm"><summary><span><small className="hc-tag">{t(r.c)}</small> <b>{t(r.n)}</b></span> <span>+</span></summary>
+      <p className="subtle">{t('Porcje')}: {r.yield}</p>
+      <h3 className="hc-h3">{t('Składniki')}</h3>
+      <ul className="hc-ing">{r.ing.map(i => <li key={i}>{i}</li>)}</ul>
+      <h3 className="hc-h3">{t('Kroki')}</h3>
+      <ol className="hc-steps">{r.steps.map((st, i) => <li key={i}>
+        <p>{st.text}</p>
+        {st.set && <div className="hc-set" aria-label={t('Ustawienia na urządzeniu')}>{settingText(st.set)}</div>}
+        {st.wait && <button className="hc-chip-btn" onClick={() => { setPreset({ sec: st.wait! * 60, name: r.n, meta: t('odpoczynek') }); onTimer(); }}>⏱ {st.wait} min</button>}
+      </li>)}</ol>
+      {r.note && <p className="hc-tip">{r.note}</p>}
+    </details>)}
+    <p className="subtle">{t('Wartości orientacyjne, oparte na ogólnych zasadach pracy z Thermomix. Sprawdź je w instrukcji swojego urządzenia i dopasuj do składników.')}</p>
   </section>;
 }
 
@@ -116,16 +145,17 @@ export function HomeModule({ active, tab, onTab }: { active: boolean; tab: HomeT
   useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
   const running = timers.filter(x => !x.ack).length;
   const toTimers = useMemo(() => () => onTab('timers'), [onTab]);
-  const heading: Record<HomeTab, [string, string]> = { eggs: ['POMOC W DOMU', 'Idealne jajko'], cook: ['POMOC W DOMU', 'Czasy gotowania'], measures: ['POMOC W DOMU', 'Miarki i temperatury'], timers: ['TIMERY', 'Timery kuchenne'] };
+  const heading: Record<HomeTab, [string, string]> = { eggs: ['POMOC W DOMU', 'Idealne jajko'], cook: ['POMOC W DOMU', 'Czasy gotowania'], measures: ['POMOC W DOMU', 'Miarki i temperatury'], thermomix: ['THERMOMIX TM6', 'Przepisy bez Cookidoo'], timers: ['TIMERY', 'Timery kuchenne'] };
   return <>
     <main ref={main} hidden={!active} className="app-content" aria-label={t('Dom')}>
       <div className="screen-heading"><p className="overline">{t(heading[tab][0])}</p><h1 tabIndex={-1}>{t(heading[tab][1])}</h1></div>
       {tab === 'eggs' && <Eggs onTimer={toTimers} />}
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
+      {tab === 'thermomix' && <Thermomix onTimer={toTimers} />}
       {tab === 'measures' && <Measures />}
       {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
     </main>
-    {active && <nav className="bottom-nav hc-nav" aria-label={t('Nawigacja Dom')}>
+    {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${homeTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Dom')}>
       {homeTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
         <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{t(x.label)}</span></button>)}
     </nav>}

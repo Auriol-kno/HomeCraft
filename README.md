@@ -5,6 +5,7 @@ Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w t
 - **Kawa:** dawne Crema Lab. Sześć metod parzenia, prowadzenie krok po kroku, timer, sprzęt (młynki, Lelit Anna), historia i baza kaw. Cały kod i dane są bez zmian.
 - **Air Fryer:** dawna „Ściąga Air Fryer” pod COSORI TurboBlaze 6 l. 37 dań z trybem, temperaturą i czasem w układzie wyświetlacza urządzenia, kroki, ulubione, niezależne timery z przypomnieniem „potrząśnij / obróć”.
 - **Dom (pomoc w domu):** nowy dział, który będzie rósł. Pierwsza zakładka to **Timery**: okrągły minutnik z pokrętłem, szybkimi czasami i opcjami zaawansowanymi (alert przed końcem, rundy, dźwięk, wibracje, przypomnienie w połowie) oraz stoper z okrążeniami.
+- **Thermomix TM6 (w Domu):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
   - **Jajka:** czasy na miękko, półtwardo i na twardo (we wrzątku i na parze) z korektą na wielkość i temperaturę jajka, jajko w koszulce, sadzone, jajecznica, test świeżości.
   - **Gotowanie:** ponad 30 produktów (ziemniaki, warzywa, kasze, ryż, makaron, strączkowe, mięso i ryby) z czasami w garnku, na parze, w piekarniku i w Air Fryerze, proporcjami wody i jednym przyciskiem do timera.
@@ -24,7 +25,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Dom `#dom/timers|eggs|cook|measures`, Zakupy `#shop/list|staples`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Dom `#dom/timers|eggs|cook|thermomix|measures`, Zakupy `#shop/list|staples`.
 
 ## Publikacja
 

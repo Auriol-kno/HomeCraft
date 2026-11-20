@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState, type KeyboardEvent as KEvent, type PointerEvent as PEvent } from 'react';
 import { t } from './en';
-import { actOn, addTimer, clock, remaining, unlockAudio, useTick, useTimers, type KTimer } from './timers';
+import { actOn, addTimer, clearPreset, clock, peekPreset, remaining, unlockAudio, useTick, useTimers, type KTimer } from './timers';
 
 const R = 112, C = 2 * Math.PI * R;
 const pad = (n: number) => String(n).padStart(2, '0');
-const MAX = 59 * 60 + 59;
+const MAX = 99 * 60 + 59;
 
-/** Two concentric rings: outer = seconds (turning it past 60 carries into minutes), inner = minutes. */
+/** Two concentric rings: outer = seconds (a full turn carries into minutes), inner = minutes (up to 99). */
 const RINGS = [
   { id: 's', r: 124, w: 16, max: 59, label: 'Sekundy', unit: 's' },
-  { id: 'm', r: 94, w: 14, max: 59, label: 'Minuty', unit: 'min' },
+  { id: 'm', r: 94, w: 14, max: 99, label: 'Minuty', unit: 'min' },
 ] as const;
 type RingId = typeof RINGS[number]['id'];
 const parts = (sec: number) => ({ m: Math.floor(sec / 60), s: sec % 60 });
@@ -30,20 +30,19 @@ function Dial({ value, onChange, children }: { value: number; onChange: (sec: nu
     const b = svg.current!.getBoundingClientRect();
     const a = Math.atan2(e.clientY - (b.top + b.height / 2), e.clientX - (b.left + b.width / 2)) + Math.PI / 2;
     const n = Math.round((((a + 2 * Math.PI) % (2 * Math.PI)) / (2 * Math.PI)) * 60) % 60;
-    if (id === 'm') { onChange(clampSec(n * 60 + p.s)); return; }
-    // Outer ring: follow the finger and carry whole turns into minutes.
-    if (start) last.current = p.s;
+    const pos = id === 'm' ? p.m % 60 : p.s;
+    if (start) last.current = pos;
     let delta = n - last.current;
     if (delta < -30) delta += 60; else if (delta > 30) delta -= 60;
     last.current = n;
-    if (delta) onChange(clampSec(value + delta));
+    if (delta) onChange(clampSec(value + delta * (id === 'm' ? 60 : 1)));
   };
   const key = (e: KEvent, id: RingId) => {
     const step = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -1 : e.key === 'PageUp' ? 5 : e.key === 'PageDown' ? -5 : 0;
     if (!step) return;
     e.preventDefault();
     if (id === 's') onChange(clampSec(value + step));
-    else onChange(clampSec((((p.m + step + 60) % 60) * 60) + p.s));
+    else onChange(clampSec(value + step * 60));
   };
   return <div className="hc-dial">
     <svg ref={svg} viewBox="0 0 280 280" role="group" aria-label={t('Pokrętło czasu')}
@@ -51,7 +50,7 @@ function Dial({ value, onChange, children }: { value: number; onChange: (sec: nu
       onPointerMove={e => { if (active.current) drag(e, active.current); }} onPointerUp={() => { active.current = null; }} onPointerCancel={() => { active.current = null; }}>
       <circle cx="140" cy="140" r="138" className="d-face" />
       {RINGS.map(ring => {
-        const val = p[ring.id], frac = val / 60, C2 = 2 * Math.PI * ring.r, [kx, ky] = polar(ring.r, frac);
+        const val = p[ring.id], frac = (ring.id === 'm' ? val % 60 : val) / 60, C2 = 2 * Math.PI * ring.r, [kx, ky] = polar(ring.r, frac);
         return <g key={ring.id} className={'d-ring d-' + ring.id} role="slider" tabIndex={0} aria-label={t(ring.label)} aria-valuemin={0} aria-valuemax={ring.max} aria-valuenow={val} aria-valuetext={`${val} ${ring.unit}`} onKeyDown={e => key(e, ring.id)}>
           <circle cx="140" cy="140" r={ring.r} className="d-track" strokeWidth={ring.w} />
           <circle cx="140" cy="140" r={ring.r} className="d-prog" strokeWidth={ring.w} strokeDasharray={`${frac * C2} ${C2}`} transform="rotate(-90 140 140)" />
@@ -98,7 +97,9 @@ const QUICK = [1, 3, 5, 10, 15, 20, 30, 45];
 function Minutnik() {
   const timers = useTimers();
   useTick(timers.some(x => !x.paused && !x.done));
-  const [sec, setSec] = useState(600), [name, setName] = useState(''), [err, setErr] = useState('');
+  const [pre0] = useState(peekPreset);
+  useEffect(() => { clearPreset(); }, []);
+  const [sec, setSec] = useState(pre0 ? Math.min(MAX, pre0.sec) : 600), [name, setName] = useState(pre0?.name || ''), [err, setErr] = useState('');
   const [half, setHalf] = useState(false), [pre, setPre] = useState(0), [rep, setRep] = useState(1), [sound, setSound] = useState(true), [vib, setVib] = useState(true);
   const { m, s } = parts(sec);
   const adj = (d: number) => setSec(v => Math.min(MAX, Math.max(0, v + d)));
@@ -106,7 +107,7 @@ function Minutnik() {
     if (sec <= 0) { setErr(t('Ustaw czas dłuższy niż 0 sekund')); return; }
     setErr('');
     const bits = [half && sec >= 60 ? t('przypomnienie w połowie') : '', pre && pre < sec ? `${t('alert')} ${pre >= 60 ? pre / 60 + ' min' : pre + ' s'}` : ''].filter(Boolean);
-    addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : [], act: 'Potrząśnij lub obróć', meta: bits.join(' · '), pre, rep, mute: !sound, vib });
+    addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : [], act: 'Potrząśnij lub obróć', meta: [pre0?.meta, ...bits].filter(Boolean).join(' · '), pre, rep, mute: !sound, vib });
     setName('');
   };
   return <div className="hc-stack">
@@ -124,7 +125,7 @@ function Minutnik() {
       <input className="hc-input" value={name} onChange={e => setName(e.target.value)} placeholder={t('Nazwa (np. Frytki)')} maxLength={40} aria-label={t('Nazwa timera')} />
       <details className="hc-adv"><summary>{t('Opcje zaawansowane')}</summary>
         <div className="hc-row wrap">
-          <label className="hc-field"><span>{t('Minuty')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={99} value={m} onChange={e => setSec(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)) * 60 + s)} aria-label={t('Minuty')} /></label>
+          <label className="hc-field"><span>{t('Minuty')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={99} value={m} onChange={e => setSec(clampSec(Math.max(0, parseInt(e.target.value) || 0) * 60 + s))} aria-label={t('Minuty')} /></label>
           <label className="hc-field"><span>{t('Sekundy')}</span><input className="hc-input hc-num" type="number" inputMode="numeric" min={0} max={59} value={s} onChange={e => setSec(m * 60 + Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} aria-label={t('Sekundy')} /></label>
         </div>
         <div className="hc-field"><span>{t('Alert przed końcem')}</span>

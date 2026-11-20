@@ -119,3 +119,10 @@ function tick() {
   if (changed) { emit(); void syncWake(); }
 }
 if (typeof window !== 'undefined') { setInterval(tick, 250); void syncWake(); }
+
+// ---- preset handed from a recipe to the timer dial (e.g. tap the time next to a dish) ---------
+export interface Preset { sec: number; name: string; meta: string }
+let preset: Preset | null = null;
+export const setPreset = (p: Preset) => { preset = p; };
+export const peekPreset = () => preset;
+export const clearPreset = () => { preset = null; };

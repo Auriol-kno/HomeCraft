@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DISHES, MODES, MODE_ORDER, FRYER_CATEGORIES, norm } from '../app/src/modules/fryer-data.ts';
+import { settingText, TM_CATEGORIES, TM_RECIPES } from '../app/src/modules/thermomix-data.ts';
 import { CATS, STAPLES, guessCat, parseEntry, listText } from '../app/src/modules/shopping-data.ts';
 import { convert, INGREDIENTS, eggSeconds, EGG_BOIL, FOODS, FOOD_CATEGORIES, METHODS, cToF, fToC, num, kitchenGrams } from '../app/src/modules/home-data.ts';
 
@@ -65,6 +66,21 @@ const mismatched = CATS.flatMap(c => STAPLES[c].filter(n => guessCat(n) !== c));
 assert(mismatched.length <= 6, 'staples mostly land in their own aisle: ' + mismatched.join(', '));
 const txt = listText([{ id: '1', name: 'Mleko', qty: '2 l', cat: 'Nabiał i jajka', done: false }, { id: '2', name: 'Chleb', qty: '', cat: 'Pieczywo', done: true }]);
 assert.equal(txt, 'NABIAŁ I JAJKA\n- Mleko (2 l)');
+
+// --- Thermomix TM6: manual recipes are complete and settings read like the device display ---
+assert(TM_RECIPES.length >= 12);
+assert.equal(new Set(TM_RECIPES.map(r => r.id)).size, TM_RECIPES.length, 'recipe ids are unique');
+for (const r of TM_RECIPES) {
+  assert(TM_CATEGORIES.includes(r.c), `${r.id}: known category`);
+  assert(r.ing.length > 0 && r.steps.length > 0, `${r.id}: has ingredients and steps`);
+  for (const st of r.steps) if (st.set) {
+    assert(typeof st.set.temp !== 'number' || (st.set.temp >= 37 && st.set.temp <= 100), `${r.id}: cooking temperature within 37–100 °C (Varoma for more)`);
+    assert(settingText(st.set).length > 0, `${r.id}: readable setting`);
+  }
+}
+assert.equal(settingText({ min: 18, temp: 100, speed: '4' }), '18 min · 100 °C · obr. 4');
+assert.equal(settingText({ sec: 25, speed: '4', rev: true }), '25 s · obr. 4 · ↺ wstecz');
+assert.equal(settingText({ min: 30, temp: 'Varoma', speed: '2' }), '30 min · Varoma · obr. 2');
 
 // --- English dictionary has no duplicate keys (a duplicate silently overrides the first) ---
 const src = readFileSync(new URL('../app/src/modules/en.ts', import.meta.url), 'utf8');

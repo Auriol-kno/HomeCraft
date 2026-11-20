@@ -17,6 +17,7 @@ export const ICONS = {
   coffee: 'M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm12 1h2a3 3 0 0 1 0 6h-2M3 22h16M8 2v3m4-3v3',
   fryer: 'M5 9h14l-1.2 9a2 2 0 0 1-2 1.7H8.2a2 2 0 0 1-2-1.7L5 9Zm2-4h10a2 2 0 0 1 2 2v2H5V7a2 2 0 0 1 2-2Zm8 7v3',
   home: 'M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6',
+  mixer: 'M6 8h12l-1.3 10a2 2 0 0 1-2 1.8H9.3a2 2 0 0 1-2-1.8L6 8Zm-1-3h14v3H5V5Zm7 3v4m-3 2h6',
 };
 
 /** Bottom sheet dialog used for dish details. */

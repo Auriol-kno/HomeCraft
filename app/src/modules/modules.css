@@ -293,3 +293,13 @@ select.hc-input{appearance:auto}
 .hc-legend{display:flex;justify-content:center;gap:14px;font:600 12px var(--body);color:var(--soft)}
 .hc-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
 }
+
+/* Thermomix */
+@layer overrides{
+.hc-tm summary{gap:10px}.hc-tm summary b{font-size:16px}
+.hc-ing,.hc-steps{margin:0;padding-left:20px;display:grid;gap:6px;font:14px/1.5 var(--body);color:var(--ink)}
+.hc-steps{gap:12px}.hc-steps li::marker{font-weight:700;color:var(--accent)}
+.hc-steps p{margin:0 0 6px}
+.hc-set{display:inline-block;margin:2px 0 4px;padding:6px 12px;border:1px solid var(--ink);border-radius:10px;font:700 14px var(--mono,ui-monospace,monospace);letter-spacing:.02em;background:var(--surface-2)}
+.hc-tip{margin:10px 0 0}
+}

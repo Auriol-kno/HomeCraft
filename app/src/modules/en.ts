@@ -46,7 +46,7 @@ const en: Record<string, string> = {
   // home: cooking
   'Metoda': 'Method', 'Garnek': 'Pot', 'Piekarnik': 'Oven', 'Szukaj: ryż, brokuł, kasza…': 'Search: rice, broccoli, groats…', 'Szukaj produktu': 'Search ingredient',
   'Czas od zagotowania wody': 'Time from when the water boils', 'Czas od pojawienia się pary': 'Time from when steam appears', 'Po rozgrzaniu piekarnika': 'After the oven has preheated', 'COSORI TurboBlaze, tryb jak w dziale Air Fryer': 'COSORI TurboBlaze, mode as in the Air Fryer section',
-  'Czasy orientacyjne: zależą od wielkości kawałków, garnka i płyty. Przycisk uruchamia timer z wartością środkową.': 'Times are approximate: they depend on piece size, pot and hob. The button starts a timer with the middle value.',
+  'Czasy orientacyjne: zależą od wielkości kawałków, garnka i płyty. Dotknięcie czasu ustawia go w minutniku.': 'Times are approximate: they depend on piece size, pot and hob. The button starts a timer with the middle value.',
   'Kasze i ryż': 'Grains and rice', 'Makaron': 'Pasta', 'Strączkowe': 'Legumes', 'Mięso i ryby': 'Meat and fish',
   // home: measures
   'Produkt': 'Ingredient', 'Ilość': 'Amount', 'Jednostka': 'Unit', 'szklanka': 'cup', 'szklanki': 'cups', 'łyżka': 'tbsp', 'łyżki': 'tbsp', 'łyżeczka': 'tsp', 'łyżeczki': 'tsp', 'Tabela miarek': 'Measures table', 'Temperatury': 'Temperatures',
@@ -163,6 +163,26 @@ const en: Record<string, string> = {
   'Zeruj': 'Reset',
   'Łącznie': 'Total',
   'Stoper liczy dalej także po zamknięciu aplikacji. Okrążenia zapisują się na tym urządzeniu.': 'The stopwatch keeps running even if you close the app. Laps are saved on this device.',
+  // Thermomix
+  'Thermomix': 'Thermomix',
+  'THERMOMIX TM6': 'THERMOMIX TM6',
+  'Przepisy bez Cookidoo': 'Recipes without Cookidoo',
+  'Ustaw timer': 'Set timer',
+  'Podstawowe ustawienia Thermomix TM6, które ustawisz ręcznie na urządzeniu: czas, temperatura i obroty. Działają bez Cookidoo i bez internetu.': 'Basic Thermomix TM6 settings you set by hand on the device: time, temperature and speed. They work without Cookidoo and without internet.',
+  'Zasady TM6': 'TM6 rules',
+  'Szukaj: ryż, zupa, pizza…': 'Search: rice, soup, pizza…',
+  'Szukaj przepisu': 'Search recipes',
+  'Porcje': 'Servings',
+  'Składniki': 'Ingredients',
+  'Kroki': 'Steps',
+  'Ustawienia na urządzeniu': 'Settings on the device',
+  'odpoczynek': 'rest',
+  'Wartości orientacyjne, oparte na ogólnych zasadach pracy z Thermomix. Sprawdź je w instrukcji swojego urządzenia i dopasuj do składników.': 'Approximate values based on general Thermomix practice. Check them against your device manual and adjust to your ingredients.',
+  'Dodatki': 'Sides',
+  'Zupy i sosy': 'Soups and sauces',
+  'Ciasta': 'Dough and batter',
+  'Słodkie i desery': 'Sweet and desserts',
+  'Szybkie czynności': 'Quick tasks',
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */
