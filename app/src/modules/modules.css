@@ -345,3 +345,56 @@ select.hc-input{appearance:auto}
 .hc-dc svg .fill{fill:currentColor}
 @media(max-width:360px){.hc-dc{width:38px;height:38px}.hc-dc.main{width:50px;height:50px}.hc-dial-ctl{gap:10px}}
 }
+@layer overrides{
+/* Big start button across the whole middle of the rings */
+.hc-start-big{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:auto;width:61%;height:61%;border-radius:50%;border:0;padding:0 0 18%;display:grid;place-content:center;justify-items:center;gap:1px;background:var(--accent);color:var(--on-accent);box-shadow:0 8px 20px #0000002e,inset 0 1px 0 #ffffff40;cursor:pointer;min-height:0}
+.hc-start-big:active{transform:translate(-50%,-50%) scale(.97)}
+.hc-start-big .hc-dial-time{color:inherit;font-size:30px}
+.hc-start-big svg{width:30px;height:30px;fill:currentColor}
+.hc-start-big span{font:800 12px var(--body);letter-spacing:.18em;color:inherit;opacity:.95}
+.hc-dc.rst{position:absolute;left:50%;bottom:19%;transform:translateX(-50%);width:32px;height:32px;pointer-events:auto;background:#ffffff2e;border-color:#ffffff66;color:var(--on-accent)}
+/* Air Fryer settings panel follows the chosen theme instead of staying dark */
+.hc-device{background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-top:3px solid var(--accent)}
+.hc-dev-row>div{background:var(--bg);border:1px solid var(--line)}
+.hc-led{color:var(--accent)}
+.hc-dev-modes span{color:var(--muted);border-color:var(--line)}
+.hc-dev-modes span.on{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}
+:root[data-theme="line"] .hc-device{background:transparent;border:1.5px solid var(--ink);border-top-width:1.5px;border-radius:26px}
+:root[data-theme="line"] .hc-dev-row>div{background:transparent;border:1.5px solid var(--ink);border-radius:14px}
+:root[data-theme="line"] .hc-led{color:var(--ink)}
+:root[data-theme="line"] .hc-dev-modes span{border-color:var(--ink);color:var(--ink)}
+:root[data-theme="line"] .hc-dev-modes span.on{background:var(--ink);color:var(--bg)}
+:root[data-theme="line"] .hc-start-big{background:var(--ink);color:var(--bg);box-shadow:none}
+:root[data-theme="line"] .hc-dc.rst{background:transparent;border-color:var(--bg);color:var(--bg)}
+/* Linia: settings dialog had a transparent panel, so the page showed through */
+:root[data-theme="line"] dialog.settings,:root[data-theme="line"] .settings{background:var(--bg);color:var(--ink);border:1.5px solid var(--ink)}
+:root[data-theme="line"] dialog.settings::backdrop{background:#0000008c}
+:root[data-theme="line"] .settings select,:root[data-theme="line"] .settings input{background:var(--bg);color:var(--ink);border:1.5px solid var(--ink)}
+:root[data-theme="line"] .guide,:root[data-theme="line"] .guide-in{background:var(--bg);color:var(--ink)}
+}
+@layer overrides{
+.hc-mini{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.hc-mini b{color:var(--accent)}
+:root[data-theme="line"] .hc-mini{background:transparent;border:1.5px solid var(--ink)}
+:root[data-theme="line"] .hc-mini b{color:var(--ink)}
+}
+/* Kawiarnia (bar): the soft raised / pressed-in look of the bottom menu on the whole interface */
+@layer overrides{
+html:root[data-theme="bar"] .app-shell :is(.card,.details-card,.hc-card,.recipe,.hint-card,.control-dock,.hc-setter,.hc-stack>div,.hc-timer){background:var(--bg);color:var(--ink);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell .hc-timer *{color:inherit}
+html:root[data-theme="bar"] .app-shell .hc-timer .hc-timer-top span,html:root[data-theme="bar"] .app-shell .hc-timer small{color:var(--muted)}
+html:root[data-theme="bar"] .app-shell .hc-timer .r-track{stroke:var(--track)}
+html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc:not(.main):not(.rst),.settings-trigger,.hc-laps-btn){background:var(--bg);color:var(--ink);border:0;box-shadow:5px 5px 11px var(--nm-d),-5px -5px 11px var(--nm-l);transition:box-shadow .15s}
+html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.hc-info-btn):is([aria-pressed="true"],[aria-selected="true"],[aria-expanded="true"]),
+html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc,.segment button,.presets button):active{background:var(--bg);color:var(--accent);box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell :is(.btn.main,.hc-primary,.hc-info-main,.hc-dc.main,.hc-timer-ctrl button.hot){border:0;box-shadow:6px 6px 14px var(--nm-d),-5px -5px 12px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell :is(.hc-input,input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){background:var(--bg);color:var(--ink);border:0;box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell :is(.hc-device,.hc-dev-row>div,.hc-mini,.hc-brew>div,.hc-facts div){background:var(--bg);border:0;box-shadow:inset 3px 3px 8px var(--nm-d),inset -3px -3px 8px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell .hc-device{border-top:0;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell .hc-dial .d-face{fill:var(--bg);stroke:none;filter:drop-shadow(6px 6px 10px var(--nm-d)) drop-shadow(-6px -6px 10px var(--nm-l))}
+html:root[data-theme="bar"] dialog.settings{background:var(--bg);border:0;box-shadow:12px 12px 28px var(--nm-d),-8px -8px 22px var(--nm-l)}
+}
+@layer overrides{
+html:root[data-theme="bar"] .app-shell .hc-dish{background:var(--bg);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root[data-theme="bar"] .app-shell .hc-dish:active{box-shadow:inset 5px 5px 11px var(--nm-d),inset -5px -5px 11px var(--nm-l)}
+}

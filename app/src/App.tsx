@@ -110,7 +110,6 @@ export function App() {
     {installHint&&<div className="hint-card" role="note"><p><b>{t('Dodaj HomeCraft do ekranu początkowego.')}</b> {t('Udostępnij → „Do ekranu początkowego”. Aplikacja otworzy się na pełnym ekranie, a Safari nie wyczyści Twojej historii.')}</p><button onClick={dismissHint} aria-label={t('Ukryj podpowiedź')}>×</button></div>}
     {backupDue&&<div className="hint-card warn" role="note"><p><b>{t('Zrób kopię danych.')}</b> {t('Historia i kalibracja są tylko na tym telefonie.')}</p><button className="hint-action" onClick={openBackup}>{t('Kopia →')}</button></div>}
     <BrewingPanel html={home}/>
-    <button className="wide-link" onClick={()=>{setEquipment('grinder');navigate('equipment');}}>{t('Dostosuj dawkę i mielenie')} <span>→</span></button>
     <div className="home-note"><Icon name="coffee"/><p>{t('Twój przepis, Twoje tempo.')}<br/><span>{t('Ustawienia i historia zostają na tym urządzeniu.')}</span></p></div>
    </section>
    <section hidden={screen!=='timer'} aria-label={t('Parzenie')} className="screen">

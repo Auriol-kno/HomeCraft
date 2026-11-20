@@ -117,19 +117,29 @@ function Minutnik() {
   return <div className="hc-stack">
     <div className="hc-card hc-setter">
       <Dial value={shown} onChange={v => { if (!cur) setSec(v); }}>
-        <b className="hc-dial-time">{pad(m)}:{pad(s)}</b>
-        <span>{cur ? (cur.done ? t('koniec') : cur.paused ? t('pauza') : t('odlicza')) : t('min : s')}</span>
-        <div className="hc-dial-ctl">
-          <button type="button" className="hc-dc" aria-label={cur ? t('Zeruj timer') : t('Zeruj')} onClick={() => { if (cur) { actOn(cur.id, 'del'); setRunId(null); } else { setSec(0); setErr(''); } }}>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" /></svg></button>
-          <button type="button" className="hc-dc main" aria-label={!cur ? t('Uruchom timer') : cur.done ? t('OK, wyłącz') : cur.paused ? t('Wznów') : t('Pauza')}
-            onClick={() => { unlockAudio(); if (!cur) start(); else if (cur.done) { actOn(cur.id, 'ack'); setRunId(null); } else actOn(cur.id, 'pause'); }}>
-            {cur && !cur.done && !cur.paused
-              ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
-              : cur?.done ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
-              : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" className="fill" /></svg>}
+        {!cur ? <>
+          <button type="button" className="hc-start-big" aria-label={t('Uruchom timer')} onClick={() => { unlockAudio(); start(); }}>
+            <b className="hc-dial-time">{pad(m)}:{pad(s)}</b>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            <span>START</span>
           </button>
-        </div>
+          <button type="button" className="hc-dc rst" aria-label={t('Zeruj')} onClick={() => { setSec(0); setErr(''); }}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" /></svg></button>
+        </> : <>
+          <b className="hc-dial-time">{pad(m)}:{pad(s)}</b>
+          <span>{cur.done ? t('koniec') : cur.paused ? t('pauza') : t('odlicza')}</span>
+          <div className="hc-dial-ctl">
+            <button type="button" className="hc-dc" aria-label={t('Zeruj timer')} onClick={() => { actOn(cur.id, 'del'); setRunId(null); }}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" /></svg></button>
+            <button type="button" className="hc-dc main" aria-label={cur.done ? t('OK, wyłącz') : cur.paused ? t('Wznów') : t('Pauza')}
+              onClick={() => { unlockAudio(); if (cur.done) { actOn(cur.id, 'ack'); setRunId(null); } else actOn(cur.id, 'pause'); }}>
+              {!cur.done && !cur.paused
+                ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+                : cur.done ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+                : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" className="fill" /></svg>}
+            </button>
+          </div>
+        </>}
       </Dial>
       <div className="hc-legend" aria-hidden="true"><span><i style={{ background: 'var(--cool)' }} />{t('Sekundy')} ({t('zewnętrzny')})</span><span><i style={{ background: 'var(--accent)' }} />{t('Minuty')} ({t('wewnętrzny')})</span></div>
       <div className="hc-fine" role="group" aria-label={t('Dokładny czas')}>
