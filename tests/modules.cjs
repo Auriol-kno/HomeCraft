@@ -16,9 +16,25 @@ let browser;
  const domNav=p.getByRole('navigation',{name:'Nawigacja Dom'}),fryerNav=p.getByRole('navigation',{name:'Nawigacja Air Fryer'});
  const tab=async name=>p.getByRole('tab',{name}).click();
 
- // Coffee stays the default module, with its own four-button navigation.
+ // Coffee stays the default module, with its own five-button navigation (Kawa, Parzenie, Sprzęt, Historia, Herbata).
  assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Kawa');
- assert.equal(await p.locator('nav.bottom-nav button').count(),4);
+ assert.equal(await p.locator('nav.bottom-nav button').count(),5);
+
+ // Tea guide: categories, search, per-tea info panel, brewing time handed to the timer.
+ await p.locator('nav.bottom-nav button').nth(4).click();
+ assert((await p.locator('.hc-tea').count())>=20,'tea cards');
+ await p.getByRole('button',{name:'Zielone',exact:true}).click();
+ const green=await p.locator('.hc-tea').count();assert(green>=4&&green<10,'green teas '+green);
+ await p.getByRole('button',{name:'Wszystkie',exact:true}).click();
+ await p.getByPlaceholder('Szukaj: sencha').fill('sencha');assert.equal(await p.locator('.hc-tea').count(),1);
+ await p.locator('.hc-tea summary').first().click();
+ assert.match(await p.locator('.hc-brew').first().innerText(),/75 °C/);
+ await p.getByRole('button',{name:'Info i ciekawostki'}).first().click();
+ assert.match(await p.locator('.hc-tea-info').first().innerText(),/Jak powstaje/);
+ await p.getByRole('button',{name:/Ustaw timer Sencha 1 min/}).click();
+ await p.waitForSelector('.hc-dial');
+ assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Dom');
+ await p.getByRole('tab',{name:'Kawa'}).click();
 
  // Air Fryer: 37 dishes, search, device settings, timer with a shake reminder.
  await tab('Air Fryer');

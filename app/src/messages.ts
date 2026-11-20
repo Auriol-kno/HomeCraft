@@ -101,6 +101,8 @@ Przygotuj kolejną kawę|Brew another coffee
 Nawigacja główna|Main navigation
 HomeCraft — ekran główny|HomeCraft — home
 Historia|History
+Herbata|Tea
+Herbata i napary|Tea and infusions
 Parzenie|Brewing
 Sprzęt|Equipment
 Kawa|Coffee

@@ -18,9 +18,10 @@ import { t as tm } from './modules/en';
 import { FryerModule, fryerTabs, type FryerTab } from './modules/FryerModule';
 import { HomeModule, homeTabs, type HomeTab } from './modules/HomeModule';
 import { ShoppingModule, SHOP_ICON, shopTabs, type ShopTab } from './modules/ShoppingModule';
+import { TeaScreen } from './modules/TeaScreen';
 import { ICONS, Icon as ModIcon, KitchenAlarm, TimerPill, Toaster } from './modules/ui';
 
-type Screen = 'home' | 'timer' | 'equipment' | 'history' | 'rating';
+type Screen = 'home' | 'timer' | 'equipment' | 'history' | 'rating' | 'tea';
 type Equipment = 'grinder' | 'anna' | 'service';
 type Module = 'coffee' | 'fryer' | 'dom' | 'shop';
 const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'fryer',label:'Air Fryer',icon:ICONS.fryer},{id:'dom',label:'Dom',icon:ICONS.home},{id:'shop',label:'Zakupy',icon:SHOP_ICON}];
@@ -30,9 +31,9 @@ function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; shop: Shop
  return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':'coffee',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:homeTabs.some(x=>x.id===b)?b as HomeTab:'timers',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
 }
 interface BrewStatus { running: boolean; method: string; seconds: number }
-const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?'};
-const destinations: {id: Screen; label: string; icon: string}[] = [{id:'home',label:'Kawa',icon:'coffee'},{id:'timer',label:'Parzenie',icon:'timer'},{id:'equipment',label:'Sprzęt',icon:'sliders'},{id:'history',label:'Historia',icon:'history'}];
-const paths: Record<string,string> = {coffee:'M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm12 1h2a3 3 0 0 1 0 6h-2M3 22h16M8 2v3m4-3v3',timer:'M9 2h6m-3 0v3m7 0 2 2M12 9v5l3 2M21 14a9 9 0 1 1-18 0 9 9 0 0 1 18 0',sliders:'M3 6h18M3 18h18M8 3v6m8 6v6',history:'M3 4v6h6M3 10a9 9 0 1 1 1 9m8-12v6l4 2',settings:'M9.94 4.58L10.32 1.94A10.2 10.2 0 0 1 13.68 1.94L14.06 4.58A7.7 7.7 0 0 1 15.79 5.30L17.92 3.70A10.2 10.2 0 0 1 20.30 6.08L18.70 8.21A7.7 7.7 0 0 1 19.42 9.94L22.06 10.32A10.2 10.2 0 0 1 22.06 13.68L19.42 14.06A7.7 7.7 0 0 1 18.70 15.79L20.30 17.92A10.2 10.2 0 0 1 17.92 20.30L15.79 18.70A7.7 7.7 0 0 1 14.06 19.42L13.68 22.06A10.2 10.2 0 0 1 10.32 22.06L9.94 19.42A7.7 7.7 0 0 1 8.21 18.70L6.08 20.30A10.2 10.2 0 0 1 3.70 17.92L5.30 15.79A7.7 7.7 0 0 1 4.58 14.06L1.94 13.68A10.2 10.2 0 0 1 1.94 10.32L4.58 9.94A7.7 7.7 0 0 1 5.30 8.21L3.70 6.08A10.2 10.2 0 0 1 6.08 3.70L8.21 5.30A7.7 7.7 0 0 1 9.94 4.58ZM15.2 12a3.2 3.2 0 1 1-6.4 0 3.2 3.2 0 0 1 6.4 0Z'};
+const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?',tea:'Herbata i napary'};
+const destinations: {id: Screen; label: string; icon: string}[] = [{id:'home',label:'Kawa',icon:'coffee'},{id:'timer',label:'Parzenie',icon:'timer'},{id:'equipment',label:'Sprzęt',icon:'sliders'},{id:'history',label:'Historia',icon:'history'},{id:'tea',label:'Herbata',icon:'tea'}];
+const paths: Record<string,string> = {coffee:'M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Zm12 1h2a3 3 0 0 1 0 6h-2M3 22h16M8 2v3m4-3v3',timer:'M9 2h6m-3 0v3m7 0 2 2M12 9v5l3 2M21 14a9 9 0 1 1-18 0 9 9 0 0 1 18 0',sliders:'M3 6h18M3 18h18M8 3v6m8 6v6',tea:'M4 9h12v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Zm12 1h1.5a2.5 2.5 0 0 1 0 5H16M7 3c0 1.5 1.5 1.5 1.5 3M11 3c0 1.5 1.5 1.5 1.5 3M3 21h14',history:'M3 4v6h6M3 10a9 9 0 1 1 1 9m8-12v6l4 2',settings:'M9.94 4.58L10.32 1.94A10.2 10.2 0 0 1 13.68 1.94L14.06 4.58A7.7 7.7 0 0 1 15.79 5.30L17.92 3.70A10.2 10.2 0 0 1 20.30 6.08L18.70 8.21A7.7 7.7 0 0 1 19.42 9.94L22.06 10.32A10.2 10.2 0 0 1 22.06 13.68L19.42 14.06A7.7 7.7 0 0 1 18.70 15.79L20.30 17.92A10.2 10.2 0 0 1 17.92 20.30L15.79 18.70A7.7 7.7 0 0 1 14.06 19.42L13.68 22.06A10.2 10.2 0 0 1 10.32 22.06L9.94 19.42A7.7 7.7 0 0 1 8.21 18.70L6.08 20.30A10.2 10.2 0 0 1 3.70 17.92L5.30 15.79A7.7 7.7 0 0 1 4.58 14.06L1.94 13.68A10.2 10.2 0 0 1 1.94 10.32L4.58 9.94A7.7 7.7 0 0 1 5.30 8.21L3.70 6.08A10.2 10.2 0 0 1 6.08 3.70L8.21 5.30A7.7 7.7 0 0 1 9.94 4.58ZM15.2 12a3.2 3.2 0 1 1-6.4 0 3.2 3.2 0 0 1 6.4 0Z'};
 function Icon({name}: {name:string}) {return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name]}/></svg>}
 // These fixed fragments belong to the retained brewing engine. Memoization keeps
 // React navigation renders from replacing its controls, live SVG or event handlers.
@@ -126,6 +127,7 @@ export function App() {
     <button className="wide-link" onClick={()=>navigate('timer')}>{t('Wróć do parzenia')} <span>→</span></button>
    </section>
    <section hidden={screen!=='history'} aria-label={t('Historia kaw')} className="screen">{backupDue&&<p className="notice">{t('Ostatnia kopia danych była dawno albo nigdy. Zapisz ją poniżej.')}</p>}<BrewingPanel html={history}/><Backup/></section>
+   <section hidden={screen!=='tea'} aria-label={t('Herbata')} className="screen"><TeaScreen onTimer={()=>go('dom','timers')}/></section>
    <section hidden={screen!=='rating'} aria-label={t('Ocena kawy')} className="screen"><BrewingPanel html={rating}/><button className="wide-link" onClick={()=>navigate('history')}>{t('Zobacz historię')} <span>→</span></button><button className="wide-link" onClick={()=>navigate('home')}>{t('Przygotuj kolejną kawę')} <span>→</span></button></section>
   </main>
   {dock&&module==='coffee'&&<div className="control-dock" role="group" aria-label={t('Sterowanie parzeniem')}>
@@ -133,7 +135,7 @@ export function App() {
    <button className="dock-main" onClick={()=>document.getElementById('mainBtn')?.click()}>{status.running?t('Stop'):status.seconds>0?t('Wznów'):t('Start')}</button>
    <button className="dock-reset" onClick={()=>document.getElementById('resetBtn')?.click()}>{t('Zeruj')}</button>
   </div>}
-  <nav className="bottom-nav" hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
+  <nav className="bottom-nav" style={{gridTemplateColumns:`repeat(${destinations.length},minmax(0,1fr))`}} hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
   <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)}/>
   <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
