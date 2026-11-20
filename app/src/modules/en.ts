@@ -227,6 +227,10 @@ const en: Record<string, string> = {
   'Kolejne zalewania': 'Re-steeping',
   'Przechowywanie': 'Storage',
   'Kofeina w herbacie': 'Caffeine in tea',
+  'odlicza': 'running',
+  'koniec': 'done',
+  'pauza': 'paused',
+  'Zeruj timer': 'Reset timer',
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */

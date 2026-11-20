@@ -74,6 +74,14 @@ let browser;
  const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.timers.v1'))[0]);
  assert.equal(saved.total,900);assert.equal(saved.rep,2);assert.equal(saved.pre,30);assert.equal(saved.name,'Interwał');
  await p.getByRole('button',{name:'Usuń',exact:true}).first().click();
+ // Start, pause and reset live in the middle of the rings.
+ await p.getByRole('button',{name:'5 min',exact:true}).click();
+ await p.getByRole('button',{name:'Uruchom timer'}).click();
+ await p.waitForTimeout(1500);await p.locator('.hc-dc.main').click();
+ assert.equal(await p.locator('.hc-dc.main').getAttribute('aria-label'),'Wznów');
+ assert.match(await p.locator('.hc-dial-time').innerText(),/^04:5\d$/,'dial shows the running countdown');
+ await p.getByRole('button',{name:'Zeruj timer'}).click();
+ assert.equal(await p.locator('.hc-dial-time').innerText(),'05:00','reset returns the dial to the set time');
  // Stopwatch with laps persists across reloads.
  await p.getByRole('button',{name:'Stoper',exact:true}).click();
  await p.getByRole('button',{name:'Start',exact:true}).click();await p.waitForTimeout(400);

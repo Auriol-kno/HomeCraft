@@ -100,21 +100,36 @@ function Minutnik() {
   const [pre0] = useState(peekPreset);
   useEffect(() => { clearPreset(); }, []);
   const [sec, setSec] = useState(pre0 ? Math.min(MAX, pre0.sec) : 600), [name, setName] = useState(pre0?.name || ''), [err, setErr] = useState('');
+  const [runId, setRunId] = useState<string | null>(null);
+  const cur = timers.find(x => x.id === runId);
+  const shown = cur ? Math.max(0, Math.ceil(remaining(cur))) : sec;
   const [half, setHalf] = useState(false), [pre, setPre] = useState(0), [rep, setRep] = useState(1), [sound, setSound] = useState(true), [vib, setVib] = useState(true);
-  const { m, s } = parts(sec);
+  const { m, s } = parts(shown);
   const adj = (d: number) => setSec(v => Math.min(MAX, Math.max(0, v + d)));
   const start = () => {
     if (sec <= 0) { setErr(t('Ustaw czas dłuższy niż 0 sekund')); return; }
     setErr('');
     const bits = [half && sec >= 60 ? t('przypomnienie w połowie') : '', pre && pre < sec ? `${t('alert')} ${pre >= 60 ? pre / 60 + ' min' : pre + ' s'}` : ''].filter(Boolean);
-    addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : pre0?.marks && sec === pre0.sec ? pre0.marks : [], act: pre0?.act || 'Potrząśnij lub obróć', meta: [pre0?.meta, ...bits].filter(Boolean).join(' · '), pre, rep, mute: !sound, vib });
+    const id = addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : pre0?.marks && sec === pre0.sec ? pre0.marks : [], act: pre0?.act || 'Potrząśnij lub obróć', meta: [pre0?.meta, ...bits].filter(Boolean).join(' · '), pre, rep, mute: !sound, vib });
+    setRunId(id);
     setName('');
   };
   return <div className="hc-stack">
     <div className="hc-card hc-setter">
-      <Dial value={sec} onChange={setSec}>
+      <Dial value={shown} onChange={v => { if (!cur) setSec(v); }}>
         <b className="hc-dial-time">{pad(m)}:{pad(s)}</b>
-        <span>{t('min : s')}</span>
+        <span>{cur ? (cur.done ? t('koniec') : cur.paused ? t('pauza') : t('odlicza')) : t('min : s')}</span>
+        <div className="hc-dial-ctl">
+          <button type="button" className="hc-dc" aria-label={cur ? t('Zeruj timer') : t('Zeruj')} onClick={() => { if (cur) { actOn(cur.id, 'del'); setRunId(null); } else { setSec(0); setErr(''); } }}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" /></svg></button>
+          <button type="button" className="hc-dc main" aria-label={!cur ? t('Uruchom timer') : cur.done ? t('OK, wyłącz') : cur.paused ? t('Wznów') : t('Pauza')}
+            onClick={() => { unlockAudio(); if (!cur) start(); else if (cur.done) { actOn(cur.id, 'ack'); setRunId(null); } else actOn(cur.id, 'pause'); }}>
+            {cur && !cur.done && !cur.paused
+              ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+              : cur?.done ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+              : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" className="fill" /></svg>}
+          </button>
+        </div>
       </Dial>
       <div className="hc-legend" aria-hidden="true"><span><i style={{ background: 'var(--cool)' }} />{t('Sekundy')} ({t('zewnętrzny')})</span><span><i style={{ background: 'var(--accent)' }} />{t('Minuty')} ({t('wewnętrzny')})</span></div>
       <div className="hc-fine" role="group" aria-label={t('Dokładny czas')}>
@@ -137,7 +152,6 @@ function Minutnik() {
         <label className="hc-check"><input type="checkbox" checked={vib} onChange={e => setVib(e.target.checked)} /> {t('Wibracje')}</label>
       </details>
       {err && <p className="hc-err" role="alert">{err}</p>}
-      <button className="hc-primary" type="button" onClick={() => { unlockAudio(); start(); }}>{t('Uruchom timer')}</button>
     </div>
     <div className="hc-stack">
       {timers.length === 0 ? <p className="hc-empty">{t('Brak aktywnych timerów. Wybierz danie albo ustaw czas powyżej.')}</p> : timers.map(tm => <TimerCard key={tm.id} tm={tm} />)}

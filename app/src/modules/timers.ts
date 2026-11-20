@@ -79,10 +79,12 @@ export function addTimer(name: string, total: number, marksOrOpts: number[] | Ti
   unlockAudio();
   const o: TimerOptions = Array.isArray(marksOrOpts) ? { marks: marksOrOpts, act, meta } : marksOrOpts;
   const rep = Math.max(1, Math.min(20, Math.round(o.rep || 1)));
-  timers.unshift({ id: Date.now() + Math.random().toString(36).slice(2, 6), name: name || 'Timer', total, endAt: Date.now() + total * 1000, paused: false, remain: total, marks: o.marks || [], fired: [], act: o.act ?? 'Potrząśnij kosz', meta: o.meta ?? '', done: false, ack: false,
+  const id = Date.now() + Math.random().toString(36).slice(2, 6);
+  timers.unshift({ id, name: name || 'Timer', total, endAt: Date.now() + total * 1000, paused: false, remain: total, marks: o.marks || [], fired: [], act: o.act ?? 'Potrząśnij kosz', meta: o.meta ?? '', done: false, ack: false,
     pre: o.pre && o.pre < total ? o.pre : 0, rep, rnd: 1, mute: !!o.mute, vib: o.vib !== false });
   if (timers.length > 20) timers.length = 20;
   emit(); void syncWake();
+  return id;
 }
 export type TimerAction = 'pause' | 'plus1' | 'plus2' | 'reset' | 'ack' | 'del';
 export function actOn(id: string, a: TimerAction) {
