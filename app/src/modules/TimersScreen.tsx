@@ -107,7 +107,7 @@ function Minutnik() {
     if (sec <= 0) { setErr(t('Ustaw czas dłuższy niż 0 sekund')); return; }
     setErr('');
     const bits = [half && sec >= 60 ? t('przypomnienie w połowie') : '', pre && pre < sec ? `${t('alert')} ${pre >= 60 ? pre / 60 + ' min' : pre + ' s'}` : ''].filter(Boolean);
-    addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : [], act: 'Potrząśnij lub obróć', meta: [pre0?.meta, ...bits].filter(Boolean).join(' · '), pre, rep, mute: !sound, vib });
+    addTimer(name.trim() || 'Timer', sec, { marks: half && sec >= 60 ? [Math.round(sec / 2)] : pre0?.marks && sec === pre0.sec ? pre0.marks : [], act: pre0?.act || 'Potrząśnij lub obróć', meta: [pre0?.meta, ...bits].filter(Boolean).join(' · '), pre, rep, mute: !sound, vib });
     setName('');
   };
   return <div className="hc-stack">

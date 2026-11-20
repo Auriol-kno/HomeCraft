@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
 import { cToF, convert, EGG_BOIL, EGG_OTHER, EGG_SIZES, EGG_START, EGG_STEAM, EGG_TIPS, eggSeconds, fToC, FOODS, FOOD_CATEGORIES, INGREDIENTS, kitchenGrams, METHODS, ML, num, OVEN_C, OVEN_NOTES, UNITS, type EggMethod, type MethodId, type Unit } from './home-data';
 import { norm, SAFE_TEMPS } from './fryer-data';
-import { addTimer, setPreset, useTimers } from './timers';
+import { setPreset, useTimers } from './timers';
 import { settingText, TM_CATEGORIES, TM_RECIPES, TM_RULES } from './thermomix-data';
 import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
@@ -20,7 +20,7 @@ function Pills<T extends string>({ label, value, options, onChange }: { label: s
 function Eggs({ onTimer }: { onTimer: () => void }) {
   const [method, setMethod] = useState<EggMethod>('boil'), [size, setSize] = useState('M'), [start, setStart] = useState('fridge');
   const styles = method === 'boil' ? EGG_BOIL : EGG_STEAM;
-  const go = (name: string, sec: number, meta: string, act = 'Wyjmij i zalej zimną wodą') => { addTimer(name, sec, [], act, meta); onTimer(); };
+  const go = (name: string, sec: number, meta: string, act = 'Wyjmij i zalej zimną wodą') => { setPreset({ sec, name, meta, act }); onTimer(); };
   return <section className="screen" aria-label={t('Jajka')}>
     <div className="hc-card hc-form">
       <Pills label="Sposób" value={method} onChange={setMethod} options={[{ id: 'boil', n: 'We wrzątku' }, { id: 'steam', n: 'Na parze' }]} />

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
 import { DISHES, FRYER_CATEGORIES, FRYER_RULES, MODES, MODE_ORDER, SAFE_TEMPS, fmtMin, norm, type Dish } from './fryer-data';
-import { addTimer, useTimers } from './timers';
+import { setPreset, useTimers } from './timers';
 import { ICONS, Icon, Sheet } from './ui';
 import { TimersScreen } from './TimersScreen';
 
@@ -18,8 +18,8 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
   const M = MODES[d.m];
   const marks = d.s.length ? d.s.map(f => 'po ' + Math.round(d.min * f) + ' min').join(', ') : t('nie trzeba');
   const start = (pre: boolean) => {
-    if (pre) addTimer('Rozgrzewanie: ' + d.n, 180, [], '', `PREHEAT · ${d.t} °C`);
-    else addTimer(d.n, d.min * 60, d.s.map(f => Math.round(d.min * 60 * f)), d.act || 'Sprawdź jedzenie', `${M.tag} · ${d.t} °C`);
+    if (pre) setPreset({ sec: 180, name: 'Rozgrzewanie: ' + d.n, meta: `PREHEAT · ${d.t} °C`, act: '' });
+    else setPreset({ sec: d.min * 60, name: d.n, meta: `${M.tag} · ${d.t} °C`, marks: d.s.map(f => Math.round(d.min * 60 * f)), act: d.act || 'Sprawdź jedzenie' });
     onTimer();
   };
   return <Sheet overline={t(d.c)} title={d.n} onClose={onClose} headExtra={<button className="hc-icon-btn" onClick={onFav} aria-pressed={fav} aria-label={t('Ulubione')}><Star on={fav} /></button>}>

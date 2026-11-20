@@ -43,6 +43,9 @@ let browser;
  await p.locator('.hc-dish').first().click();
  assert.match(await p.locator('.hc-device').innerText(),/AIR FRY/);
  await p.getByRole('button',{name:/Start timera 20 min/}).click();
+ await p.waitForSelector('.hc-dial');
+ assert.equal(await p.locator('.hc-dial-time').innerText(),'20:00','dish time is already in the dial');
+ await p.getByRole('button',{name:'Uruchom timer'}).click();
  await p.waitForSelector('.hc-timer');
  assert.match(await p.locator('.hc-timer [role=timer]').first().innerText(),/^(19:5\d|20:00)$/);
  assert.equal(await p.locator('.hc-bar b').count(),2,'two shake marks for frytki');
@@ -84,6 +87,9 @@ let browser;
  // Dom: eggs
  await domNav.getByRole('button',{name:'Jajka'}).click();
  await p.getByRole('button',{name:/Start timera Na twardo/}).click();
+ await p.waitForSelector('.hc-dial');
+ assert.match(await p.locator('.hc-dial-time').innerText(),/^09:[23]\d$/,'egg time is already in the dial');
+ await p.getByRole('button',{name:'Uruchom timer'}).click();
  assert.equal(await p.locator('.hc-timer').count(),2);
  assert.match(await p.locator('.hc-timer [role=timer]').first().innerText(),/^(09:2\d|09:30)$/);
  // Dom: measures
