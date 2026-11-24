@@ -139,8 +139,8 @@ export function App() {
    <button className="dock-reset" onClick={()=>document.getElementById('resetBtn')?.click()}>{t('Zeruj')}</button>
   </div>}
   <nav className="bottom-nav" style={{gridTemplateColumns:`repeat(${destinations.length},minmax(0,1fr))`}} hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
-  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan')}/>
-  <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan')}/>
+  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
+  <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
   <KitchenModule active={module==='plan'} tab={planTab} onTab={x=>go('plan',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <BrewingPanel html={overlays}/>

@@ -2,6 +2,7 @@
 // Plan (Mission Control) → Przygotuj (Mise en Place) → Gotuj (Cooking Timeline).
 // Uses the shared kitchen timers (timers.ts) and the theme variables, like the other modules.
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { recipeKcal } from './cookbook-data';
 import { t } from './en';
 import { earliestServeAt, handsMinutes, hhmm, LANES, minLabel, recipeById, PANKO_DINNER, schedule, status, timeToday, totalMinutes, type Lane, type Planned, type Recipe, type Status } from './kitchen-data';
 import { getKitchen, resetKitchen, setKitchen, useKitchen, type KitchenSession } from './kitchen-store';
@@ -76,7 +77,7 @@ function Lanes({ plan, now, serveAt }: { plan: Planned[]; now: number; serveAt: 
   const t0 = Math.min(...plan.map(x => x.start)), span = serveAt - t0 || 1;
   const pos = (ms: number) => Math.min(100, Math.max(0, (ms - t0) / span * 100));
   return <div className="hc-k-lanes" aria-hidden="true">
-    {LANES.map(l => <div key={l.id} className="hc-k-lane">
+    {LANES.filter(l => plan.some(task => task.lane === l.id)).map(l => <div key={l.id} className="hc-k-lane">
       <span>{laneLabel(l.id)}</span>
       <div>{plan.filter(x => x.lane === l.id).map(x => <i key={x.id} className={'l-' + l.id} style={{ left: pos(x.start) + '%', width: `calc(${pos(x.end) - pos(x.start)}% - 2px)` }} title={x.title} />)}
         {now > t0 && now < serveAt && <b className="hc-k-nowline" style={{ left: pos(now) + '%' }} />}</div>
@@ -147,16 +148,16 @@ function PlanView({ c, onTab }: { c: ReturnType<typeof useCooking>; onTab: (x: K
       <button className="hc-primary" onClick={() => onTab('cook')}>{t('Wróć do gotowania')} →</button>
     </div>}
     <div className="hc-card hc-k-recipe" aria-label={t('Wybrane danie')}>
-      <p className="hc-tag">{t('Przykładowe danie')}</p>
+      <p className="hc-tag">{t('Wybrane danie')}</p><a className="hc-ghost" href="#dom/recipes">{t('Książka kucharska')}</a>
       <h2 className="hc-h3">{recipe.name}</h2>
-      <p className="hc-k-facts"><span>{recipe.servings} {t('porcje')}</span><span>{t('razem')} {minLabel(totalMinutes(recipe))}</span><span>{t('Twoja praca')} {handsMinutes(recipe)} min</span><span>Air Fryer × {fryerRuns}</span></p>
+      <p className="hc-k-facts"><span>{recipe.servings} {t('porcje')}</span><span>{t('razem')} {minLabel(totalMinutes(recipe))}</span><span>{t('Twoja praca')} {handsMinutes(recipe)} min</span>{fryerRuns > 0 && <span>Air Fryer × {fryerRuns}</span>}<span>≈ {recipeKcal(recipe)} {t('kcal / porcję')}</span></p>
       <p className="subtle">{recipe.note}</p>
     </div>
     <ServeTime s={s} recipe={recipe} now={now} locked={s.cooking} />
     <div className="hc-card">
       <p className="hc-k-summary"><span>{t('Start')} <b>{hhmm(first.start)}</b></span><span>{t('Podanie')} <b>{hhmm(s.serveAt)}</b></span></p>
       <Lanes plan={plan} now={now} serveAt={s.serveAt} />
-      <p className="subtle">{t('Pierwszy krok')}: {first.title}. {t('Równolegle pracują Air Fryer i czas oczekiwania, Ty robisz jedną rzecz naraz.')}</p>
+      <p className="subtle">{t('Pierwszy krok')}: {first.title}. {t('Plan uwzględnia sprzęt i czas oczekiwania. Ty robisz jedną rzecz naraz.')}</p>
     </div>
     <div className="hc-k-cta">
       {!s.cooking && <button className="hc-primary" onClick={() => onTab('mise')}>{t('Dalej: przygotuj składniki')} →</button>}
@@ -282,7 +283,7 @@ export function PlanCta({ onOpen }: { onOpen: () => void }) {
 export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: KitchenTab; onTab: (x: KitchenTab) => void }) {
   const c = useCooking(active);
   const main = useRef<HTMLElement>(null);
-  useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
+  useEffect(() => { if(active){ main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab, active]);
   // Keep the screen on while cooking on the Gotuj view (timers also do this while they count).
   useEffect(() => {
     if (!active || tab !== 'cook' || !c.s.cooking || !navigator.wakeLock) return;

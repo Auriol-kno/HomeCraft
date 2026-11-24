@@ -5,26 +5,11 @@
 
 /** Who or what is busy during a task. `hands` = the cook (one task at a time), `fryer` = the single
  *  Air Fryer basket (one load at a time), `wait` = passive time (soaking, resting), unlimited. */
-export type Lane = 'hands' | 'fryer' | 'wait';
-export const LANES: { id: Lane; label: string }[] = [{ id: 'hands', label: 'Ty' }, { id: 'fryer', label: 'Air Fryer' }, { id: 'wait', label: 'Czeka' }];
+export const LANES: { id: Lane; label: string }[] = [{ id: 'hands', label: 'Ty' }, { id: 'fryer', label: 'Air Fryer' }, { id: 'stove', label: 'Kuchenka' }, { id: 'oven', label: 'Piekarnik' }, { id: 'blender', label: 'Blender' }, { id: 'wait', label: 'Czeka' }];
 
-export interface KitchenTask {
-  id: string; title: string; detail: string; lane: Lane; min: number;
-  /** Tasks that must be finished before this one starts. */
-  after: string[];
-  /** Manual appliance setting shown on the card (never sent to the device). */
-  fryer?: { mode: string; temp: number };
-  /** Timer handed to the shared kitchen timers; `marks` are fractions of the time (shake / turn). */
-  timer?: { name: string; marks?: number[]; act?: string };
-  safety?: string;
-}
-export interface Ingredient { id: string; n: string; q: string }
-export interface Recipe {
-  id: string; name: string; short: string; servings: number; note: string;
-  ingredients: Ingredient[]; equipment: { id: string; n: string }[]; prep: { id: string; n: string }[];
-  tasks: KitchenTask[];
-}
-
+export type { Recipe, KitchenTask, Ingredient, Lane } from './kitchen-types.ts';
+import type { Recipe, KitchenTask, Lane } from './kitchen-types.ts';
+import { COOKBOOK_RECIPES } from './cookbook-recipes.ts';
 export const PANKO_DINNER: Recipe = {
   id: 'panko-frytki-salatka',
   name: 'Kurczak w panko, frytki i sałatka',
@@ -74,7 +59,7 @@ export const PANKO_DINNER: Recipe = {
     { id: 'serve', title: 'Polej sałatkę i podawaj', detail: 'Dressing dodaj tuż przed podaniem. Posól frytki.', lane: 'hands', min: 2, after: ['rest', 'recrisp', 'salad'] },
   ],
 };
-export const RECIPES: Recipe[] = [PANKO_DINNER];
+export const RECIPES: Recipe[] = [PANKO_DINNER, ...COOKBOOK_RECIPES];
 export const recipeById = (id: string) => RECIPES.find(r => r.id === id);
 
 export interface Planned extends KitchenTask { start: number; end: number }
@@ -88,7 +73,7 @@ export function schedule(recipe: Recipe, serveAt: number): Planned[] {
   const succ = new Map<string, string[]>(tasks.map(t => [t.id, []]));
   for (const t of tasks) for (const d of t.after) succ.get(d)?.push(t.id);
   const placed = new Map<string, Planned>();
-  const busy: Record<Lane, { start: number; end: number }[]> = { hands: [], fryer: [], wait: [] };
+  const busy: Record<Lane, { start: number; end: number }[]> = { hands: [], fryer: [], stove: [], oven: [], blender: [], wait: [] };
   while (placed.size < tasks.length) {
     const ready = tasks.filter(t => !placed.has(t.id) && succ.get(t.id)!.every(s => placed.has(s)));
     if (!ready.length) throw new Error('Cykl zależności w przepisie ' + recipe.id);
@@ -96,12 +81,13 @@ export function schedule(recipe: Recipe, serveAt: number): Planned[] {
     ready.sort((a, b) => bound(b) - bound(a) || order.get(b.id)! - order.get(a.id)!);
     const t = ready[0], d = t.min * MIN;
     let end = bound(t);
-    if (t.lane !== 'wait') {
+    const resources = [...new Set([t.lane, ...(t.resources || [])])].filter(l => l !== 'wait');
+    if (resources.length) {
       for (let moved = true; moved;) {
         moved = false;
-        for (const iv of busy[t.lane]) if (end - d < iv.end && end > iv.start) { end = iv.start; moved = true; }
+        for (const resource of resources) for (const iv of busy[resource]) if (end - d < iv.end && end > iv.start) { end = iv.start; moved = true; }
       }
-      busy[t.lane].push({ start: end - d, end });
+      for (const resource of resources) busy[resource].push({ start: end - d, end });
     }
     placed.set(t.id, { ...t, start: end - d, end });
   }
@@ -111,7 +97,7 @@ export function schedule(recipe: Recipe, serveAt: number): Planned[] {
 
 /** Total time from the first task to serving, in minutes. */
 export const totalMinutes = (recipe: Recipe) => { const p = schedule(recipe, 0); return Math.round(-Math.min(...p.map(t => t.start)) / MIN); };
-export const handsMinutes = (recipe: Recipe) => recipe.tasks.filter(t => t.lane === 'hands').reduce((s, t) => s + t.min, 0);
+export const handsMinutes = (recipe: Recipe) => recipe.tasks.filter(t => t.lane === 'hands' || t.resources?.includes('hands')).reduce((s, t) => s + t.min, 0);
 
 /** First sensible serving time: now + the whole plan + a little slack, rounded up to 15 minutes. */
 export function defaultServeAt(recipe: Recipe, now: number) {
