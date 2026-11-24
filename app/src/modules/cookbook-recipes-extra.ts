@@ -171,15 +171,15 @@ function make(seed:Seed,index:number):CookbookRecipe{
   {id:'s2',title:'Pozostaw do wyrośnięcia',detail:'Przykryj i odstaw w ciepłym miejscu, aż wyraźnie zwiększy objętość.',lane:'wait' as Lane,min:60,after:['s1'],timer:{name:'Wyrastanie focaccii'}},
   {id:'s3',title:'Uformuj i upiecz',detail:'Przełóż do natłuszczonej formy, dodaj pomidorki. Piecz w piekarniku 210 °C przez 20–25 min do rumianego spodu.',lane:'oven' as Lane,min:25,after:['s2'],timer:{name:'Focaccia w piekarniku'}},
  ] : baked ? [
-  {id:'s1',title:'Przygotuj masę',detail:'W Thermomixie wymieszaj składniki tylko do połączenia.',lane:'blender' as Lane,min:8,after:[]},
+  {id:'s1',title:'Przygotuj masę',detail:'W Thermomixie wymieszaj składniki tylko do połączenia.',lane:'blender' as Lane,min:8,after:[],timer:{name:'Przygotowanie masy'}},
   {id:'s2',title:/gofry/i.test(name)?'Upiecz gofry':'Upiecz w formie',detail:/gofry/i.test(name)?'Rozgrzej gofrownicę i piecz porcjami zgodnie z instrukcją urządzenia, aż środek będzie upieczony.':'Przelej do wyłożonej formy. Piecz w piekarniku 180 °C około 25–32 min; patyczek nie może być oblepiony surową masą.',lane:/gofry/i.test(name)?'hands' as Lane:'oven' as Lane,min:30,after:['s1'],timer:{name},...(safety?{safety}:{})},
-  {id:'s3',title:'Przestudź i podziel',detail:'Odstaw na 10 min, następnie podziel na 4 porcje.',lane:'wait' as Lane,min:10,after:['s2']},
+  {id:'s3',title:'Przestudź i podziel',detail:'Odstaw na 10 min, następnie podziel na 4 porcje.',lane:'wait' as Lane,min:10,after:['s2'],timer:{name:'Studzenie'}},
  ] : chia ? [
-  {id:'s1',title:'Wymieszaj pudding',detail:'W Thermomixie krótko wymieszaj chia z płynnymi składnikami. Przelej do czterech naczyń.',lane:'blender' as Lane,min:5,after:[]},
+  {id:'s1',title:'Wymieszaj pudding',detail:'W Thermomixie krótko wymieszaj chia z płynnymi składnikami. Przelej do czterech naczyń.',lane:'blender' as Lane,min:5,after:[],timer:{name:'Mieszanie puddingu'}},
   {id:'s2',title:'Schłodź do zgęstnienia',detail:'Wstaw pod przykryciem do lodówki na minimum 4 godziny; po 15 min ponownie zamieszaj.',lane:'wait' as Lane,min:240,after:['s1'],timer:{name:'Chłodzenie puddingu chia'}},
   {id:'s3',title:'Dodaj owoce',detail:'Dodaj umyte owoce i podaj schłodzone.',lane:'hands' as Lane,min:3,after:['s2']},
  ] : balls ? [
-  {id:'s1',title:'Rozdrobnij masę',detail:'W Thermomixie rozdrobnij składniki pulsacyjnie na lepką, plastyczną masę; nie podgrzewaj.',lane:'blender' as Lane,min:5,after:[]},
+  {id:'s1',title:'Rozdrobnij masę',detail:'W Thermomixie rozdrobnij składniki pulsacyjnie na lepką, plastyczną masę; nie podgrzewaj.',lane:'blender' as Lane,min:5,after:[],timer:{name:'Rozdrabnianie masy'}},
   {id:'s2',title:'Uformuj kulki',detail:'Wilgotnymi dłońmi uformuj 16 równych kulek.',lane:'hands' as Lane,min:10,after:['s1']},
   {id:'s3',title:'Schłodź',detail:'Wstaw do lodówki na 30 min. Porcja to 4 kulki.',lane:'wait' as Lane,min:30,after:['s2'],timer:{name:'Chłodzenie kulek mocy'}},
  ] : [
