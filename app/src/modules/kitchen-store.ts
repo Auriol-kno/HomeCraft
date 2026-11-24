@@ -42,6 +42,7 @@ export function setKitchen(update: (s: KitchenSession) => KitchenSession) {
   try { localStorage.setItem(KITCHEN_KEY, JSON.stringify(session)); } catch { /* storage blocked */ }
   listeners.forEach(l => l());
 }
+export const selectKitchenRecipe = (recipe: Recipe) => setKitchen(() => fresh(recipe));
 export const resetKitchen = () => setKitchen(s => fresh(recipeById(s.recipe)));
 const subscribe = (l: () => void) => { listeners.add(l); return () => { listeners.delete(l); }; };
 export const useKitchen = () => useSyncExternalStore(subscribe, get, get);

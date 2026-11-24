@@ -72,3 +72,65 @@ Przy systemowym Chromium: `CHROMIUM_PATH=/usr/bin/chromium npm test`. Testy: `te
 ## Zastrzeżenia
 
 Czasy gotowania, ilości wody i gramatury są **orientacyjne**: zależą od wielkości produktu, sprzętu i wilgotności. Miary: szklanka 250 ml, łyżka 15 ml, łyżeczka 5 ml, bez czubka, dokładność około ±10%. Przy mięsie i drobiu sprawdzaj temperaturę termometrem. Nie testowano na fizycznym iPhonie (dźwięk, wibracje i wake lock zależą od Safari).
+
+## Książka kucharska (demo)
+
+Dom → Książka kucharska (`#dom/recipes`) zawiera 100 receptur, w tym 20 azjatyckich,
+polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adres
+`#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
+bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
+Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
+Książka otwiera się z karty w Timerach; dolny pasek Dom zachowuje pięć dotychczasowych zakładek, bez ciasnej szóstej pozycji. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
+
+Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
+zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
+potwierdzenia, jeżeli istnieje postęp; usuwa wyłącznie timery przypisane do zastępowanej
+sesji. Bez zmiany przepisu otwiera istniejący plan. Liczba porcji jest ustalona dla
+receptury; automatycznego skalowania porcji/partii jeszcze nie ma.
+
+Dane ulubionych: wyłącznie nowy klucz `homecraft.cookbook.favourites.v1`, format
+`{v:1,ids:string[]}`. Odczyt waliduje wersję, typy, znane identyfikatory i duplikaty.
+Uszkodzone dane dają pustą listę bez nadpisywania przy odczycie. Błąd zapisu jest
+zgłaszany; ulubione działają wtedy tylko w pamięci. Nie ma migracji. Dotychczasowy
+`homecraft.kitchen.v1` nadal przechowuje tę samą pojedynczą sesję i oryginalny przepis
+panko zachowuje identyfikatory. Pozostałe dane nie są migrowane ani kasowane.
+
+Baza jest lokalna w `cookbook-recipes.ts`; każdy rekord ma trwałe jawne ID (nie zmieniaj
+ich przy edycji ani sortowaniu). Nowe rekordy dodaje się bez zmiany algorytmu katalogu;
+test sprawdza wyszukiwanie i sortowanie także dla 500 rekordów. Logika jest w czystych
+plikach `.ts`; interfejs w `Cookbook.tsx`. Planer uwzględnia wyłączne zasoby osoby,
+kosza, kuchenki, piekarnika i blendera, także dodatkowe zasoby aktywnego kroku.
+Nowe scenariusze są celowo sekwencyjne: jedna osoba i bez konfliktów sprzętu.
+
+**Kcal na porcję są szacunkowe**, obliczane jako suma `gramy × kcal/100 g / 100`
+podzielona przez liczbę porcji, zaokrąglana do całej kcal. Obejmują wszystkie wymienione
+składniki, olej i dodatki. Wartości kcal/100 g są orientacyjnymi wartościami redakcyjnymi,
+nie importem zweryfikowanych rekordów USDA ani danymi laboratoryjnymi. Szczegóły
+obliczenia widać w karcie; suche produkty są ważone na sucho, konserwy po odsączeniu.
+Soki mają określony uzysk i porcję w ml; kompot uwzględnia także zjedzone jabłka.
+W rosole kcal zakładają zjedzenie mięsa i warzyw. Zamienniki i inne marki zmieniają kcal.
+
+Receptury są własnymi domowymi opracowaniami, nie kopiami opisów źródłowych ani
+rankingiem popularności. Linki kategorii służą jako inspiracje do doboru dań, nie jako
+potwierdzenie dokładnej gramatury czy czasu. **Nie przetestowano ich w kuchni**.
+W wybranych przepisach Air Fryera partie są jawnie rozdzielone na kroki. Większe porcje mogą wymagać dodatkowych partii i wydłużenia planu. Sprawdzaj gotowość,
+a mięso termometrem: drób 75 °C (przyjęte zaokrąglenie w górę), mielona wieprzowina/
+wołowina 71 °C, ryby 63 °C, całe kawałki wieprzowiny 63 °C + 3 min odpoczynku.
+Podstawą progów jest FoodSafety.gov; nie zakładaj gotowości wyłącznie po czasie.
+
+Źródła przeglądu (24.11.2026):
+- https://www.kwestiasmaku.com/przepisy — polskie dania i codzienne gotowanie;
+- https://www.recipetineats.com/category/asian-recipes/ — rodziny dań azjatyckich;
+- https://www.bbcgoodfood.com/recipes/collection/family-meal-recipes — posiłki rodzinne;
+- https://cosori.com/pages/air-fryer-recipes — inspiracje do Air Fryera;
+- https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures — bezpieczeństwo;
+- https://fdc.nal.usda.gov/ — możliwe przyszłe źródło zweryfikowanych danych odżywczych;
+  obecne wartości nie są jego automatycznym importem.
+
+Testy książki: `tests/cookbook.test.mjs` i `tests/cookbook.cjs` (wchodzą w `npm test`).
+Zrzuty przeglądarkowe zapisują się w `test-results/cookbook/`, także jako artefakt CI.
+Wariant Vercel: `npx vite build --base=/`, potem
+`BOOK_BASE=/ CHROMIUM_PATH=/usr/bin/chromium node tests/cookbook.cjs`.
+Wariant Pages: `npm run build`, potem `npm test`. Nie commituj wygenerowanych plików strony.
+Safari na fizycznym iPhonie wymaga osobnego testu: alarm nie jest gwarantowany przy
+zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia systemu.

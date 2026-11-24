@@ -6,9 +6,10 @@ import { setPreset, useTimers } from './timers';
 import { settingText, TM_CATEGORIES, TM_RECIPES, TM_RULES } from './thermomix-data';
 import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
+import { Cookbook } from './Cookbook';
 import { PlanCta } from './KitchenModule';
 
-export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix';
+export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix' | 'recipes';
 export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
   { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'eggs', label: 'Jajka', icon: ICONS.egg },
   { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'thermomix', label: 'Thermomix', icon: ICONS.mixer }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
@@ -146,19 +147,20 @@ export function HomeModule({ active, tab, onTab, onPlan }: { active: boolean; ta
   useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
   const running = timers.filter(x => !x.ack).length;
   const toTimers = useMemo(() => () => onTab('timers'), [onTab]);
-  const heading: Record<HomeTab, [string, string]> = { eggs: ['POMOC W DOMU', 'Idealne jajko'], cook: ['POMOC W DOMU', 'Czasy gotowania'], measures: ['POMOC W DOMU', 'Miarki i temperatury'], thermomix: ['THERMOMIX TM6', 'Przepisy bez Cookidoo'], timers: ['TIMERY', 'Timery kuchenne'] };
+  const heading: Record<HomeTab, [string, string]> = { recipes: ['HOMECRAFT', 'Książka kucharska'], eggs: ['POMOC W DOMU', 'Idealne jajko'], cook: ['POMOC W DOMU', 'Czasy gotowania'], measures: ['POMOC W DOMU', 'Miarki i temperatury'], thermomix: ['THERMOMIX TM6', 'Przepisy bez Cookidoo'], timers: ['TIMERY', 'Timery kuchenne'] };
   return <>
     <main ref={main} hidden={!active} className="app-content" aria-label={t('Dom')}>
       <div className="screen-heading"><p className="overline">{t(heading[tab][0])}</p><h1 tabIndex={-1}>{t(heading[tab][1])}</h1></div>
+      {tab === 'recipes' && active && <Cookbook onPlan={onPlan || (() => {})} />}
       {tab === 'eggs' && <Eggs onTimer={toTimers} />}
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'thermomix' && <Thermomix onTimer={toTimers} />}
       {tab === 'measures' && <Measures />}
-      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('100 przepisów, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
     </main>
     {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${homeTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Dom')}>
-      {homeTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
-        <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{t(x.label)}</span></button>)}
+      {homeTabs.map(x => <button key={x.id} aria-label={x.id === 'cook' ? `${t('Czasy')} — ${t(x.label)}` : x.id === 'thermomix' ? `TM6 — ${t(x.label)}` : t(x.label)} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
+        <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{x.id === 'cook' ? t('Czasy') : x.id === 'thermomix' ? 'TM6' : t(x.label)}</span></button>)}
     </nav>}
   </>;
 }

@@ -2,11 +2,12 @@
 // Plan (Mission Control) → Przygotuj (Mise en Place) → Gotuj (Cooking Timeline).
 // Uses the shared kitchen timers (timers.ts) and the theme variables, like the other modules.
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { recipeKcal } from './cookbook-data';
 import { t } from './en';
 import { earliestServeAt, handsMinutes, hhmm, LANES, minLabel, recipeById, PANKO_DINNER, schedule, status, timeToday, totalMinutes, type Lane, type Planned, type Recipe, type Status } from './kitchen-data';
 import { getKitchen, resetKitchen, setKitchen, useKitchen, type KitchenSession } from './kitchen-store';
 import { SHOP_ADD_EVENT } from './shopping-data';
-import { actOn, addTimer, clock, remaining, TOAST_EVENT, useTick, useTimers, type KTimer } from './timers';
+import { soundMark, unlockAudio, actOn, addTimer, clock, remaining, TOAST_EVENT, useTick, useTimers, type KTimer } from './timers';
 import { ICONS, Icon } from './ui';
 
 export type KitchenTab = 'plan' | 'mise' | 'cook';
@@ -76,7 +77,7 @@ function Lanes({ plan, now, serveAt }: { plan: Planned[]; now: number; serveAt: 
   const t0 = Math.min(...plan.map(x => x.start)), span = serveAt - t0 || 1;
   const pos = (ms: number) => Math.min(100, Math.max(0, (ms - t0) / span * 100));
   return <div className="hc-k-lanes" aria-hidden="true">
-    {LANES.map(l => <div key={l.id} className="hc-k-lane">
+    {LANES.filter(l => plan.some(task => task.lane === l.id)).map(l => <div key={l.id} className="hc-k-lane">
       <span>{laneLabel(l.id)}</span>
       <div>{plan.filter(x => x.lane === l.id).map(x => <i key={x.id} className={'l-' + l.id} style={{ left: pos(x.start) + '%', width: `calc(${pos(x.end) - pos(x.start)}% - 2px)` }} title={x.title} />)}
         {now > t0 && now < serveAt && <b className="hc-k-nowline" style={{ left: pos(now) + '%' }} />}</div>
@@ -147,16 +148,16 @@ function PlanView({ c, onTab }: { c: ReturnType<typeof useCooking>; onTab: (x: K
       <button className="hc-primary" onClick={() => onTab('cook')}>{t('Wróć do gotowania')} →</button>
     </div>}
     <div className="hc-card hc-k-recipe" aria-label={t('Wybrane danie')}>
-      <p className="hc-tag">{t('Przykładowe danie')}</p>
+      <p className="hc-tag">{t('Wybrane danie')}</p><a className="hc-ghost" href="#dom/recipes">{t('Książka kucharska')}</a>
       <h2 className="hc-h3">{recipe.name}</h2>
-      <p className="hc-k-facts"><span>{recipe.servings} {t('porcje')}</span><span>{t('razem')} {minLabel(totalMinutes(recipe))}</span><span>{t('Twoja praca')} {handsMinutes(recipe)} min</span><span>Air Fryer × {fryerRuns}</span></p>
+      <p className="hc-k-facts"><span>{recipe.servings} {t('porcje')}</span><span>{t('razem')} {minLabel(totalMinutes(recipe))}</span><span>{t('Twoja praca')} {handsMinutes(recipe)} min</span>{fryerRuns > 0 && <span>Air Fryer × {fryerRuns}</span>}<span>≈ {recipeKcal(recipe)} {t('kcal / porcję')}</span></p>
       <p className="subtle">{recipe.note}</p>
     </div>
     <ServeTime s={s} recipe={recipe} now={now} locked={s.cooking} />
     <div className="hc-card">
       <p className="hc-k-summary"><span>{t('Start')} <b>{hhmm(first.start)}</b></span><span>{t('Podanie')} <b>{hhmm(s.serveAt)}</b></span></p>
       <Lanes plan={plan} now={now} serveAt={s.serveAt} />
-      <p className="subtle">{t('Pierwszy krok')}: {first.title}. {t('Równolegle pracują Air Fryer i czas oczekiwania, Ty robisz jedną rzecz naraz.')}</p>
+      <p className="subtle">{t('Pierwszy krok')}: {first.title}. {t('Plan uwzględnia sprzęt i czas oczekiwania. Ty robisz jedną rzecz naraz.')}</p>
     </div>
     <div className="hc-k-cta">
       {!s.cooking && <button className="hc-primary" onClick={() => onTab('mise')}>{t('Dalej: przygotuj składniki')} →</button>}
@@ -252,7 +253,7 @@ function CookView({ c, onTab }: { c: ReturnType<typeof useCooking>; onTab: (x: K
         </>}
       </>}
     <details className="details-card hc-k-all" open={st.finished || undefined}><summary>{t('Cały plan')} ({st.doneCount}/{st.total}) <span>+</span></summary><StepList plan={plan} s={s} now={now} editable timers={timers} /></details>
-    <p className="hc-k-note">{t('Czasy są orientacyjne. Kurczak jest gotowy przy min. 75 °C w środku: sprawdź termometrem. Na iPhonie zostaw aplikację otwartą; przy zablokowanym ekranie Safari może nie zadzwonić.')}</p>
+    <p className="hc-k-note">{t('Czasy są orientacyjne. Sprawdź gotowość według wskazówek przepisu. Przy zablokowanym ekranie alarm nie jest gwarantowany.')}</p>
   </section>;
 }
 
@@ -282,13 +283,25 @@ export function PlanCta({ onOpen }: { onOpen: () => void }) {
 export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: KitchenTab; onTab: (x: KitchenTab) => void }) {
   const c = useCooking(active);
   const main = useRef<HTMLElement>(null);
-  useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
-  // Keep the screen on while cooking on the Gotuj view (timers also do this while they count).
+  const [wakeStatus,setWakeStatus] = useState('Podtrzymanie ekranu włącza się podczas gotowania.');
+  useEffect(() => { if(active){ main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab, active]);
+  // Report the real wake-lock state; the OS may release or deny a lock at any time.
   useEffect(() => {
-    if (!active || tab !== 'cook' || !c.s.cooking || !navigator.wakeLock) return;
-    let lock: WakeLockSentinel | null = null, gone = false;
-    const take = () => { if (document.visibilityState === 'visible') navigator.wakeLock.request('screen').then(l => { if (gone) void l.release(); else lock = l; }).catch(() => {}); };
-    take(); document.addEventListener('visibilitychange', take);
+    if (!active || tab !== 'cook' || !c.s.cooking) { setWakeStatus('Podtrzymanie ekranu włącza się podczas gotowania.'); return; }
+    if (!navigator.wakeLock) { setWakeStatus('Podtrzymanie ekranu niedostępne.'); return; }
+    let lock: WakeLockSentinel | null = null, gone = false, pending = false;
+    const take = async () => {
+      if (gone || pending || lock || document.visibilityState !== 'visible') return;
+      pending = true;
+      try {
+        const acquired = await navigator.wakeLock.request('screen');
+        if (gone) { void acquired.release(); return; }
+        lock = acquired; setWakeStatus('Podtrzymanie ekranu aktywne.');
+        acquired.addEventListener('release', () => { lock = null; if (!gone) setWakeStatus('Podtrzymanie ekranu zwolnione przez system.'); });
+      } catch { if (!gone) setWakeStatus('System odmówił podtrzymania ekranu.'); }
+      finally { pending = false; }
+    };
+    void take(); document.addEventListener('visibilitychange', take);
     return () => { gone = true; document.removeEventListener('visibilitychange', take); void lock?.release().catch(() => {}); };
   }, [active, tab, c.s.cooking]);
   if (!active) return null;
@@ -297,6 +310,11 @@ export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: Ki
   return <>
     <main ref={main} className="app-content hc-kitchen" aria-label={t('Kitchen OS')}>
       <div className="screen-heading"><p className="overline">{t(heading[0])}</p><h1 tabIndex={-1}>{t(heading[1])}</h1></div>
+      <aside className="hc-card hc-k-device-note" aria-label={t('Ekran i alarm')}>
+        <p>{t('Zostaw aplikację otwartą. Po zablokowaniu ekranu lub przejściu w tło alarm może nie zabrzmieć.')}</p>
+        <p role="status">{t(wakeStatus)}</p>
+        <button className="hc-ghost" onClick={() => { unlockAudio(); soundMark(); }}>{t('Sprawdź dźwięk')}</button>
+      </aside>
       {tab === 'plan' && <PlanView c={c} onTab={onTab} />}
       {tab === 'mise' && <MiseView c={c} onTab={onTab} />}
       {tab === 'cook' && <CookView c={c} onTab={onTab} />}

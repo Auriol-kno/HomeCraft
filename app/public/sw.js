@@ -1,6 +1,6 @@
 // HomeCraft offline cache. The page is network-first (updates arrive when online);
 // hashed assets and icons are cache-first. Bump VERSION to drop old caches.
-const VERSION = 'homecraft-v1';
+const VERSION = 'homecraft-cookbook-v2';
 // Servers may send `Vary: Origin`; module scripts and the page differ in that header, so ignore Vary.
 const MATCH = { ignoreVary: true };
 const CORE = ['./', './manifest.webmanifest', './icon.png', './icon-192.png', './icon-512.png'];
@@ -8,7 +8,7 @@ self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('homecraft-') && k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 self.addEventListener('message', e => {
   if (e.data?.type !== 'cache' || !Array.isArray(e.data.urls)) return;

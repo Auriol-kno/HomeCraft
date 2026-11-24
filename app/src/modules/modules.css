@@ -8,12 +8,12 @@
 /* module bar */
 .module-bar{display:flex;align-items:center;gap:6px;margin:8px 14px;padding:5px;border-radius:999px;background:var(--ink);overflow-x:auto;scrollbar-width:none}
 .module-bar::-webkit-scrollbar{display:none}
-.module-bar>button.mod{flex:1 1 auto;justify-content:center;display:inline-flex;align-items:center;gap:5px;min-height:38px;padding:0 8px;white-space:nowrap;border:0;border-radius:999px;background:transparent;color:var(--bg);opacity:.78;font:650 12.5px var(--body);position:relative}
+.module-bar>button.mod{flex:1 1 auto;justify-content:center;display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:0 8px;white-space:nowrap;border:0;border-radius:999px;background:transparent;color:var(--bg);opacity:.78;font:650 12.5px var(--body);position:relative}
 .module-bar>button.mod svg{width:17px;height:17px;flex:none}
 .module-bar>button.mod[aria-selected="true"]{background:var(--accent);color:var(--on-accent);opacity:1;box-shadow:0 1px 0 #ffffff33 inset}
 .module-bar .dot{position:absolute;top:4px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--good)}
-.app-header .hc-pill{margin-left:auto;margin-right:6px;min-height:38px;padding:0 10px}
-:root[data-density="compact"] .module-bar>button.mod{min-height:34px;font-size:12px}
+.app-header .hc-pill{margin-left:auto;margin-right:6px;min-height:44px;padding:0 10px}
+:root[data-density="compact"] .module-bar>button.mod{min-height:44px;font-size:12px}
 .hc-pill{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border:1px solid var(--good);border-radius:999px;background:var(--surface);color:var(--good);font:700 13px var(--body);font-variant-numeric:tabular-nums}
 .hc-pill svg{width:16px;height:16px}.hc-pill span{font-weight:600;opacity:.8}
 
@@ -49,7 +49,7 @@ select.hc-input{appearance:auto}
 .hc-seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
 .hc-chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .hc-chips::-webkit-scrollbar{display:none}
-.hc-chips button{flex:none;min-height:38px;padding:0 13px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:600 13px var(--body);box-shadow:none}
+.hc-chips button{flex:none;min-height:44px;padding:0 13px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:600 13px var(--body);box-shadow:none}
 .hc-chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .hc-search{display:flex;gap:8px}
 .hc-toggle{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-ctl,12px);background:var(--surface);color:var(--ink);font:600 13px var(--body);box-shadow:none}
@@ -135,7 +135,7 @@ select.hc-input{appearance:auto}
 .hc-conv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .hc-conv div{display:grid;gap:2px;text-align:center}.hc-conv b{font:700 18px var(--body);font-variant-numeric:tabular-nums}.hc-conv span{font-size:11px;color:var(--muted)}
 /* Kitchen OS (Zaplanuj gotowanie): Plan → Przygotuj → Gotuj. Large type while cooking. */
-.hc-k-entry{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 14px;border:1px solid var(--accent);border-radius:var(--r-card,16px);background:var(--wash,var(--surface));color:var(--ink);text-align:left;box-shadow:none}
+.hc-k-entry, .hc-book-entry{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 14px;border:1px solid var(--accent);border-radius:var(--r-card,16px);background:var(--wash,var(--surface));color:var(--ink);text-align:left;box-shadow:none}
 .hc-k-entry svg{width:26px;height:26px;color:var(--accent)}
 .hc-k-entry b{display:block;font:700 16px var(--body)}.hc-k-entry small{display:block;font-size:12.5px;color:var(--soft);margin-top:2px}
 .hc-k-entry>span:last-child{font:700 20px var(--body);color:var(--accent)}
@@ -402,7 +402,7 @@ select.hc-input{appearance:auto}
 .hc-facts dd{margin:0;color:var(--ink)}
 .hc-ml{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .hc-ml>span{font:700 11px var(--body);letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-right:4px}
-.hc-ml button{min-height:38px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:600 13px var(--body);box-shadow:none}
+.hc-ml button{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:600 13px var(--body);box-shadow:none}
 .hc-ml button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 @media(max-width:360px){.hc-brew b{font-size:17px}.hc-facts div{grid-template-columns:1fr;gap:2px}}
 }

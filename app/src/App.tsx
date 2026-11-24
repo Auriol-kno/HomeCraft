@@ -30,7 +30,7 @@ const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label
 // Hash routes: coffee keeps its own (#timer, #history ...); the new modules use #fryer/<tab> and #dom/<tab>.
 function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; shop: ShopTab; plan: KitchenTab} {
  const [a,b]=location.hash.slice(1).split('/');
- return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:homeTabs.some(x=>x.id===b)?b as HomeTab:'timers',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
+ return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:(b==='recipes'||homeTabs.some(x=>x.id===b))?b as HomeTab:'timers',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
 }
 interface BrewStatus { running: boolean; method: string; seconds: number }
 const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?',tea:'Herbata i napary'};
@@ -139,8 +139,8 @@ export function App() {
    <button className="dock-reset" onClick={()=>document.getElementById('resetBtn')?.click()}>{t('Zeruj')}</button>
   </div>}
   <nav className="bottom-nav" style={{gridTemplateColumns:`repeat(${destinations.length},minmax(0,1fr))`}} hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
-  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan')}/>
-  <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan')}/>
+  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
+  <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
   <KitchenModule active={module==='plan'} tab={planTab} onTab={x=>go('plan',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <BrewingPanel html={overlays}/>
