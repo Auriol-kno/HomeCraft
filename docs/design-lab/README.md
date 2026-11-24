@@ -2,6 +2,16 @@
 
 **Status:** wyłącznie laboratorium UX. Nie jest częścią działającej aplikacji HomeCraft. Nie zapisuje żadnych danych i nie steruje urządzeniami.
 
+## Podgląd Vercel — oddzielne środowisko testowe
+
+Po pomyślnym zbudowaniu gałęzi `concept/homecraft-kitchen-os-2026` prototyp jest dostępny pod ścieżką:
+
+https://home-craft-git-concept-homecraft-kitchen-os-2026-kno-flow.vercel.app/kitchen-os-demo/
+
+Statyczny plik `app/public/kitchen-os-demo/index.html` jest publikowany przez Vite do `dist/kitchen-os-demo/index.html`. Oddzielny `vercel.json` dla tej gałęzi ustawia `--base=/`, ponieważ GitHub Pages wymaga innej ścieżki `/HomeCraft/`. Plik jest niezależną kopią prototypu, bez połączenia z danymi produkcyjnymi.
+
+**Nie zmieniono gałęzi `main`; Vercel Preview nie zastępuje wdrożenia produkcyjnego.** Dostępność strony w przeglądarce należy osobno zweryfikować; automatyczny zielony build nie zastępuje testu Safari.
+
 ## Otwórz prototyp
 
 Plik: [demo/index.html](demo/index.html). Jest **samodzielny** (jeden HTML, CSS, JavaScript bez zewnętrznych bibliotek i API). Pobierz go i otwórz lokalnie w przeglądarce albo uruchom serwer statyczny w folderze `demo`:
