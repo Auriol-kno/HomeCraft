@@ -41,7 +41,7 @@ let browser;
   await p.locator('.control-dock').waitFor();
   await p.locator('.dock-main').click();assert.equal((await p.locator('.dock-main').innerText()).trim(),'Stop');
   await p.waitForTimeout(1200);await p.locator('.dock-main').click();assert.equal((await p.locator('.dock-main').innerText()).trim(),'Wznów');
-  const box=await p.locator('.control-dock').boundingBox(),navBox=await p.locator('nav').boundingBox();assert(box.y+box.height<=navBox.y+1,'dock sits above the navigation');
+  const box=await p.locator('.control-dock').boundingBox(),navBox=await p.locator('nav.bottom-nav:not([hidden])').boundingBox();assert(box.y+box.height<=navBox.y+1,'dock sits above the navigation');
   await p.locator('.dock-reset').click();assert.equal(await p.locator('#bTime').innerText(),'0,0');
   await p.locator('.visual-details summary').click();await p.waitForTimeout(100);assert.equal(await p.locator('.control-dock').count(),0);
   await p.context().close();}
@@ -80,7 +80,7 @@ let browser;
   await p.context().setOffline(false);await p.context().close();}
 
  // 7. Home: the guide button is visible without scrolling on a small phone.
- {const p=await open({viewport:{width:375,height:667}});const box=await p.locator('#guideCta').boundingBox();const navBox=await p.locator('nav').boundingBox();
+ {const p=await open({viewport:{width:375,height:667}});const box=await p.locator('#guideCta').boundingBox();const navBox=await p.locator('nav.bottom-nav:not([hidden])').boundingBox();
   assert(box&&box.y+box.height<=navBox.y+1,'guide button above the fold');await p.context().close();}
 
 

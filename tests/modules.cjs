@@ -14,7 +14,7 @@ let browser;
  const p=await (await browser.newContext({viewport:{width:390,height:844},colorScheme:'light'})).newPage();
  p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await p.goto(url);await p.waitForSelector('.module-bar');
- const domNav=p.getByRole('navigation',{name:'Nawigacja Kuchnia'}),fryerNav=p.getByRole('navigation',{name:'Nawigacja Air Fryer'});
+ const domNav=p.getByRole('navigation',{name:'Nawigacja Kuchnia'});
  const tab=async name=>openModule(p,name);
 
  // Coffee stays the default module, with its own five-button navigation (Kawa, Parzenie, Sprzęt, Historia, Herbata).
@@ -39,6 +39,10 @@ let browser;
 
  // Air Fryer: 37 dishes, search, device settings, timer with a shake reminder.
  await tab('Air Fryer');
+ assert(await domNav.isVisible(),'Kitchen bottom menu stays visible in Air Fryer');
+ assert.equal(await domNav.getByRole('button',{name:'Air Fryer'}).getAttribute('aria-current'),'page');
+ const fryerMenu=p.getByRole('tablist',{name:'Menu Air Fryer'});
+ assert.deepEqual(await fryerMenu.getByRole('tab').allInnerTexts(),['Dania','Timery','Zasady używania']);
  assert.equal(await p.locator('.hc-dish').count(),37);
  await p.getByPlaceholder('Szukaj: frytki').fill('frytki');assert.equal(await p.locator('.hc-dish').count(),4);
  await p.locator('.hc-dish').first().click();
@@ -50,7 +54,7 @@ let browser;
  await p.waitForSelector('.hc-timer');
  assert.match(await p.locator('.hc-timer [role=timer]').first().innerText(),/^(19:5\d|20:00)$/);
  assert.equal(await p.locator('.hc-bar b').count(),2,'two shake marks for frytki');
- await fryerNav.getByRole('button',{name:'Dania'}).click();
+ await fryerMenu.getByRole('tab',{name:'Dania'}).click();
  await p.locator('.hc-dish').first().click();await p.locator('.hc-sheet').getByRole('button',{name:'Ulubione'}).click();await p.keyboard.press('Escape');
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.fryer.favs.v1')).length),1);
 
@@ -122,12 +126,15 @@ let browser;
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.timers.v1')).length),before,'not started yet');
  // Thermomix TM6: manual settings without Cookidoo.
  await domNav.getByRole('button',{name:'Thermomix'}).click();
+ const tmMenu=p.getByRole('tablist',{name:'Menu Thermomix'});
+ assert.deepEqual(await tmMenu.getByRole('tab').allInnerTexts(),['Przepisy','Timery','Zasady używania']);
  assert((await p.locator('.hc-tm').count())>=12,'Thermomix recipes');
  await p.locator('.hc-tm summary').filter({hasText:'Ryż w koszyczku'}).click();
  assert.match(await p.locator('.hc-tm[open] .hc-set').first().innerText(),/18 min · 100 °C · obr\. 4/);
  await p.locator('.hc-tm summary').filter({hasText:'Ciasto na pizzę'}).click();
  await p.locator('.hc-tm[open] .hc-chip-btn').click();
  assert.equal(await p.locator('.hc-dial-time').innerText(),'40:00','rest time goes to the dial');
+ await domNav.getByRole('button',{name:'Thermomix'}).click();await tmMenu.getByRole('tab',{name:'Zasady używania'}).click();assert.equal(new URL(p.url()).hash,'#dom/thermomix/rules');assert.equal(await p.locator('h1:visible').innerText(),'Zasady używania');await p.reload();assert.equal(await tmMenu.getByRole('tab',{name:'Zasady używania'}).getAttribute('aria-selected'),'true');await p.goBack();assert.equal(await tmMenu.getByRole('tab',{name:'Przepisy'}).getAttribute('aria-selected'),'true');
 
  // Shopping list: add, group by aisle, tick, quick products, persistence.
  await tab('Zakupy');
@@ -179,7 +186,7 @@ let browser;
  await p.click('#settingsBtn');await p.selectOption('#appLanguage','en');await p.selectOption('#appTheme','bar');await p.selectOption('#appMode','dark');await p.locator('#settingsDialog button[type=submit]').click();
  assert.equal(await p.getByRole('tab',{name:'Kitchen'}).count(),1);
  await p.setViewportSize({width:320,height:640});
- for(const [m,n] of [['Air Fryer',4],['Kitchen',6],['Shopping',2]])for(let i=0;i<n;i++){await openModule(p,m);await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
+ for(const [m,n] of [['Air Fryer',6],['Kitchen',6],['Shopping',2]])for(let i=0;i<n;i++){await openModule(p,m);await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
   const over=await p.evaluate(()=>[...document.querySelectorAll('.app-content:not([hidden]) *')].filter(e=>!e.closest('.hc-chips,.module-bar')&&e.getBoundingClientRect().right>document.documentElement.clientWidth+1).length);assert.equal(over,0,`${m} tab ${i} fits 320 px`);}
  assert.deepEqual(errors,[]);
  console.log('PASS: modules — switching, round timer + stopwatch, shopping list, one nav look in every theme, side-by-side preview, 37 dishes, device settings and shake timers, eggs, measures (szklanka cukru = 220 g = 22 dag), cooking times, timers across modules and reloads, alarm, English, 320 px, zero JS errors.');

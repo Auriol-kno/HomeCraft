@@ -5,7 +5,7 @@ Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w t
 - **Kawa:** dawne Crema Lab. Sześć metod parzenia, prowadzenie krok po kroku, timer, sprzęt (młynki, Lelit Anna), historia i baza kaw. Cały kod i dane są bez zmian.
 - **Air Fryer:** dawna „Ściąga Air Fryer” pod COSORI TurboBlaze 6 l. 37 dań z trybem, temperaturą i czasem w układzie wyświetlacza urządzenia, kroki, ulubione, niezależne timery z przypomnieniem „potrząśnij / obróć”.
 - **Dom (pomoc w domu):** nowy dział, który będzie rósł. Pierwsza zakładka to **Timery**: okrągły minutnik z pokrętłem, szybkimi czasami i opcjami zaawansowanymi (alert przed końcem, rundy, dźwięk, wibracje, przypomnienie w połowie) oraz stoper z okrążeniami.
-- **Thermomix TM6 (w Domu):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu.
+- **Thermomix TM6 (w Kuchni):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
 - **Herbata (przy kawie):** piąta zakładka menu kawy. 24 herbaty i napary w kategoriach (białe, zielone, żółte, oolong, czarne, pu-erh, ziołowe, owocowe, rooibos i mate): temperatura wody, ilość liści przeliczana na wybraną ilość wody, czasy kolejnych zalań ustawiane jednym dotknięciem w minutniku, przycisk „Info i ciekawostki” (czym jest, jak powstaje, dlaczego tak smakuje, pochodzenie, ciekawostki) oraz ogólny przewodnik. Kod jest odseparowany (`modules/TeaScreen.tsx`, `modules/tea-data.ts`), więc zakładkę łatwo usunąć.
 - **Zaplanuj gotowanie (Kitchen OS, demo):** przycisk w Air Fryerze (Dania) i w Domu (Timery). Jeden scenariusz: kurczak w panko z Air Fryera, frytki i sałatka na 2 porcje. **Plan** (wybór dania i godziny podania, plan liczony wstecz, pasy „Ty / Air Fryer / Czeka”), **Przygotuj** (składniki, sprzęt i czynności do odhaczenia, brakujące składniki trafiają do Zakupów), **Gotuj** (co teraz, co następne, o której koniec, równoległe kroki, timery ze wspólnego silnika, opóźnienie i przeliczenie planu). Ustawienia Air Fryera są do wpisania ręcznie; aplikacja nie steruje urządzeniem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
@@ -27,7 +27,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Dom `#dom/timers|eggs|cook|thermomix|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 
@@ -80,7 +80,7 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Książka otwiera się z karty w Timerach w Kuchni; dolne menu zawiera także skrót Air Fryer obok Timerów. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
+Książka otwiera się z karty w Timerach w Kuchni; dolne menu zawiera także skrót Air Fryer obok Timerów i pozostaje widoczne podczas korzystania z Air Fryera. W Air Fryerze duże przyciski Dania / Timery / Zasady używania zmieniają widok urządzenia, nie zastępując dolnego menu Kuchni. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga

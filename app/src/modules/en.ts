@@ -72,9 +72,9 @@ const en: Record<string, string> = {
   "Plan uwzględnia sprzęt i czas oczekiwania. Ty robisz jedną rzecz naraz.": "The plan accounts for appliances and waiting. You do one task at a time.",
 
   // modules and navigation
-  'Air Fryer': 'Air Fryer', 'Dom': 'Home', 'Dania': 'Dishes', 'Timery': 'Timers', 'Tryby': 'Modes', 'Jajka': 'Eggs', 'Gotowanie': 'Cooking', 'Miarki': 'Measures',
+  'Air Fryer': 'Air Fryer', 'Dom': 'Home', 'Dania': 'Dishes', 'Timery': 'Timers', 'Tryby': 'Modes', 'Zasady używania': 'How to use', 'Menu Air Fryer': 'Air Fryer menu', 'Menu Thermomix': 'Thermomix menu', 'Aktywny timer': 'Active timer', 'Jajka': 'Eggs', 'Gotowanie': 'Cooking', 'Miarki': 'Measures',
   'Nawigacja Air Fryer': 'Air Fryer navigation', 'Nawigacja Dom': 'Home navigation', 'Dział aplikacji': 'App section', 'Timery kuchenne': 'Kitchen timers',
-  'COSORI TURBOBLAZE 6 L': 'COSORI TURBOBLAZE 6 L', 'Ściąga Air Fryer': 'Air Fryer cheat sheet', 'TIMERY': 'TIMERS', 'Czas na potrząśnięcie': 'Time to shake',
+  'COSORI TURBOBLAZE 6 L': 'COSORI TURBOBLAZE 6 L', 'Ściąga Air Fryer': 'Air Fryer cheat sheet', 'TIMERY': 'TIMERS', 'Czas na potrząśnięcie': 'Time to shake', 'ZASADY': 'HOW TO USE',
   'TRYBY': 'MODES', 'Tryby i zasady': 'Modes and rules', 'POMOC W DOMU': 'HOME HELP', 'Idealne jajko': 'The perfect egg', 'Czasy gotowania': 'Cooking times', 'Miarki i temperatury': 'Measures and temperatures',
   // timers
   'Nazwa (np. Frytki)': 'Name (e.g. Fries)', 'Nazwa timera': 'Timer name', 'Minuty': 'Minutes', 'Sekundy': 'Seconds', 'Uruchom timer': 'Start timer',
@@ -236,6 +236,7 @@ const en: Record<string, string> = {
   'Thermomix': 'Thermomix',
   'THERMOMIX TM6': 'THERMOMIX TM6',
   'Przepisy bez Cookidoo': 'Recipes without Cookidoo',
+  'Timery Thermomix': 'Thermomix timers',
   'Ustaw timer': 'Set timer',
   'Podstawowe ustawienia Thermomix TM6, które ustawisz ręcznie na urządzeniu: czas, temperatura i obroty. Działają bez Cookidoo i bez internetu.': 'Basic Thermomix TM6 settings you set by hand on the device: time, temperature and speed. They work without Cookidoo and without internet.',
   'Zasady TM6': 'TM6 rules',
