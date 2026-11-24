@@ -2,16 +2,16 @@
 // kcal/100 g are editorial reference estimates, not a verified import of a nutrition database.
 // Include all listed oil/sugar. No ingredient or recipe is claimed to be kitchen-tested.
 import type { Recipe, Lane } from './kitchen-types.ts';
-export type Cuisine = 'Polska' | 'Azjatycka' | 'Śródziemnomorska' | 'Międzynarodowa';
-export type Category = 'Obiady' | 'Zupy' | 'Śniadania' | 'Przekąski' | 'Napoje' | 'Desery';
+export type Cuisine = 'Polska' | 'Azjatycka' | 'Śródziemnomorska' | 'Międzynarodowa' | 'Włoska' | 'Francuska' | 'Meksykańska' | 'Japońska' | 'Tajska' | 'Indyjska' | 'Grecka' | 'Koreańska' | 'Turecka' | 'Hiszpańska' | 'Amerykańska';
+export type Category = 'Obiady' | 'Zupy' | 'Śniadania' | 'Przekąski' | 'Napoje' | 'Desery' | 'Ciasta' | 'Chleby' | 'Bułki' | 'Wypieki';
 export type Diet = 'Wysokobiałkowa' | 'Niskowęglowodanowa' | 'Śródziemnomorska' | 'Wegetariańska' | 'Wegańska' | 'Bezglutenowa';
-export type RecipeDevice = 'Air Fryer' | 'Thermomix' | 'Bez urządzenia';
+export type RecipeDevice = 'Air Fryer' | 'Thermomix' | 'Bez urządzenia' | 'Piekarnik';
 export interface NutritionIngredient { n: string; grams: number; kcal100: number; q?: string }
 export interface CookbookInfo { cuisine: Cuisine; category: Category; diets: Diet[]; devices: RecipeDevice[]; nutrition: NutritionIngredient[]; allergens: string[]; sources: string[]; tested: false }
 export interface CookbookRecipe extends Recipe { book: CookbookInfo }
 type Ing = [name: string, grams: number, kcal100: number, quantity?: string];
 type Step = [minutes: number, title: string, detail: string, lane?: Lane, batches?: number, marks?: number[]];
-const sources = {
+const sources: Partial<Record<Cuisine,string>> = {
  Polska: 'https://www.kwestiasmaku.com/przepisy',
  Azjatycka: 'https://www.recipetineats.com/category/asian-recipes/',
  Śródziemnomorska: 'https://www.bbcgoodfood.com/recipes/collection/mediterranean-recipes',
@@ -27,7 +27,7 @@ const safety = {
  egg: 'Potrawy z jaj: min. 71 °C w środku; białko i żółtko powinny być ścięte. Nie próbuj surowego ciasta.',
 };
 type Safety = keyof typeof safety;
-function recipe(id: string, name: string, cuisine: Cuisine, category: Category, servings: number, ing: Ing[], steps: Step[], allergens: string[] = [], safe?: Safety, note = ''): CookbookRecipe {
+export function recipe(id: string, name: string, cuisine: Cuisine, category: Category, servings: number, ing: Ing[], steps: Step[], allergens: string[] = [], safe?: Safety, note = ''): CookbookRecipe {
  const lanes = new Set(steps.map(s => s[3] || 'hands'));
  const equipment = ['Deska, nóż, miska i waga kuchenna', ...(lanes.has('stove') || steps.some(s => /pateln|garn|smaż/i.test(s[2])) ? ['Kuchenka, garnek lub patelnia'] : []), ...(lanes.has('oven') ? ['Piekarnik i naczynie żaroodporne'] : []), ...(lanes.has('fryer') ? ['Air Fryer COSORI TurboBlaze 6 l'] : []), ...(lanes.has('blender') ? ['Blender'] : []), ...(safe ? ['Termometr kuchenny'] : [])];
  const expanded: Step[] = steps.flatMap(([min,title,detail,lane,batches=1,marks]) => Array.from({length:batches}, (_,i) => [min, batches>1 ? `${title} — partia ${i+1}/${batches}` : title, batches>1 ? `Przygotuj połowę składników; czas dotyczy jednej partii. ${detail}` : detail, lane, 1, marks] as Step));
@@ -36,8 +36,8 @@ function recipe(id: string, name: string, cuisine: Cuisine, category: Category, 
  // Older recipes did not carry verified diet metadata. Avoid deriving a dietary claim
  // from a name; device tags only follow an actual appliance lane in the instructions.
  const diets:Diet[]=[];
- const devices:RecipeDevice[]=[]; if(lanes.has('fryer'))devices.push('Air Fryer'); if(lanes.has('blender'))devices.push('Thermomix'); if(!devices.length)devices.push('Bez urządzenia');
- return {id,name,short:name,servings,note:`${note} Ilości dotyczą całego przepisu. Czasy są orientacyjne; sprawdzaj gotowość. Wersja domowa, nieprzetestowana w kuchni.`.trim(),ingredients:ing.map(([n,g,,q],i)=>({id:`i${i}`,n,q:q || `${g} g`})),equipment:equipment.map((n,i)=>({id:`e${i}`,n})),prep:[{id:'prep-clean',n:'Umyj ręce, warzywa i owoce; odmierz składniki.'},{id:'prep-read',n:'Przeczytaj cały przepis i sprawdź alergeny na opakowaniach.'}],tasks,book:{cuisine,category,diets,devices,nutrition:ing.map(([n,grams,kcal100,q])=>({n,grams,kcal100,q})),allergens,sources:[sources[cuisine],...(safe?[safetySource]:[])],tested:false}};
+ const devices:RecipeDevice[]=[]; if(lanes.has('fryer'))devices.push('Air Fryer'); if(lanes.has('blender'))devices.push('Thermomix'); if(lanes.has('oven'))devices.push('Piekarnik'); if(!devices.length)devices.push('Bez urządzenia');
+ return {id,name,short:name,servings,note:`${note} Ilości dotyczą całego przepisu. Czasy są orientacyjne; sprawdzaj gotowość. Wersja domowa, nieprzetestowana w kuchni.`.trim(),ingredients:ing.map(([n,g,,q],i)=>({id:`i${i}`,n,q:q || `${g} g`})),equipment:equipment.map((n,i)=>({id:`e${i}`,n})),prep:[{id:'prep-clean',n:'Umyj ręce, warzywa i owoce; odmierz składniki.'},{id:'prep-read',n:'Przeczytaj cały przepis i sprawdź alergeny na opakowaniach.'}],tasks,book:{cuisine,category,diets,devices,nutrition:ing.map(([n,grams,kcal100,q])=>({n,grams,kcal100,q})),allergens,sources:[sources[cuisine] || sources.Międzynarodowa!,...(safe?[safetySource]:[])],tested:false}};
 }
 const P = 'Polska', A = 'Azjatycka', W = 'Międzynarodowa';
 const O = 'Obiady', Z = 'Zupy', S = 'Śniadania', K = 'Przekąski', N = 'Napoje', D = 'Desery';
