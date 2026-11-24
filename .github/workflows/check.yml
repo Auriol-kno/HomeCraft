@@ -19,6 +19,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm test
       - name: Sprawdź build i książkę z bazą Vercel
+        if: ${{ !cancelled() }}
         run: |
           npx vite build --base=/
           BOOK_BASE=/ node tests/cookbook.cjs
