@@ -16,7 +16,7 @@ import { startLocalization, t } from './i18n';
 import './modules/modules.css';
 import { t as tm } from './modules/en';
 import { FryerModule, fryerTabs, type FryerTab } from './modules/FryerModule';
-import { HomeModule, homeTabs, type HomeTab } from './modules/HomeModule';
+import { HomeModule, KitchenBottomNav, homeTabs, type HomeTab, type ThermomixView } from './modules/HomeModule';
 import { ShoppingModule, SHOP_ICON, shopTabs, type ShopTab } from './modules/ShoppingModule';
 import { TeaScreen } from './modules/TeaScreen';
 import { KitchenModule, kitchenTabs, type KitchenTab } from './modules/KitchenModule';
@@ -28,9 +28,9 @@ type Equipment = 'grinder' | 'anna' | 'service';
 type Module = 'coffee' | 'fryer' | 'dom' | 'shop' | 'plan';
 const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'dom',label:'Kuchnia',icon:ICONS.home},{id:'shop',label:'Zakupy',icon:SHOP_ICON}];
 // Hash routes: coffee keeps its own (#timer, #history ...); the new modules use #fryer/<tab> and #dom/<tab>.
-function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; shop: ShopTab; plan: KitchenTab} {
- const [a,b]=location.hash.slice(1).split('/');
- return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:(b==='recipes'||homeTabs.some(x=>x.id===b))?b as HomeTab:'timers',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
+function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; thermomix: ThermomixView; shop: ShopTab; plan: KitchenTab} {
+ const [a,b,c]=location.hash.slice(1).split('/');
+ return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:(b==='recipes'||homeTabs.some(x=>x.id===b))?b as HomeTab:'timers',thermomix:['recipes','timers','rules'].includes(c)?c as ThermomixView:'recipes',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
 }
 interface BrewStatus { running: boolean; method: string; seconds: number }
 const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?',tea:'Herbata i napary'};
@@ -51,6 +51,7 @@ export function App() {
  const [module,setModule]=useState<Module>(()=>parseHash().module);
  const [fryerTab,setFryerTab]=useState<FryerTab>(()=>parseHash().fryer);
  const [homeTab,setHomeTab]=useState<HomeTab>(()=>parseHash().dom);
+ const [thermomixView,setThermomixView]=useState<ThermomixView>(()=>parseHash().thermomix);
  const [shopTab,setShopTab]=useState<ShopTab>(()=>parseHash().shop);
  const [planTab,setPlanTab]=useState<KitchenTab>(()=>parseHash().plan);
  const [equipment,setEquipment]=useState<Equipment>('grinder');
@@ -71,7 +72,7 @@ export function App() {
   const settings=document.getElementById('settingsDialog')!;
   const preferenceChange=(event:Event)=>{const el=event.target as HTMLSelectElement;const fields:Record<string,keyof Preferences>={appTheme:'theme',appMode:'mode',appDensity:'density',appLanguage:'language'};const field=fields[el.id];if(field)savePreferences({...readPreferences(),[field]:el.value});};
   sync();settings.addEventListener('change',preferenceChange);window.addEventListener('crema:preferences',sync);
-  const change=()=>{const h=parseHash();setModule(h.module);if(h.module==='fryer')setFryerTab(h.fryer);else if(h.module==='dom')setHomeTab(h.dom);else if(h.module==='shop')setShopTab(h.shop);else if(h.module==='plan')setPlanTab(h.plan);else setScreen(initialScreen());};window.addEventListener('hashchange',change);
+  const change=()=>{const h=parseHash();setModule(h.module);if(h.module==='fryer')setFryerTab(h.fryer);else if(h.module==='dom'){setHomeTab(h.dom);setThermomixView(h.thermomix);}else if(h.module==='shop')setShopTab(h.shop);else if(h.module==='plan')setPlanTab(h.plan);else setScreen(initialScreen());};window.addEventListener('hashchange',change);
   return ()=>{window.removeEventListener('hashchange',change);settings.removeEventListener('change',preferenceChange);window.removeEventListener('crema:preferences',sync);stopLocalization();};
  },[navigate]);
  useEffect(()=>{
@@ -90,12 +91,12 @@ export function App() {
  },[]);
  const go=(m:Module,tab?:FryerTab|HomeTab|ShopTab|KitchenTab)=>{
   if(m==='fryer'){const x=(tab as FryerTab)||fryerTab;setFryerTab(x);setModule('fryer');location.hash=`fryer/${x}`;}
-  else if(m==='dom'){const x=(tab as HomeTab)||homeTab;setHomeTab(x);setModule('dom');location.hash=`dom/${x}`;}
+  else if(m==='dom'){const x=(tab as HomeTab)||homeTab;setHomeTab(x);if(x==='thermomix')setThermomixView('recipes');setModule('dom');location.hash=`dom/${x}`;}
   else if(m==='shop'){const x=(tab as ShopTab)||shopTab;setShopTab(x);setModule('shop');location.hash=`shop/${x}`;}
   else if(m==='plan'){const x=(tab as KitchenTab)||planTab;setPlanTab(x);setModule('plan');location.hash=`plan/${x}`;}
   else {setModule('coffee');location.hash=screen;}
  };
- const viewingTimers=(module==='fryer'&&fryerTab==='timers')||(module==='dom'&&homeTab==='timers');
+ const viewingTimers=(module==='fryer'&&fryerTab==='timers')||(module==='dom'&&(homeTab==='timers'||(homeTab==='thermomix'&&thermomixView==='timers')));
  const openBackup=()=>{navigate('history');requestAnimationFrame(()=>{const d=document.getElementById('backupCard') as HTMLDetailsElement|null;if(d){d.open=true;d.scrollIntoView({block:'center'});}});};
  const dismissHint=()=>{try{localStorage.setItem(hintKey,'1');}catch{}setInstallHint(false);};
  return <div className="app-shell" data-screen={module==='coffee'?screen:module} data-dock={dock&&module==='coffee'?'on':undefined}>
@@ -139,8 +140,9 @@ export function App() {
    <button className="dock-reset" onClick={()=>document.getElementById('resetBtn')?.click()}>{t('Zeruj')}</button>
   </div>}
   <nav className="bottom-nav" style={{gridTemplateColumns:`repeat(${destinations.length},minmax(0,1fr))`}} hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
-  <FryerModule onKitchen={()=>go('dom','timers')} active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
-  <HomeModule onFryer={()=>go('fryer','dishes')} active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
+  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
+  <HomeModule active={module==='dom'} tab={homeTab} thermomixView={thermomixView} onThermomixView={x=>{setThermomixView(x);location.hash=`dom/thermomix/${x}`;}} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
+  {(module==='dom'||module==='fryer')&&<KitchenBottomNav tab={homeTab} fryerActive={module==='fryer'} onTab={x=>go('dom',x)} onFryer={()=>go('fryer','dishes')}/>}
   <KitchenModule active={module==='plan'} tab={planTab} onTab={x=>go('plan',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <BrewingPanel html={overlays}/>

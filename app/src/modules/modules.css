@@ -208,6 +208,12 @@ select.hc-input{appearance:auto}
 .hc-k-all summary{font-weight:700}
 @media(min-width:760px){.hc-kitchen .screen{max-width:680px}.hc-k-title{font-size:28px}}
 .hc-nav{z-index:10}
+.hc-device-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.hc-device-tabs button{position:relative;display:flex;min-width:0;min-height:112px;padding:14px 8px;align-items:center;justify-content:center;flex-direction:column;gap:8px;border:0;border-radius:28px;background:var(--bg);color:var(--muted);box-shadow:5px 5px 11px var(--nm-d),-5px -5px 11px var(--nm-l);font:700 16px/1.15 var(--body);text-align:center}
+.hc-device-tabs button[aria-selected="true"]{color:var(--ink);box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+.hc-device-tabs svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.hc-device-tabs button>i{position:absolute;right:14px;top:14px;width:9px;height:9px;border-radius:50%;background:var(--good)}
+@media(max-width:360px){.hc-device-tabs{gap:7px}.hc-device-tabs button{min-height:100px;padding:10px 5px;border-radius:23px;font-size:14px}.hc-device-tabs svg{width:32px;height:32px}:root .app-shell .hc-kitchen-nav{gap:0;padding-inline:8px}}
 @media(prefers-reduced-motion:reduce){.hc-timer.done{animation:none}}
 }
 

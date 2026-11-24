@@ -18,6 +18,11 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  const nav=p.getByRole('navigation',{name:'Nawigacja Kuchnia'});
  assert.deepEqual((await nav.getByRole('button').allInnerTexts()).slice(0,2),['Timery','Fryer']);
  await nav.getByRole('button',{name:'Air Fryer',exact:true}).click();
+ const fryerMenu=p.getByRole('tablist',{name:'Menu Air Fryer'});
+ assert(await nav.isVisible(),'Kitchen bottom navigation is persistent in Air Fryer');
+ assert.deepEqual(await fryerMenu.getByRole('tab').allInnerTexts(),['Dania','Timery','Zasady używania']);
+ for(const button of await fryerMenu.getByRole('tab').all())assert((await button.boundingBox()).height>=44,'large Air Fryer target');
+ await p.screenshot({path:shots+'/fryer-menu-390.png'});
  assert.equal(await p.locator('.hc-dish').count(),37);
  assert.equal(await p.evaluate(()=>document.activeElement.tagName),'H1');
  assert.equal(await p.getByRole('tab',{name:'Kuchnia',exact:true}).getAttribute('aria-selected'),'true');
@@ -37,8 +42,9 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  const alarm=p.getByRole('alertdialog');await alarm.waitFor();await alarm.getByRole('button',{name:'Wyłącz alarm',exact:true}).focus();await p.keyboard.press('Tab');assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Jeszcze 2 min');
  await alarm.getByRole('button',{name:'Wyłącz alarm',exact:true}).click();await p.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='Zamknij');
  await sheet.getByRole('button',{name:'Zamknij',exact:true}).click();
- await p.getByRole('navigation',{name:'Nawigacja Air Fryer'}).getByRole('button',{name:'Kuchnia',exact:true}).click();
+ await nav.getByRole('button',{name:'Timery',exact:true}).click();
  await p.goBack();assert.equal(await p.locator('.hc-dish').count(),37);await p.goForward();await nav.waitFor();
+ await nav.getByRole('button',{name:/TM6/}).click();const tmMenu=p.getByRole('tablist',{name:'Menu Thermomix'});assert.deepEqual(await tmMenu.getByRole('tab').allInnerTexts(),['Przepisy','Timery','Zasady używania']);assert(await nav.isVisible());await tmMenu.getByRole('tab',{name:'Zasady używania'}).click();assert.equal(new URL(p.url()).hash,'#dom/thermomix/rules');await p.reload();assert.equal(await tmMenu.getByRole('tab',{name:'Zasady używania'}).getAttribute('aria-selected'),'true');await p.goBack();assert.equal(await tmMenu.getByRole('tab',{name:'Przepisy'}).getAttribute('aria-selected'),'true');await p.screenshot({path:shots+'/thermomix-menu-390.png'});await nav.getByRole('button',{name:'Timery',exact:true}).click();
  await p.getByRole('button',{name:/Książka kucharska/}).click();
  await p.evaluate(()=>{const now=Date.now();localStorage.setItem('homecraft.kitchen.v1',JSON.stringify({v:1,recipe:'book-021',serveAt:now+3600000,cooking:true,started:{s2:now},done:{s1:now},timers:{s2:'preview-keep'},mise:['i0']}));localStorage.setItem('homecraft.timers.v1',JSON.stringify([{id:'preview-keep',name:'Zachowaj timer',total:3600,endAt:now+3600000,paused:false,remain:3600,marks:[],fired:[],act:'Sprawdź',meta:'',done:false,ack:false}]));});
  const before=await p.evaluate(()=>({k:localStorage.getItem('homecraft.kitchen.v1'),t:localStorage.getItem('homecraft.timers.v1')}));

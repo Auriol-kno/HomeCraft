@@ -10,7 +10,7 @@ import { PlanCta } from './KitchenModule';
 
 export type FryerTab = 'dishes' | 'timers' | 'modes';
 export const fryerTabs: { id: FryerTab; label: string; icon: string }[] = [
-  { id: 'dishes', label: 'Dania', icon: ICONS.dishes }, { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'modes', label: 'Tryby', icon: ICONS.modes },
+  { id: 'dishes', label: 'Dania', icon: ICONS.dishes }, { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'modes', label: 'Zasady używania', icon: ICONS.modes },
 ];
 const favKey = 'homecraft.fryer.favs.v1';
 const readFavs = (): Set<string> => { try { const v = JSON.parse(localStorage.getItem(favKey) || '[]'); return new Set(Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []); } catch { return new Set(); } };
@@ -54,22 +54,27 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
   </Sheet>;
 }
 
-export function FryerModule({ active, tab, onTab, onPlan, onKitchen }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void; onPlan?: () => void; onKitchen: () => void }) {
+export function FryerModule({ active, tab, onTab, onPlan }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void; onPlan?: () => void }) {
   const [cat, setCat] = useState('Wszystkie'), [q, setQ] = useState(''), [favOnly, setFavOnly] = useState(false);
   const [favs, setFavs] = useState(readFavs), [open, setOpen] = useState<string | null>(null);
   const main = useRef<HTMLElement>(null);
   const timers = useTimers();
-  useEffect(() => { if (active) { main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab,active]);
+  useEffect(() => { if (active) { main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [active]);
   const toggleFav = (id: string) => setFavs(prev => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); try { localStorage.setItem(favKey, JSON.stringify([...n])); } catch { /* ignore */ } return n; });
   const list = useMemo(() => { const nq = norm(q.trim()); return DISHES.filter(d => (cat === 'Wszystkie' || d.c === cat) && (!favOnly || favs.has(d.id)) && (!nq || norm(d.n + ' ' + d.c).includes(nq))); }, [cat, q, favOnly, favs]);
   const dish = open ? DISHES.find(d => d.id === open) : undefined;
   useEffect(() => { if (!active) setOpen(null); }, [active]);
   const running = timers.filter(x => !x.ack).length;
-  const heading = tab === 'dishes' ? ['COSORI TURBOBLAZE 6 L', 'Ściąga Air Fryer'] : tab === 'timers' ? ['TIMERY', 'Czas na potrząśnięcie'] : ['TRYBY', 'Tryby i zasady'];
+  const heading = tab === 'dishes' ? ['COSORI TURBOBLAZE 6 L', 'Ściąga Air Fryer'] : tab === 'timers' ? ['TIMERY', 'Czas na potrząśnięcie'] : ['ZASADY', 'Zasady używania'];
   return <>
     <main ref={main} hidden={!active} className="app-content" aria-label={t('Air Fryer')}>
       <div className="screen-heading"><p className="overline">{t(heading[0])}</p><h1 tabIndex={-1}>{t(heading[1])}</h1></div>
-      {tab === 'dishes' && <section className="screen" aria-label={t('Dania')}>
+      <nav className="hc-device-tabs" role="tablist" aria-label={t('Menu Air Fryer')}>
+        {fryerTabs.map(x => <button key={x.id} role="tab" id={`fryer-tab-${x.id}`} aria-selected={tab === x.id} onClick={() => onTab(x.id)}>
+          <Icon d={x.icon} /><span>{t(x.label)}</span>{x.id === 'timers' && running > 0 && <i aria-label={t('Aktywny timer')} />}
+        </button>)}
+      </nav>
+      {tab === 'dishes' && <section className="screen" role="tabpanel" id="fryer-panel-dishes" aria-labelledby="fryer-tab-dishes">
         {onPlan && <PlanCta onOpen={onPlan} />}
         <div className="hc-search">
           <input className="hc-input" type="search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('Szukaj: frytki, skrzydełka, łosoś…')} aria-label={t('Szukaj dania')} autoComplete="off" />
@@ -85,18 +90,13 @@ export function FryerModule({ active, tab, onTab, onPlan, onKitchen }: { active:
           </button>)}
         </div>
       </section>}
-      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
-      {tab === 'modes' && <section className="screen" aria-label={t('Tryby')}>
+      {tab === 'timers' && active && <section className="screen" role="tabpanel" id="fryer-panel-timers" aria-labelledby="fryer-tab-timers"><TimersScreen /></section>}
+      {tab === 'modes' && <section className="screen" role="tabpanel" id="fryer-panel-modes" aria-labelledby="fryer-tab-modes">
         <div className="hc-card"><h3 className="hc-h3">{t('Bezpieczna temperatura w środku')}</h3><table className="hc-table"><tbody>{SAFE_TEMPS.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td>{b}</td></tr>)}</tbody></table></div>
         {MODE_ORDER.map(k => { const M = MODES[k]; const n = DISHES.filter(d => d.m === k).length; return <div key={k} className="hc-card"><p className="hc-tag">{M.tag}</p><h3 className="hc-h3">{t(M.pl)}</h3><p>{t(M.d)}</p><p className="hc-range">{M.range}{n ? ` · ${n} ${t('dań w ściądze')}` : ''}</p></div>; })}
         <div className="hc-card"><h3 className="hc-h3">{t('Zasady, które zawsze działają')}</h3><table className="hc-table"><tbody>{FRYER_RULES.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td>{b}</td></tr>)}</tbody></table></div>
       </section>}
       {active && dish && <DishSheet d={dish} fav={favs.has(dish.id)} onFav={() => toggleFav(dish.id)} onClose={() => setOpen(null)} onTimer={() => { setOpen(null); onTab('timers'); }} />}
     </main>
-    {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${fryerTabs.length+1},minmax(0,1fr))` }} aria-label={t('Nawigacja Air Fryer')}>
-      {fryerTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
-        <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{t(x.label)}</span></button>)}
-      <button onClick={onKitchen}><span className="nav-icon"><Icon d={ICONS.home}/></span><span>{t('Kuchnia','module')}</span></button>
-    </nav>}
   </>;
 }
