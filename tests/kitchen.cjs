@@ -29,7 +29,7 @@ let browser;
  await p.clock.pauseAt(new Date('2026-11-24T16:00:30+01:00'));
 
  // 1. Entry from Air Fryer; the global menu remains available.
- assert.equal(await p.locator('.primary-nav button').count(),5);
+ assert.equal(await p.locator('.primary-nav button').count(),6);
  await openModule(p,'Air Fryer');
  assert.equal(await p.locator('.hc-dish').count(),37,'Air Fryer dishes unchanged');
  await shot('01-air-fryer-entry');
@@ -57,7 +57,7 @@ let browser;
  assert.equal(await p.locator('.hc-kitchen .hc-shop-prog b').innerText(),'5/23');
  await p.getByRole('button',{name:/Dodaj nieodhaczone składniki do Zakupów \(10\)/}).click();
  await shot('03-mise');
- await p.getByRole('navigation',{name:'Główne działy'}).getByRole('button',{name:'Zakupy'}).click();
+ await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Zakupy'}).click();
  const shop=await p.locator('main:not([hidden]) .hc-iname').allInnerTexts();
  assert(shop.some(x=>/^Panko/.test(x))&&shop.some(x=>/^Mleko/.test(x)),'panko added, milk kept');
  assert(!shop.some(x=>/^Ziemniaki/.test(x)),'ticked ingredients are not added');
