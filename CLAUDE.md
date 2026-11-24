@@ -19,3 +19,12 @@ No assertion that an Air Fryer, Lelit or Thermomix is remotely controlled unless
 
 ## Acceptance report
 Provide changed files, screenshots/mockups, user journeys, WCAG AA checks, Playwright/build results, remaining risks and a non-merging PR link.
+
+## CURRENT ACTIVE SPRINT — selected concepts (2026-11-24)
+The user has selected **01 Mission Control + 02 Cooking Timeline + 07 Mise en Place**. Do **not** restart the ten-concept exploration unless requested. Current source documents:
+- `docs/design-lab/SELECTED_TRIO_SPEC.md` — detailed screen wireframes and flows;
+- `docs/design-lab/UX_CRITIQUE_AND_ROADMAP.md` — critical tradeoffs and phase plan;
+- `docs/design-lab/demo/index.html` — independent **interactive mock prototype**, not functional production HomeCraft;
+- `docs/design-lab/README.md` — operating instructions and limitations.
+
+**Next Claude Code task:** review the existing prototype with all four independent roles. Produce visual improvements and test evidence at 320 and 390px, then request human selection/approval. Keep main unchanged, do not publish Vercel or merge. Future React integration must preserve all existing modules and persisted data.
