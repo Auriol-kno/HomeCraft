@@ -13,7 +13,7 @@ const chosen=()=>{const [a,b,id]=location.hash.slice(1).split('/');return a==='d
 export function Cookbook({onPlan}:{onPlan:()=>void}){
  const favourites=useBookFavourites(), timers=useTimers();
  const [filters,setFilters]=useState({...rememberedFilters}),[limit,setLimit]=useState(rememberedLimit),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
- const heading=useRef<HTMLHeadingElement>(null), lastRecipe=useRef<string|undefined>(undefined);
+ const heading=useRef<HTMLHeadingElement>(null), lastRecipe=useRef<string|undefined>('');
  useEffect(()=>{const sync=()=>{setSelected(chosen());setConfirm(false);};window.addEventListener('hashchange',sync);return()=>window.removeEventListener('hashchange',sync);},[]);
  useEffect(()=>{if(selected?.id!==lastRecipe.current){heading.current?.focus();lastRecipe.current=selected?.id;heading.current?.closest('main')?.scrollTo(0,0);}},[selected]);
  const change=(next:Partial<typeof filters>)=>{setFilters(f=>{rememberedFilters={...f,...next};return rememberedFilters;});rememberedLimit=20;setLimit(20);};
