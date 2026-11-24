@@ -3,7 +3,7 @@
 // Include all listed oil/sugar. No ingredient or recipe is claimed to be kitchen-tested.
 import type { Recipe, Lane } from './kitchen-types.ts';
 export type Cuisine = 'Polska' | 'Azjatycka' | 'Śródziemnomorska' | 'Międzynarodowa' | 'Włoska' | 'Francuska' | 'Meksykańska' | 'Japońska' | 'Tajska' | 'Indyjska' | 'Grecka' | 'Koreańska' | 'Turecka' | 'Hiszpańska' | 'Amerykańska';
-export type Category = 'Obiady' | 'Zupy' | 'Śniadania' | 'Przekąski' | 'Napoje' | 'Desery' | 'Ciasta' | 'Chleby' | 'Bułki' | 'Wypieki';
+export type Category = 'Obiady' | 'Zupy' | 'Śniadania' | 'Przekąski' | 'Napoje' | 'Desery' | 'Ciasta' | 'Chleby' | 'Bułki' | 'Wypieki' | 'Sałatki' | 'Sosy' | 'Dipy';
 export type Diet = 'Wysokobiałkowa' | 'Niskowęglowodanowa' | 'Śródziemnomorska' | 'Wegetariańska' | 'Wegańska' | 'Bezglutenowa';
 export type RecipeDevice = 'Air Fryer' | 'Thermomix' | 'Bez urządzenia' | 'Piekarnik';
 export interface NutritionIngredient { n: string; grams: number; kcal100: number; q?: string }
