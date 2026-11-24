@@ -22,7 +22,7 @@ let browser;
     small:[...document.querySelectorAll('.hc-book button, .hc-book input, .hc-book select, nav:not([hidden]) button, .module-bar button, .app-header .hc-pill')].filter(e=>e.getBoundingClientRect().width&&e.getBoundingClientRect().height<44).map(e=>e.textContent)};
   });assert(!issues.overflow,'overflow '+label);assert.deepEqual(issues.small,[],'touch targets '+label);
  };
- await go('home');await shot('01-start');
+ await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));await shot('01-start');
  for(const tab of ['Air Fryer','Dom','Zakupy','Kawa']){await p.getByRole('tab',{name:tab,exact:true}).click();await shot('02-module-'+tab.replace(' ','-'));}
  await p.getByRole('tab',{name:'Dom',exact:true}).click();await p.getByRole('button',{name:/Książka kucharska/}).click();
  await p.locator('.hc-book').waitFor();assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/100 \/ 100/);
