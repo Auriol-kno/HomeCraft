@@ -32,6 +32,8 @@ export function guessCat(name: string): Cat {
   return 'Inne';
 }
 
+/** Other modules (Kitchen OS) add products with this window event: detail = [{ name, qty }]. */
+export const SHOP_ADD_EVENT = 'homecraft:shop-add';
 export interface Item { id: string; name: string; qty: string; cat: Cat; done: boolean }
 /** Split "2 l mleko", "mleko 2 l" or "jajka x10" into name and quantity. */
 export function parseEntry(raw: string): { name: string; qty: string } {

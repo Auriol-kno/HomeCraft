@@ -4,6 +4,7 @@ import { DISHES, FRYER_CATEGORIES, FRYER_RULES, MODES, MODE_ORDER, SAFE_TEMPS, f
 import { setPreset, useTimers } from './timers';
 import { ICONS, Icon, Sheet } from './ui';
 import { TimersScreen } from './TimersScreen';
+import { PlanCta } from './KitchenModule';
 
 export type FryerTab = 'dishes' | 'timers' | 'modes';
 export const fryerTabs: { id: FryerTab; label: string; icon: string }[] = [
@@ -49,7 +50,7 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
   </Sheet>;
 }
 
-export function FryerModule({ active, tab, onTab }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void }) {
+export function FryerModule({ active, tab, onTab, onPlan }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void; onPlan?: () => void }) {
   const [cat, setCat] = useState('Wszystkie'), [q, setQ] = useState(''), [favOnly, setFavOnly] = useState(false);
   const [favs, setFavs] = useState(readFavs), [open, setOpen] = useState<string | null>(null);
   const main = useRef<HTMLElement>(null);
@@ -64,6 +65,7 @@ export function FryerModule({ active, tab, onTab }: { active: boolean; tab: Frye
     <main ref={main} hidden={!active} className="app-content" aria-label={t('Air Fryer')}>
       <div className="screen-heading"><p className="overline">{t(heading[0])}</p><h1 tabIndex={-1}>{t(heading[1])}</h1></div>
       {tab === 'dishes' && <section className="screen" aria-label={t('Dania')}>
+        {onPlan && <PlanCta onOpen={onPlan} />}
         <div className="hc-search">
           <input className="hc-input" type="search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('Szukaj: frytki, skrzydełka, łosoś…')} aria-label={t('Szukaj dania')} autoComplete="off" />
           <button className="hc-toggle" aria-pressed={favOnly} onClick={() => setFavOnly(v => !v)}><Star on={favOnly} />{t('Ulubione')}</button>
