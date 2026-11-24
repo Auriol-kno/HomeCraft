@@ -2,6 +2,9 @@
 // (never by fragments), so a phrase without a translation stays readable Polish instead of
 // turning into a mixed sentence. Recipe content (dish names, steps, tips) is Polish only.
 const en: Record<string, string> = {
+"Fermentacja":"Fermentation",
+"Menu Napojów":"Drinks menu",
+"Kawa":"Coffee",
 "Włoska":"Italian",
 "Francuska":"French",
 "Meksykańska":"Mexican",
