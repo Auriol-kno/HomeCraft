@@ -75,7 +75,7 @@ Czasy gotowania, ilości wody i gramatury są **orientacyjne**: zależą od wiel
 
 ## Książka kucharska (demo)
 
-Książka (`#dom/recipes`) zawiera 200 receptur, w tym dania polskie, azjatyckie i śródziemnomorskie,
+Książka (`#dom/recipes`) zawiera 350 receptur, w tym dania polskie, azjatyckie i śródziemnomorskie,
 polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adres
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
@@ -164,3 +164,6 @@ marks/fired → puste tablice), bez zapisu migracji przy samym odczycie. Poprawn
 w tym stan rund i alertu przed końcem, są zachowywane. Karta Air Fryera przywraca
 fokus po zamknięciu i zatrzymuje Tab wewnątrz modala. Żeberka pokazują również
 istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładność sekund.
+
+### Rozbudowana książka kucharska
+100 wariantów kuchni świata, 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Książka, Kawa, Fryer, TM6, Użyteczne, Zakupy.
