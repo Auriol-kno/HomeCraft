@@ -16,3 +16,21 @@ html:root .app-shell .hc-ferment .hc-primary,html:root .app-shell .hc-ferment bu
 .hc-ferment button:disabled{opacity:.45}
 .hc-ferment a{color:var(--ink);overflow-wrap:anywhere}
 .hc-ferment button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
+
+/* Concept 03: category-first product discovery. No image downloads or new dependencies. */
+.hc-ferment-catalog{display:grid;gap:9px;min-width:0}
+.hc-ferment-hint{color:var(--muted);font-size:13px}
+.hc-ferment-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;min-width:0}
+html:root .app-shell .hc-ferment .hc-ferment-categories button{padding:5px 2px;font-size:clamp(10px,2.8vw,13px);min-width:0;white-space:nowrap;border-radius:12px}
+.hc-ferment-products{display:grid;gap:6px;min-width:0}
+html:root .app-shell .hc-ferment .hc-ferment-product{display:grid;grid-template-columns:44px minmax(0,1fr) 20px;align-items:center;gap:10px;text-align:left;width:100%;min-width:0;padding:9px;min-height:76px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px}
+html:root .app-shell .hc-ferment .hc-ferment-product[aria-pressed=true]{background:var(--surface-2);color:var(--ink);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.hc-ferment-product-icon{width:44px;height:44px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--accent)}
+.hc-ferment-product-icon svg{width:27px;height:27px}
+.hc-ferment-product-copy{display:grid;gap:2px;min-width:0}
+.hc-ferment-product-copy b{font-size:14px;line-height:1.25;overflow-wrap:anywhere}
+.hc-ferment-product-copy small{font-size:12px;line-height:1.3;font-weight:500}
+.hc-ferment-duration{font-size:11px;font-weight:650;color:var(--accent)}
+.hc-ferment-product-arrow{font-size:19px;text-align:center;color:var(--accent)}
+.hc-ferment-selection{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:350px){html:root .app-shell .hc-ferment .hc-ferment-product{grid-template-columns:36px minmax(0,1fr) 16px;gap:6px;padding:7px}.hc-ferment-product-icon{width:36px;height:36px}}
