@@ -1,0 +1,18 @@
+/* Fermentation: scoped, compact, accessible controls in all HomeCraft themes. */
+.hc-ferment{min-width:0;max-width:100%;gap:10px;color:var(--ink);font-size:14px;line-height:1.5}
+.hc-ferment h2{font-size:19px;margin:0;line-height:1.3}
+.hc-ferment-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+html:root .app-shell .hc-ferment :is(.hc-ghost,.hc-primary){min-height:44px;padding:8px 10px;font-size:13px;box-shadow:none;border:1px solid var(--line);white-space:normal;overflow-wrap:anywhere}
+html:root .app-shell .hc-ferment .hc-primary,html:root .app-shell .hc-ferment button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.hc-ferment .hc-card{padding:12px;gap:9px;min-width:0}
+.hc-ferment .hc-input{box-sizing:border-box;min-width:0;max-width:100%;font-size:16px}
+.hc-ferment-ingredients{list-style:none;padding:0;margin:0}
+.hc-ferment-ingredients li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.hc-ferment-ingredients b{flex:none}
+.hc-ferment-event{border-inline-start:3px solid var(--accent)}
+.hc-ferment-log{display:grid;gap:3px;padding:9px 0;border-top:1px solid var(--line)}
+.hc-ferment small{color:var(--muted)}
+.hc-ferment summary{cursor:pointer;padding:8px 0;font-weight:700}
+.hc-ferment button:disabled{opacity:.45}
+.hc-ferment a{color:var(--ink);overflow-wrap:anywhere}
+.hc-ferment button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
