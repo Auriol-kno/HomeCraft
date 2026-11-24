@@ -11,6 +11,7 @@ export type { Recipe, KitchenTask, Ingredient, Lane } from './kitchen-types.ts';
 import type { Recipe, KitchenTask, Lane } from './kitchen-types.ts';
 import { COOKBOOK_RECIPES } from './cookbook-recipes.ts';
 import { WORLD_COOKBOOK_RECIPES } from './cookbook-world.ts';
+import { ADDITIONAL_COOKBOOK_RECIPES } from './cookbook-additional.ts';
 import { BAKERY_COOKBOOK_RECIPES } from './cookbook-bakery.ts';
 import { EXTRA_COOKBOOK_RECIPES } from './cookbook-recipes-extra.ts';
 export const PANKO_DINNER: Recipe = {
@@ -62,7 +63,7 @@ export const PANKO_DINNER: Recipe = {
     { id: 'serve', title: 'Polej sałatkę i podawaj', detail: 'Dressing dodaj tuż przed podaniem. Posól frytki.', lane: 'hands', min: 2, after: ['rest', 'recrisp', 'salad'] },
   ],
 };
-export const RECIPES: Recipe[] = [PANKO_DINNER, ...COOKBOOK_RECIPES, ...EXTRA_COOKBOOK_RECIPES, ...WORLD_COOKBOOK_RECIPES, ...BAKERY_COOKBOOK_RECIPES];
+export const RECIPES: Recipe[] = [PANKO_DINNER, ...COOKBOOK_RECIPES, ...EXTRA_COOKBOOK_RECIPES, ...WORLD_COOKBOOK_RECIPES, ...BAKERY_COOKBOOK_RECIPES, ...ADDITIONAL_COOKBOOK_RECIPES];
 export const recipeById = (id: string) => RECIPES.find(r => r.id === id);
 
 export interface Planned extends KitchenTask { start: number; end: number }
