@@ -29,13 +29,13 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  await p.screenshot({path:shots+'/fryer-390.png'});
  await sheet.getByRole('button',{name:'Zamknij',exact:true}).click();assert.match(await p.evaluate(()=>document.activeElement.textContent),/Frytki domowe/);
  // Back while a dish is open must unmount the modal and restore interaction.
- await p.getByRole('button',{name:/Frytki domowe/}).click();await p.goBack();assert.equal(await p.getByRole('dialog').count(),0);assert.equal(await nav.evaluate(el=>el.inert),false);
+ await p.getByRole('button',{name:/Frytki domowe/}).click();await p.goBack();await p.getByRole('dialog').waitFor({state:'hidden'});assert.equal(await nav.evaluate(el=>el.closest('[inert]')===null),true);
  await openModule(p,'Air Fryer');
  // The higher-priority alarm keeps keyboard focus above a still-open dish.
  await p.evaluate(()=>localStorage.setItem('homecraft.timers.v1',JSON.stringify([{id:'alarm-test',name:'Test alarmu',total:5,endAt:Date.now()+5000,paused:false,remain:5,marks:[],fired:[],act:'',meta:'',done:false,ack:false}])));
  await go('fryer/dishes');await p.getByRole('button',{name:/Frytki domowe/}).click();await p.clock.fastForward(6000);
  const alarm=p.getByRole('alertdialog');await alarm.waitFor();await alarm.getByRole('button',{name:'Wyłącz alarm',exact:true}).focus();await p.keyboard.press('Tab');assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Jeszcze 2 min');
- await alarm.getByRole('button',{name:'Wyłącz alarm',exact:true}).click();assert.equal(await p.evaluate(()=>document.activeElement.getAttribute('aria-label')),'Zamknij');
+ await alarm.getByRole('button',{name:'Wyłącz alarm',exact:true}).click();await p.waitForFunction(()=>document.activeElement?.getAttribute('aria-label')==='Zamknij');
  await sheet.getByRole('button',{name:'Zamknij',exact:true}).click();
  await p.getByRole('navigation',{name:'Nawigacja Air Fryer'}).getByRole('button',{name:'Kuchnia',exact:true}).click();
  await p.goBack();assert.equal(await p.locator('.hc-dish').count(),37);await p.goForward();await nav.waitFor();
