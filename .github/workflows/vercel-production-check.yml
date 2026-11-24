@@ -1,0 +1,28 @@
+name: Vercel production configuration checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'vercel.json'
+      - 'vite.config.ts'
+      - 'app/**'
+      - 'package*.json'
+      - 'scripts/verify-vercel-build.mjs'
+      - '.github/workflows/vercel-production-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-vercel-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - name: Build as Vercel does, without publishing to GitHub Pages
+        run: npx vite build --base=/
+      - run: node scripts/verify-vercel-build.mjs
