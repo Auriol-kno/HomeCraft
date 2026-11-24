@@ -1,0 +1,17 @@
+.hc-timeline{display:grid;gap:12px;min-width:0;color:var(--ink);line-height:1.5}
+.hc-timeline .hc-h3{font-size:18px;color:var(--ink);margin:0}
+.hc-timeline-total{margin:0;font-size:15px}
+.hc-timeline .hc-k-lane{grid-template-columns:72px minmax(0,1fr)}
+.hc-timeline .hc-k-lane>span,.hc-timeline .hc-k-axis{color:var(--ink)}
+.hc-timeline .hc-k-lane i{background:var(--ink)}
+.hc-timeline-details summary{min-height:48px;padding:12px 0;cursor:pointer;font-weight:700;color:var(--ink)}
+.hc-timeline-steps{list-style:none;padding:0!important;margin:0;display:grid;gap:12px}
+.hc-timeline-steps li{display:grid;grid-template-columns:minmax(0,90px) minmax(0,1fr);gap:10px;align-items:start;font-size:15px}
+.hc-timeline-steps b{font-variant-numeric:tabular-nums;font-size:14px;overflow-wrap:anywhere}
+.hc-timeline-steps small{display:block;color:var(--ink);font-size:13px}
+.hc-timeline :focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.hc-timeline-note{font-size:14px;color:var(--ink);line-height:1.5}
+/* Six short destinations remain at least 44px wide at 320px. */
+@media(max-width:350px){nav.hc-kitchen-nav{gap:0;margin-left:8px;margin-right:8px}nav.hc-kitchen-nav button{padding-left:1px;padding-right:1px;font-size:10px}}
+
+:root .app-shell .hc-nav button[aria-current="page"]{color:var(--ink)}

@@ -1,6 +1,6 @@
 // HomeCraft offline cache. The page is network-first (updates arrive when online);
 // hashed assets and icons are cache-first. Bump VERSION to drop old caches.
-const VERSION = 'homecraft-cookbook-v2';
+const VERSION = 'homecraft-kitchen-timeline-v3';
 // Servers may send `Vary: Origin`; module scripts and the page differ in that header, so ignore Vary.
 const MATCH = { ignoreVary: true };
 const CORE = ['./', './manifest.webmanifest', './icon.png', './icon-192.png', './icon-512.png'];

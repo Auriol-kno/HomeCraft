@@ -2,6 +2,7 @@
 // Plan (Mission Control) → Przygotuj (Mise en Place) → Gotuj (Cooking Timeline).
 // Uses the shared kitchen timers (timers.ts) and the theme variables, like the other modules.
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { CookingTimeline } from './CookingTimeline';
 import { recipeKcal } from './cookbook-data';
 import { t } from './en';
 import { earliestServeAt, handsMinutes, hhmm, LANES, minLabel, recipeById, PANKO_DINNER, schedule, status, timeToday, totalMinutes, type Lane, type Planned, type Recipe, type Status } from './kitchen-data';
@@ -68,21 +69,6 @@ function FryerSetting({ task }: { task: Planned }) {
       <div><span className="hc-lbl">{t('Temp.')}</span><b className="hc-led">{task.fryer.temp}<small>°C</small></b></div>
       <div><span className="hc-lbl">{t('Czas')}</span><b className="hc-led">{task.min}<small>min</small></b></div>
     </div>
-  </div>;
-}
-
-/** Timeline overview: one row per lane (Ty / Air Fryer / Czeka), so parallel work is visible.
- *  Decorative: the same information is in the step list, which screen readers use. */
-function Lanes({ plan, now, serveAt }: { plan: Planned[]; now: number; serveAt: number }) {
-  const t0 = Math.min(...plan.map(x => x.start)), span = serveAt - t0 || 1;
-  const pos = (ms: number) => Math.min(100, Math.max(0, (ms - t0) / span * 100));
-  return <div className="hc-k-lanes" aria-hidden="true">
-    {LANES.filter(l => plan.some(task => task.lane === l.id)).map(l => <div key={l.id} className="hc-k-lane">
-      <span>{laneLabel(l.id)}</span>
-      <div>{plan.filter(x => x.lane === l.id).map(x => <i key={x.id} className={'l-' + l.id} style={{ left: pos(x.start) + '%', width: `calc(${pos(x.end) - pos(x.start)}% - 2px)` }} title={x.title} />)}
-        {now > t0 && now < serveAt && <b className="hc-k-nowline" style={{ left: pos(now) + '%' }} />}</div>
-    </div>)}
-    <div className="hc-k-axis"><span>{hhmm(t0)}</span><span>{hhmm(t0 + span / 2)}</span><span>{hhmm(serveAt)}</span></div>
   </div>;
 }
 
@@ -156,7 +142,7 @@ function PlanView({ c, onTab }: { c: ReturnType<typeof useCooking>; onTab: (x: K
     <ServeTime s={s} recipe={recipe} now={now} locked={s.cooking} />
     <div className="hc-card">
       <p className="hc-k-summary"><span>{t('Start')} <b>{hhmm(first.start)}</b></span><span>{t('Podanie')} <b>{hhmm(s.serveAt)}</b></span></p>
-      <Lanes plan={plan} now={now} serveAt={s.serveAt} />
+      <CookingTimeline plan={plan} now={now} />
       <p className="subtle">{t('Pierwszy krok')}: {first.title}. {t('Plan uwzględnia sprzęt i czas oczekiwania. Ty robisz jedną rzecz naraz.')}</p>
     </div>
     <div className="hc-k-cta">

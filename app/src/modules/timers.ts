@@ -1,6 +1,7 @@
 // Shared kitchen timers for the Air Fryer and Home modules. They are independent of the
 // coffee brewing engine, survive reloads (absolute end time in localStorage), keep the screen
 // awake while counting and ring/vibrate when finished or when a "shake it" mark is reached.
+import { normalizeTimers } from './timer-validation';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 
 export interface KTimer {
@@ -14,8 +15,7 @@ const KEY = 'homecraft.timers.v1';
 const load = (): KTimer[] => {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY) || '[]');
-    if (!Array.isArray(raw)) return [];
-    return raw.filter(t => t && typeof t.id === 'string' && Number.isFinite(t.total) && Number.isFinite(t.endAt)).slice(0, 20);
+    return normalizeTimers(raw);
   } catch { return []; }
 };
 let timers: KTimer[] = load();

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
-import { DISHES, FRYER_CATEGORIES, FRYER_RULES, MODES, MODE_ORDER, SAFE_TEMPS, fmtMin, norm, type Dish } from './fryer-data';
+import { CookingTimeline } from './CookingTimeline';
+import { dishTimeline } from './timeline-data';
+import { DISHES, FRYER_PREHEAT_SECONDS, FRYER_CATEGORIES, FRYER_RULES, MODES, MODE_ORDER, SAFE_TEMPS, fmtMin, norm, type Dish } from './fryer-data';
 import { setPreset, useTimers } from './timers';
 import { ICONS, Icon, Sheet } from './ui';
 import { TimersScreen } from './TimersScreen';
@@ -19,7 +21,7 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
   const M = MODES[d.m];
   const marks = d.s.length ? d.s.map(f => 'po ' + Math.round(d.min * f) + ' min').join(', ') : t('nie trzeba');
   const start = (pre: boolean) => {
-    if (pre) setPreset({ sec: 180, name: 'Rozgrzewanie: ' + d.n, meta: `PREHEAT · ${d.t} °C`, act: '' });
+    if (pre) setPreset({ sec: FRYER_PREHEAT_SECONDS, name: 'Rozgrzewanie: ' + d.n, meta: `PREHEAT · ${d.t} °C`, act: '' });
     else setPreset({ sec: d.min * 60, name: d.n, meta: `${M.tag} · ${d.t} °C`, marks: d.s.map(f => Math.round(d.min * 60 * f)), act: d.act || 'Sprawdź jedzenie' });
     onTimer();
   };
@@ -40,6 +42,8 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
       <div><span>{d.act ? d.act : t('W trakcie')}</span><b>{marks}</b></div>
       <div><span>{t('W środku')}</span><b>{d.core ? d.core + ' °C' : t('wg wyglądu')}</b></div>
     </div>
+    <CookingTimeline plan={dishTimeline(d)} relative showSteps translateTitles totalLabel="Czas urządzenia" />
+    <p className="hc-timeline-note">{t('Rozkład pokazuje czas urządzenia. Krojenie, namaczanie i odpoczynek opisano w krokach; nie są doliczane do tej osi.')}</p>
     <h3 className="hc-h3">{t('Krok po kroku')}</h3>
     <ol className="hc-steps">{d.st.map(s => <li key={s}>{s}</li>)}</ol>
     {d.tip && <p className="hc-tip">{d.tip}</p>}
@@ -50,15 +54,16 @@ function DishSheet({ d, fav, onFav, onClose, onTimer }: { d: Dish; fav: boolean;
   </Sheet>;
 }
 
-export function FryerModule({ active, tab, onTab, onPlan }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void; onPlan?: () => void }) {
+export function FryerModule({ active, tab, onTab, onPlan, onKitchen }: { active: boolean; tab: FryerTab; onTab: (t: FryerTab) => void; onPlan?: () => void; onKitchen: () => void }) {
   const [cat, setCat] = useState('Wszystkie'), [q, setQ] = useState(''), [favOnly, setFavOnly] = useState(false);
   const [favs, setFavs] = useState(readFavs), [open, setOpen] = useState<string | null>(null);
   const main = useRef<HTMLElement>(null);
   const timers = useTimers();
-  useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
+  useEffect(() => { if (active) { main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab,active]);
   const toggleFav = (id: string) => setFavs(prev => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); try { localStorage.setItem(favKey, JSON.stringify([...n])); } catch { /* ignore */ } return n; });
   const list = useMemo(() => { const nq = norm(q.trim()); return DISHES.filter(d => (cat === 'Wszystkie' || d.c === cat) && (!favOnly || favs.has(d.id)) && (!nq || norm(d.n + ' ' + d.c).includes(nq))); }, [cat, q, favOnly, favs]);
   const dish = open ? DISHES.find(d => d.id === open) : undefined;
+  useEffect(() => { if (!active) setOpen(null); }, [active]);
   const running = timers.filter(x => !x.ack).length;
   const heading = tab === 'dishes' ? ['COSORI TURBOBLAZE 6 L', 'Ściąga Air Fryer'] : tab === 'timers' ? ['TIMERY', 'Czas na potrząśnięcie'] : ['TRYBY', 'Tryby i zasady'];
   return <>
@@ -86,11 +91,12 @@ export function FryerModule({ active, tab, onTab, onPlan }: { active: boolean; t
         {MODE_ORDER.map(k => { const M = MODES[k]; const n = DISHES.filter(d => d.m === k).length; return <div key={k} className="hc-card"><p className="hc-tag">{M.tag}</p><h3 className="hc-h3">{t(M.pl)}</h3><p>{t(M.d)}</p><p className="hc-range">{M.range}{n ? ` · ${n} ${t('dań w ściądze')}` : ''}</p></div>; })}
         <div className="hc-card"><h3 className="hc-h3">{t('Zasady, które zawsze działają')}</h3><table className="hc-table"><tbody>{FRYER_RULES.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td>{b}</td></tr>)}</tbody></table></div>
       </section>}
-      {dish && <DishSheet d={dish} fav={favs.has(dish.id)} onFav={() => toggleFav(dish.id)} onClose={() => setOpen(null)} onTimer={() => { setOpen(null); onTab('timers'); }} />}
+      {active && dish && <DishSheet d={dish} fav={favs.has(dish.id)} onFav={() => toggleFav(dish.id)} onClose={() => setOpen(null)} onTimer={() => { setOpen(null); onTab('timers'); }} />}
     </main>
-    {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${fryerTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Air Fryer')}>
+    {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${fryerTabs.length+1},minmax(0,1fr))` }} aria-label={t('Nawigacja Air Fryer')}>
       {fryerTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
         <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{t(x.label)}</span></button>)}
+      <button onClick={onKitchen}><span className="nav-icon"><Icon d={ICONS.home}/></span><span>{t('Kuchnia','module')}</span></button>
     </nav>}
   </>;
 }

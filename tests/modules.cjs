@@ -1,3 +1,4 @@
+const {openModule}=require('./navigation.cjs');
 // Browser checks for the Air Fryer and Dom modules: module switching, dishes and timers,
 // eggs, measures (szklanka cukru = 220 g = 22 dag), cooking times, persistence and English.
 const {chromium}=require('@playwright/test');
@@ -13,8 +14,8 @@ let browser;
  const p=await (await browser.newContext({viewport:{width:390,height:844},colorScheme:'light'})).newPage();
  p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await p.goto(url);await p.waitForSelector('.module-bar');
- const domNav=p.getByRole('navigation',{name:'Nawigacja Dom'}),fryerNav=p.getByRole('navigation',{name:'Nawigacja Air Fryer'});
- const tab=async name=>p.getByRole('tab',{name}).click();
+ const domNav=p.getByRole('navigation',{name:'Nawigacja Kuchnia'}),fryerNav=p.getByRole('navigation',{name:'Nawigacja Air Fryer'});
+ const tab=async name=>openModule(p,name);
 
  // Coffee stays the default module, with its own five-button navigation (Kawa, Parzenie, Sprzęt, Historia, Herbata).
  assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Kawa');
@@ -33,7 +34,7 @@ let browser;
  assert.match(await p.locator('.hc-tea-info').first().innerText(),/Jak powstaje/);
  await p.getByRole('button',{name:/Ustaw timer Sencha 1 min/}).click();
  await p.waitForSelector('.hc-dial');
- assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Dom');
+ assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Kuchnia');
  await p.getByRole('tab',{name:'Kawa'}).click();
 
  // Air Fryer: 37 dishes, search, device settings, timer with a shake reminder.
@@ -54,7 +55,7 @@ let browser;
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.fryer.favs.v1')).length),1);
 
  // Dom: eggs
- await tab('Dom');
+ await tab('Kuchnia');
  // Kitchen timers are the first Dom tab: round dial, quick times, advanced options, stopwatch.
  assert.equal(await p.locator('h1:visible').first().innerText(),'Timery kuchenne');
  assert.equal(await domNav.getByRole('button').first().innerText(),'Timery');
@@ -92,7 +93,7 @@ let browser;
   return {below:r.top>dial.top+dial.height/2,bg:getComputedStyle(d).backgroundColor,fill:btn.classList.contains('hc-fill')&&/%/.test(btn.style.getPropertyValue('--fill'))};});
  assert(sw.below,'stopwatch digits below the hand pivot');assert(!/rgba\(0, 0, 0, 0\)|transparent/.test(sw.bg),'digits have a backing');assert(sw.fill,'Pauza fills while running');
  await p.getByRole('button',{name:'Pauza',exact:true}).click();
- await p.reload();await p.waitForSelector('.module-bar');await tab('Dom');await p.getByRole('button',{name:'Stoper',exact:true}).click();
+ await p.reload();await p.waitForSelector('.module-bar');await tab('Kuchnia');await p.getByRole('button',{name:'Stoper',exact:true}).click();
  assert.equal(await p.locator('.hc-laps tbody tr').count(),1,'laps survive a reload');
  await p.getByRole('button',{name:'Zeruj'}).click();
  await p.getByRole('button',{name:'Minutnik',exact:true}).click();
@@ -164,7 +165,7 @@ let browser;
  await tab('Kawa');
  assert.equal(await p.locator('.hc-pill').count(),1);
  await p.locator('.hc-pill').click();
- assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Dom');
+ assert.equal(await p.locator('.module-bar [aria-selected=true]').innerText(),'Kuchnia');
  await p.reload();await p.waitForSelector('.module-bar');
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.timers.v1')).length),2,'timers survive a reload');
 
@@ -176,9 +177,9 @@ let browser;
 
  // English UI, no horizontal overflow at 320 px, themes apply to the new modules.
  await p.click('#settingsBtn');await p.selectOption('#appLanguage','en');await p.selectOption('#appTheme','bar');await p.selectOption('#appMode','dark');await p.locator('#settingsDialog button[type=submit]').click();
- assert.equal(await p.getByRole('tab',{name:'Home'}).count(),1);
+ assert.equal(await p.getByRole('tab',{name:'Kitchen'}).count(),1);
  await p.setViewportSize({width:320,height:640});
- for(const [m,n] of [['Air Fryer',3],['Home',5],['Shopping',2]])for(let i=0;i<n;i++){await p.getByRole('tab',{name:m}).click();await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
+ for(const [m,n] of [['Air Fryer',4],['Kitchen',6],['Shopping',2]])for(let i=0;i<n;i++){await openModule(p,m);await p.locator('nav.bottom-nav:not([hidden]) button').nth(i).click();
   const over=await p.evaluate(()=>[...document.querySelectorAll('.app-content:not([hidden]) *')].filter(e=>!e.closest('.hc-chips,.module-bar')&&e.getBoundingClientRect().right>document.documentElement.clientWidth+1).length);assert.equal(over,0,`${m} tab ${i} fits 320 px`);}
  assert.deepEqual(errors,[]);
  console.log('PASS: modules — switching, round timer + stopwatch, shopping list, one nav look in every theme, side-by-side preview, 37 dishes, device settings and shake timers, eggs, measures (szklanka cukru = 220 g = 22 dag), cooking times, timers across modules and reloads, alarm, English, 320 px, zero JS errors.');

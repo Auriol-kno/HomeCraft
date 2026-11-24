@@ -1,5 +1,6 @@
 // Air Fryer cheat sheet for the COSORI TurboBlaze 6 l (30–230 °C, 9 modes).
 // `s` are the moments (fraction of the total time) at which to shake or turn the food.
+export const FRYER_PREHEAT_SECONDS = 180;
 export type ModeId = 'PREHEAT' | 'AIRFRY' | 'ROAST' | 'BROIL' | 'FROZEN' | 'BAKE' | 'REHEAT' | 'DRY' | 'PROOF';
 export interface Mode { tag: string; pl: string; range: string; d: string }
 export const MODES: Record<ModeId, Mode> = {
@@ -15,6 +16,10 @@ export const MODES: Record<ModeId, Mode> = {
 };
 export const MODE_ORDER: ModeId[] = ['PREHEAT', 'AIRFRY', 'ROAST', 'BROIL', 'FROZEN', 'BAKE', 'REHEAT', 'DRY', 'PROOF'];
 
+// Additional appliance stages already required by the written instructions.
+export const DISH_FINISH_STAGES: Record<string,{title:string;min:number;mode:ModeId;temp:number}[]> = {
+ zeberka: [{title:'Dopieczenie: BROIL 230 °C',min:4,mode:'BROIL',temp:230}],
+};
 export interface Dish {
   id: string; n: string; c: string; m: ModeId; t: number; min: number; pre: boolean; s: number[]; act: string;
   a: string; f: string; core: number | null; st: string[]; tip: string;
