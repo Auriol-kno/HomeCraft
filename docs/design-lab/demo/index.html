@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111e24">
+<title>HomeCraft Kitchen OS • Laboratorium projektu</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e9f1ec;background:#071115;--card:#15252a;--card2:#1a2c31;--edge:#365055;--muted:#adc0bb;--highlight:#d3f36b;--warm:#f0b779}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 10% -20%,#203a3d,#071115 70%);display:flex;justify-content:center;padding:18px 12px 30px}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #d3f36b;outline-offset:2px}button:disabled{opacity:.5;cursor:not-allowed}
+.shell{width:min(100%,410px);min-height:790px;border:1px solid #43585b;border-radius:34px;overflow:hidden;background:#0d191d;box-shadow:0 25px 75px #000a;display:grid;grid-template-rows:auto 1fr auto}
+header{padding:26px 24px 19px;background:#101d21;border-bottom:1px solid #2f4144}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}.logo{font-size:18px;font-weight:830;letter-spacing:-.5px}.logo i{display:inline-grid;place-items:center;color:#0e2023;background:var(--highlight);font-size:14px;width:30px;height:30px;border-radius:9px;font-style:normal;margin-right:7px}
+.tag{font-size:10px;letter-spacing:1.1px;text-transform:uppercase;color:#a5beb8;background:#213439;padding:7px 9px;border-radius:20px;white-space:nowrap}
+h1{font-size:29px;line-height:1.08;letter-spacing:-1.1px;margin:22px 0 6px}p{margin:0;line-height:1.5}.subtitle{color:#b1c2bc;font-size:13px}
+main{padding:16px 18px 20px;overflow:auto;max-height:710px;scrollbar-width:thin}
+.view{display:none}.view.active{display:block}
+.label{display:flex;justify-content:space-between;align-items:center;gap:8px;text-transform:uppercase;color:#b5cbc2;letter-spacing:1.25px;font-size:10px;font-weight:800;margin:20px 4px 10px}.label span{color:#d3f36b;letter-spacing:0}
+.panel{background:var(--card);border:1px solid var(--edge);border-radius:21px;padding:17px;margin-bottom:11px}
+.hero{background:linear-gradient(135deg,#294345,#162b2e 55%,#1d3126);border-color:#526e4b;padding:20px}
+.eyebrow{font-size:11px;color:#c8decb;letter-spacing:1.1px;text-transform:uppercase;font-weight:780}
+.hero .time{font-variant-numeric:tabular-nums;font-size:55px;font-weight:770;letter-spacing:-3px;line-height:1.12;margin:9px 0 6px;color:var(--highlight)}
+.hero .time small{font-size:16px;font-weight:650;letter-spacing:0;color:#e6f2e7}
+.hero h2{font-size:19px;margin:14px 0 4px;letter-spacing:-.3px}.hint{font-size:12px;color:#b6c7c1}
+.btn{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border:1px solid #50686a;border-radius:14px;background:#253c42;color:#f4fbf2;font-weight:700;font-size:13px}
+.btn.primary{background:var(--highlight);border-color:var(--highlight);color:#13221b}.btn.secondary{background:#25383d}.btn.full{width:100%;margin-top:15px}.btn.small{min-height:44px;padding:8px 12px;font-size:12px}
+.progress{height:8px;background:#324749;border-radius:30px;overflow:hidden;margin-top:15px}.progress>div{height:100%;width:35%;background:var(--highlight);border-radius:30px;transition:width .2s}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{padding:16px 13px;border:1px solid var(--edge);border-radius:17px;background:var(--card)}.stat strong{display:block;font-size:26px;letter-spacing:-.7px;font-variant-numeric:tabular-nums}.stat small{font-size:11px;color:#b5c9c1}
+.timerrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #34474a}.timerrow:last-child{border:0}.timerrow b{display:block;font-size:13px}.timerrow small{font-size:11px;color:#aec0b9}.counter{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--highlight)}.mini{width:44px;height:44px;border:1px solid #567074;border-radius:12px;background:#273d42;color:#eaf4e9;font-size:15px}
+.nextrow{display:flex;align-items:center;gap:12px;margin:9px 0;font-size:13px}.nextrow b{color:var(--warm);width:46px;font-variant-numeric:tabular-nums}
+.tilegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.tile{min-width:0;padding:12px 2px;border-radius:15px;border:1px solid #3a5357;background:#1e3438;color:#dceae5;min-height:70px;font-size:11px;font-weight:750}.tile span{display:block;font-size:23px;margin-bottom:7px}
+nav{background:#14252a;padding:9px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #43575b;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+nav button{border:0;background:none;color:#a9beb8;border-radius:13px;min-height:57px;font-weight:700;font-size:10px;padding:6px 2px}nav button span{display:block;font-size:21px;margin-bottom:3px}nav button[aria-current=page]{color:var(--highlight);background:#2a3f3b}
+.serving{display:flex;justify-content:space-between;align-items:center;gap:8px}.serving .clock{font-size:30px;font-weight:820;font-variant-numeric:tabular-nums}.serving .controls{display:flex;gap:5px}
+.timeline{padding:16px 10px 5px;border-left:2px solid #5c7775;margin:17px 0 8px 17px}
+.task{position:relative;margin:0 0 19px 15px}.task:before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;background:#d3f36b;border:3px solid #1b3131}.task.done:before{background:#57726b}.task .when{font-size:11px;font-weight:800;color:#d3f36b;letter-spacing:.6px}.task b{display:block;font-size:15px;margin:3px 0}.task p{font-size:12px;color:#b3c6be}.task .bar{margin-top:8px;height:6px;border-radius:5px;background:#3b5352;overflow:hidden}.task .bar i{display:block;height:100%;background:#d3f36b}
+.warning{font-size:12px;color:#e4c7a5;border-left:3px solid #e4a85d;padding:9px 12px;background:#3a3126;border-radius:8px;margin:15px 0}
+.circles{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{background:#2b4244;border:1px solid #577173;border-radius:100px;font-size:11px;padding:8px 10px}
+.stepnum{color:var(--highlight);font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:1px}.steptext{font-size:22px;line-height:1.25;letter-spacing:-.5px;font-weight:760;margin:12px 0}
+.check{display:flex;align-items:center;gap:12px;padding:12px 6px;border-bottom:1px solid #355054;font-size:14px;min-height:48px}.check:last-child{border:0}.check input{width:22px;height:22px;accent-color:#d3f36b;flex:none}.check.done span{text-decoration:line-through;color:#90a7a0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.modcopy{font-size:13px;color:#c6d7d1}.modcard{padding:13px;border:1px solid #43585b;background:#1b3033;border-radius:16px;margin:9px 0}.modcard strong{display:block}.modcard small{color:#aec8bd}
+footer{max-width:410px;margin:auto;text-align:center;font-size:11px;color:#a3b1ae;padding:10px}
+.demo{background:#4a3928;border:1px solid #866a38;border-radius:10px;color:#f5dea8;font-size:11px;padding:10px 12px;margin-bottom:14px}
+@media(max-width:365px){body{padding:0}.shell{border-radius:0;border:0;min-height:100svh}main{max-height:calc(100svh - 235px)}header{padding:19px 17px 12px}h1{font-size:25px}.hero .time{font-size:48px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+</style></head><body>
+<div><div class="shell">
+<header><div class="top"><div class="logo"><i>⌂</i> HomeCraft</div><span class="tag">KITCHEN OS · DEMO</span></div><h1 id="pageTitle">Twoja kuchnia.<br>Pod kontrolą.</h1><p class="subtitle" id="pageSubtitle">Jeden pulpit. Wszystkie czynności. Zero chaosu.</p></header>
+<main>
+<div class="demo">PROTOTYP UX — przykładowe dane, bez połączenia z urządzeniami ani aplikacją produkcyjną</div>
+<section class="view active" id="dashboard" aria-label="Pulpit">
+  <div class="panel hero"><div class="eyebrow">Plan obiadu · Podanie 18:30</div><div class="time"><span id="untilServe">43</span><small> min do podania</small></div><h2 id="heroTask">Teraz: przygotuj marynatę</h2><p class="hint" id="heroHint">Następna czynność: nastaw ryż</p><div class="progress"><div id="heroProgress"></div></div><button type="button" class="btn primary full" data-go="prep">Przejdź do aktualnego kroku →</button></div>
+  <div class="label">Aktywne timery <span>symulacja</span></div>
+  <div class="panel"><div class="timerrow"><div><b>🍗 Air Fryer</b><small>Kurczak panko</small></div><span class="counter" id="airTime">12:40</span><button class="mini" data-timer="air" aria-label="Pauzuj timer Air Fryer">Ⅱ</button></div><div class="timerrow"><div><b>🍚 Ryż</b><small>Garnek</small></div><span class="counter" id="riceTime">06:15</span><button class="mini" data-timer="rice" aria-label="Pauzuj timer ryżu">Ⅱ</button></div></div>
+  <div class="label">Następne czynności</div><div class="panel" id="nextTasks"></div>
+  <div class="label">Twoje moduły</div>
+  <div class="tilegrid"><button class="tile" data-module="Kawa"><span>☕</span>Kawa</button><button class="tile" data-module="Air Fryer"><span>♨</span>Air Fryer</button><button class="tile" data-module="Dom"><span>⌂</span>Dom</button><button class="tile" data-module="Zakupy"><span>▤</span>Zakupy</button></div>
+</section>
+<section class="view" id="timeline" aria-label="Plan gotowania">
+  <div class="label">Cooking Timeline</div><div class="panel"><div class="serving"><div><div class="eyebrow">Godzina podania</div><div class="clock" id="serveTime">18:30</div></div><div class="controls"><button class="mini" id="serveMinus" aria-label="Podanie 5 minut wcześniej">−</button><button class="mini" id="servePlus" aria-label="Podanie 5 minut później">+</button></div></div><p class="hint" style="margin-top:10px">Zmień godzinę; harmonogram przeliczy się automatycznie.</p></div>
+  <div class="panel"><div class="eyebrow">Kolejność i zależności</div><div class="timeline" id="timelineTasks"></div></div>
+  <div class="warning">⚠ Czasy orientacyjne. Prawidłowe przygotowanie mięsa sprawdzaj termometrem. To plan ręcznej pracy, nie sterowanie urządzeniami.</div>
+  <button class="btn primary full" data-go="prep">Przejdź do przygotowania →</button>
+</section>
+<section class="view" id="prep" aria-label="Przygotowanie i gotowanie">
+  <div class="label">Mise en Place <span id="ingredientProgress">0 / 5 gotowe</span></div>
+  <div class="panel"><div class="eyebrow">Kurczak w panko · 4 porcje</div><p style="font-size:18px;font-weight:750;margin:11px 0 4px">Sprawdź składniki</p><div id="ingredients"></div><button class="btn small full" id="missingButton">Dodaj brakujące do zakupów (symulacja)</button></div>
+  <div class="label">Prowadzenie krok po kroku</div><div class="panel"><div class="stepnum" id="stepBadge">KROK 1 Z 5</div><div class="steptext" id="stepText">Przygotuj składniki na blacie.</div><p class="hint" id="stepHint">Zacznij dopiero, kiedy masz wszystko pod ręką.</p><div class="actions"><button class="btn secondary" id="backStep">← Wstecz</button><button class="btn primary" id="nextStep">Zrobione →</button></div></div>
+  <div class="panel"><div class="eyebrow">Urządzenie • ręczne ustawienie</div><p style="font-size:17px;font-weight:760;margin:10px 0">COSORI Air Fryer</p><div class="circles"><span class="pill">200°C</span><span class="pill">15–20 minut</span><span class="pill">Obróć w połowie</span></div><button class="btn full" id="startDemoTimer">Uruchom demonstracyjny timer 15 min</button></div>
+  <div class="warning">To makieta. Nie steruje Air Fryerem ani nie gwarantuje alarmów w tle na iOS.</div>
+</section>
+<section class="view" id="modules" aria-label="Zachowane moduły">
+  <div class="label">Istniejące funkcje HomeCraft</div>
+  <p class="modcopy">W docelowym projekcie wszystkie obecne funkcje zachowają własne ekrany. To tylko mapa integracji, nie zastępcza implementacja.</p>
+  <div class="modcard"><strong>☕ Kawa i herbata</strong><small>6 metod parzenia, Lelit Anna, młynki, baza kaw, historia, 24 rodzaje herbat</small></div>
+  <div class="modcard"><strong>♨ Air Fryer</strong><small>37 dań, profile COSORI, ulubione, istniejące timery i alerty</small></div>
+  <div class="modcard"><strong>⌂ Dom</strong><small>Timery, stoper, jajka, gotowanie, miarki, Thermomix TM6</small></div>
+  <div class="modcard"><strong>▤ Zakupy</strong><small>Lista zakupów, odhaczanie, produkty i kategorie</small></div>
+  <div class="warning">Nie przenosimy tutaj danych użytkownika. Wdrożenie integracji wymaga osobnego etapu, migracji i testów.</div>
+  <button class="btn primary full" data-go="dashboard">Wróć do pulpitu</button>
+</section>
+</main>
+<nav aria-label="Nawigacja prototypu"><button aria-current="page" data-go="dashboard"><span>▦</span>Pulpit</button><button data-go="timeline"><span>◷</span>Plan</button><button data-go="prep"><span>☑</span>Przygotuj</button><button data-go="modules"><span>▤</span>Moduły</button></nav>
+</div><footer>HomeCraft Kitchen OS · oddzielny, samodzielny prototyp · bez zapisu danych</footer></div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const tasks=[
+{title:"Przygotuj marynatę",detail:"Miska i przyprawy · 10 min",offset:-45,dur:10},
+{title:"Ugotuj ryż",detail:"Garnek · 15 min",offset:-30,dur:15},
+{title:"Rozgrzej Air Fryer",detail:"Ustaw ręcznie · 5 min",offset:-25,dur:5},
+{title:"Piecz kurczaka",detail:"COSORI · orientacyjnie 20 min",offset:-20,dur:20},
+{title:"Przygotuj warzywa",detail:"Deska i patelnia · 10 min",offset:-10,dur:10}
+];
+const steps=[
+["Ułóż produkty na blacie","Umyj ręce; przygotuj miskę, deskę i naczynia."],
+["Pokrój kurczaka i przygotuj marynatę","Surowy drób trzymaj oddzielnie od gotowych produktów."],
+["Obtocz kawałki w jajku i panko","Przygotuj osobne naczynia. Unikaj krzyżowego zanieczyszczenia."],
+["Ustaw ręcznie Air Fryer","200°C, orientacyjnie 15–20 minut. Czas zależy od grubości kawałków."],
+["Sprawdź gotowość i podaj","Użyj termometru do żywności. Nie oceniaj bezpieczeństwa tylko po kolorze."]
+];
+const products=["500 g piersi kurczaka","2 jajka","120 g panko","1 łyżka oleju","Przyprawy"];
+let serve=18*60+30, step=0,checked=[false,true,false,true,false],timer={air:{left:12*60+40,on:true},rice:{left:6*60+15,on:true}};
+function mm(n){return String(Math.floor((n+1440)%1440/60)).padStart(2,"0")+":"+String((n+1440)%60).padStart(2,"0")}
+function duration(s){s=Math.max(0,s);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function view(id){document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.id===id));document.querySelectorAll("nav button").forEach(el=>el.setAttribute("aria-current",el.dataset.go===id?"page":"false"));const names={dashboard:["Twoja kuchnia.","Jeden pulpit. Wszystkie czynności. Zero chaosu."],timeline:["Wszystko na czas.","Gotuj tak, by wszystkie dania skończyć razem."],prep:["Pracuj spokojnie.","Przygotuj składniki, potem wykonuj krok po kroku."],modules:["Wszystko zostaje.","Obecne funkcje HomeCraft pozostają dostępne."]};$("pageTitle").textContent=names[id][0];$("pageSubtitle").textContent=names[id][1];document.querySelector("main").scrollTop=0}
+function renderSchedule(){const holder=$("timelineTasks");holder.replaceChildren();tasks.forEach((task,i)=>{const div=document.createElement("div");div.className="task"+(i<step?" done":"");const when=document.createElement("div");when.className="when";when.textContent=mm(serve+task.offset)+" · "+task.dur+" min";const title=document.createElement("b");title.textContent=task.title;const detail=document.createElement("p");detail.textContent=task.detail;const bar=document.createElement("div");bar.className="bar";const fill=document.createElement("i");fill.style.width=Math.min(100,Math.round(task.dur/25*100))+"%";bar.append(fill);div.append(when,title,detail,bar);holder.append(div)});$("serveTime").textContent=mm(serve);$("untilServe").textContent=String(serve-(17*60+47));$("nextTasks").replaceChildren();tasks.slice(step,step+2).forEach(task=>{const d=document.createElement("div");d.className="nextrow";const t=document.createElement("b");t.textContent=mm(serve+task.offset);const text=document.createElement("span");text.textContent=task.title;d.append(t,text);$("nextTasks").append(d)});$("heroTask").textContent=step<tasks.length?"Teraz: "+tasks[Math.min(step,tasks.length-1)].title:"Wszystkie kroki oznaczone jako gotowe";$("heroHint").textContent=step+1<tasks.length?"Następnie: "+tasks[step+1].title:"Zakończenie pracy — sprawdź danie";$("heroProgress").style.width=Math.min(100,step/steps.length*100)+"%"}
+function renderIngredients(){const parent=$("ingredients");parent.replaceChildren();products.forEach((item,i)=>{const label=document.createElement("label");label.className="check"+(checked[i]?" done":"");const check=document.createElement("input");check.type="checkbox";check.checked=checked[i];check.addEventListener("change",()=>{checked[i]=check.checked;renderIngredients()});const t=document.createElement("span");t.textContent=item;label.append(check,t);parent.append(label)});$("ingredientProgress").textContent=checked.filter(Boolean).length+" / "+products.length+" gotowe"}
+function renderStep(){$("stepBadge").textContent="KROK "+(step+1)+" Z "+steps.length;$("stepText").textContent=steps[step][0];$("stepHint").textContent=steps[step][1];$("backStep").disabled=step===0;$("nextStep").textContent=step===steps.length-1?"Zakończ ✓":"Zrobione →";renderSchedule()}
+document.querySelectorAll("[data-go]").forEach(el=>el.addEventListener("click",()=>view(el.dataset.go)));
+document.querySelectorAll("[data-module]").forEach(el=>el.addEventListener("click",()=>view("modules")));
+$("serveMinus").addEventListener("click",()=>{serve-=5;renderSchedule()});
+$("servePlus").addEventListener("click",()=>{serve+=5;renderSchedule()});
+$("backStep").addEventListener("click",()=>{step=Math.max(0,step-1);renderStep()});
+$("nextStep").addEventListener("click",()=>{if(step<steps.length-1){step++;renderStep()}else{view("dashboard");$("heroTask").textContent="Gotowe — zweryfikuj podanie";$("heroProgress").style.width="100%"}});
+$("missingButton").addEventListener("click",()=>{const missing=products.filter((x,i)=>!checked[i]);alert(missing.length?"Przykładowa lista zakupów (bez zapisu):\n• "+missing.join("\n• "):"Wszystkie składniki zaznaczone!")});
+$("startDemoTimer").addEventListener("click",()=>{timer.air.left=15*60;timer.air.on=true;view("dashboard");updateTimers()});
+document.querySelectorAll("[data-timer]").forEach(el=>el.addEventListener("click",()=>{let t=timer[el.dataset.timer];t.on=!t.on;updateTimers()}));
+function updateTimers(){for(const key of ["air","rice"]){$(key==="air"?"airTime":"riceTime").textContent=duration(timer[key].left);const b=document.querySelector('[data-timer="'+key+'"]');b.textContent=timer[key].on?"Ⅱ":"▶";b.setAttribute("aria-label",(timer[key].on?"Pauzuj":"Wznów")+" timer "+(key==="air"?"Air Fryer":"ryżu"))}}
+let last=Date.now();setInterval(()=>{const now=Date.now(),diff=Math.floor((now-last)/1000);if(diff<1)return;last=now;for(const key of ["air","rice"]){const t=timer[key];if(t.on)t.left=Math.max(0,t.left-diff);if(t.left===0)t.on=false}updateTimers()},1000);
+renderIngredients();renderStep();updateTimers();
+})();
+</script></body></html>
