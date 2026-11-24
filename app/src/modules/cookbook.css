@@ -37,3 +37,5 @@
 
 .hc-k-device-note{display:grid;gap:10px;color:var(--ink);font-size:14px;line-height:1.5;margin-bottom:16px}
 .hc-k-device-note p{margin:0}
+.hc-book-labels{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.hc-book-labels span{font-size:.76rem;line-height:1.25;padding:5px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.hc-book h2{font-size:clamp(1.12rem,5vw,1.45rem);line-height:1.18}.hc-book .hc-k-title{font-size:clamp(1.45rem,6vw,2rem)}.hc-book p,.hc-book li,.hc-book button,.hc-book input,.hc-book select{font-size:clamp(.9rem,3.8vw,1rem)}

@@ -75,12 +75,12 @@ Czasy gotowania, ilości wody i gramatury są **orientacyjne**: zależą od wiel
 
 ## Książka kucharska (demo)
 
-Dom → Książka kucharska (`#dom/recipes`) zawiera 100 receptur, w tym 20 azjatyckich,
+Książka (`#dom/recipes`) zawiera 200 receptur, w tym dania polskie, azjatyckie i śródziemnomorskie,
 polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adres
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Książka otwiera się z karty w Timerach w Kuchni; dolne menu zawiera także skrót Air Fryer obok Timerów i pozostaje widoczne podczas korzystania z Air Fryera. W Air Fryerze duże przyciski Dania / Timery / Zasady używania zmieniają widok urządzenia, nie zastępując dolnego menu Kuchni. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
+Stałe dolne menu prowadzi do Książki, Kawy, Air Fryera, TM6 i Użytecznych. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga

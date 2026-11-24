@@ -292,7 +292,6 @@ export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: Ki
   }, [active, tab, c.s.cooking]);
   if (!active) return null;
   const heading = tab === 'plan' ? ['KITCHEN OS', 'Zaplanuj gotowanie'] : tab === 'mise' ? ['MISE EN PLACE', 'Przygotuj wszystko'] : ['GOTOWANIE', c.recipe.short];
-  const running = c.s.cooking && !c.st.finished;
   return <>
     <main ref={main} className="app-content hc-kitchen" aria-label={t('Kitchen OS')}>
       <div className="screen-heading"><p className="overline">{t(heading[0])}</p><h1 tabIndex={-1}>{t(heading[1])}</h1></div>
@@ -305,9 +304,5 @@ export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: Ki
       {tab === 'mise' && <MiseView c={c} onTab={onTab} />}
       {tab === 'cook' && <CookView c={c} onTab={onTab} />}
     </main>
-    <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${kitchenTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Kitchen OS')}>
-      {kitchenTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
-        <span className="nav-icon"><Icon d={x.icon} />{x.id === 'cook' && running && <i />}</span><span>{t(x.label)}</span></button>)}
-    </nav>
   </>;
 }

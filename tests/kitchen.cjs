@@ -28,10 +28,8 @@ let browser;
  await p.goto(url);await p.waitForSelector('.module-bar');
  await p.clock.pauseAt(new Date('2026-11-24T16:00:30+01:00'));
 
- // 1. Entry from Air Fryer (and Dom) under "Zaplanuj gotowanie"; the module bar keeps its four sections.
- assert.equal(await p.locator('.module-bar button.mod').count(),3);
- await p.getByRole('tab',{name:'Kuchnia'}).click();
- assert(await p.locator('main:not([hidden]) .hc-k-entry').isVisible(),'Dom shows the plan entry');
+ // 1. Entry from Air Fryer; the global menu remains available.
+ assert.equal(await p.locator('.primary-nav button').count(),5);
  await openModule(p,'Air Fryer');
  assert.equal(await p.locator('.hc-dish').count(),37,'Air Fryer dishes unchanged');
  await shot('01-air-fryer-entry');
@@ -59,7 +57,7 @@ let browser;
  assert.equal(await p.locator('.hc-kitchen .hc-shop-prog b').innerText(),'5/23');
  await p.getByRole('button',{name:/Dodaj nieodhaczone składniki do Zakupów \(10\)/}).click();
  await shot('03-mise');
- await p.getByRole('tab',{name:'Zakupy'}).click();
+ await p.getByRole('navigation',{name:'Główne działy'}).getByRole('button',{name:'Zakupy'}).click();
  const shop=await p.locator('main:not([hidden]) .hc-iname').allInnerTexts();
  assert(shop.some(x=>/^Panko/.test(x))&&shop.some(x=>/^Mleko/.test(x)),'panko added, milk kept');
  assert(!shop.some(x=>/^Ziemniaki/.test(x)),'ticked ingredients are not added');
@@ -118,7 +116,7 @@ let browser;
  await shot('06-done');
 
  // 8. Existing modules still switch, keep their data, and the coffee history is untouched.
- for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Kuchnia','nav[aria-label="Nawigacja Kuchnia"]'],['Zakupy','.hc-iname']]){await openModule(p,tab);await p.locator(sel).first().waitFor({state:'attached'});}
+ for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Kuchnia','.hc-book'],['Zakupy','.hc-iname']]){await openModule(p,tab);await p.locator(sel).first().waitFor({state:'attached'});}
  assert.deepEqual((await p.evaluate(()=>JSON.parse(localStorage.getItem('cremalab.iphone.v3')))).hist,coffee.hist,'coffee history untouched');
  await ctx.close();
 

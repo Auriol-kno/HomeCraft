@@ -2,16 +2,19 @@
 // kcal/100 g are editorial reference estimates, not a verified import of a nutrition database.
 // Include all listed oil/sugar. No ingredient or recipe is claimed to be kitchen-tested.
 import type { Recipe, Lane } from './kitchen-types.ts';
-export type Cuisine = 'Polska' | 'Azjatycka' | 'Międzynarodowa';
+export type Cuisine = 'Polska' | 'Azjatycka' | 'Śródziemnomorska' | 'Międzynarodowa';
 export type Category = 'Obiady' | 'Zupy' | 'Śniadania' | 'Przekąski' | 'Napoje' | 'Desery';
+export type Diet = 'Wysokobiałkowa' | 'Niskowęglowodanowa' | 'Śródziemnomorska' | 'Wegetariańska' | 'Wegańska' | 'Bezglutenowa';
+export type RecipeDevice = 'Air Fryer' | 'Thermomix' | 'Bez urządzenia';
 export interface NutritionIngredient { n: string; grams: number; kcal100: number; q?: string }
-export interface CookbookInfo { cuisine: Cuisine; category: Category; nutrition: NutritionIngredient[]; allergens: string[]; sources: string[]; tested: false }
+export interface CookbookInfo { cuisine: Cuisine; category: Category; diets: Diet[]; devices: RecipeDevice[]; nutrition: NutritionIngredient[]; allergens: string[]; sources: string[]; tested: false }
 export interface CookbookRecipe extends Recipe { book: CookbookInfo }
 type Ing = [name: string, grams: number, kcal100: number, quantity?: string];
 type Step = [minutes: number, title: string, detail: string, lane?: Lane, batches?: number, marks?: number[]];
 const sources = {
  Polska: 'https://www.kwestiasmaku.com/przepisy',
  Azjatycka: 'https://www.recipetineats.com/category/asian-recipes/',
+ Śródziemnomorska: 'https://www.bbcgoodfood.com/recipes/collection/mediterranean-recipes',
  Międzynarodowa: 'https://www.bbcgoodfood.com/recipes/collection/family-meal-recipes',
 };
 const safetySource = 'https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures';
@@ -30,7 +33,11 @@ function recipe(id: string, name: string, cuisine: Cuisine, category: Category, 
  const expanded: Step[] = steps.flatMap(([min,title,detail,lane,batches=1,marks]) => Array.from({length:batches}, (_,i) => [min, batches>1 ? `${title} — partia ${i+1}/${batches}` : title, batches>1 ? `Przygotuj połowę składników; czas dotyczy jednej partii. ${detail}` : detail, lane, 1, marks] as Step));
  const tasks = expanded.map(([min,title,detail,lane='hands',,marks],i) => ({id:`s${i+1}`,title,detail,lane,min, ...(lane==='stove' && /smaż|podsmaż|roztop|zetnij|energicznie/i.test(title+' '+detail) ? {resources:['hands' as Lane]} : {}), after:i?[`s${i}`]:[], ...(lane !== 'hands' ? {timer:{name:title, ...(marks?.length?{marks,act:'Sprawdź i obróć lub potrząśnij jedzenie'}:{})}} : {}), ...(lane==='fryer' ? {fryer:{mode:/Rozgrzej/.test(title)?'PREHEAT':/BAKE/.test(detail)?'BAKE':'AIR FRY',temp:Number(detail.match(/(\d{3}) °C/)?.[1] || 190)}} : {}), ...(lane==='hands' && /patelni|garnku|oleju.*smaż|podsmaż/i.test(detail) ? {resources:['stove' as Lane]} : {}), ...(safe ? {safety:safety[safe]} : {})}));
  // Sequential steps are deliberate: a single cook never has to handle two active pans at once.
- return {id,name,short:name,servings,note:`${note} Ilości dotyczą całego przepisu. Czasy są orientacyjne; sprawdzaj gotowość. Wersja domowa, nieprzetestowana w kuchni.`.trim(),ingredients:ing.map(([n,g,,q],i)=>({id:`i${i}`,n,q:q || `${g} g`})),equipment:equipment.map((n,i)=>({id:`e${i}`,n})),prep:[{id:'prep-clean',n:'Umyj ręce, warzywa i owoce; odmierz składniki.'},{id:'prep-read',n:'Przeczytaj cały przepis i sprawdź alergeny na opakowaniach.'}],tasks,book:{cuisine,category,nutrition:ing.map(([n,grams,kcal100,q])=>({n,grams,kcal100,q})),allergens,sources:[sources[cuisine],...(safe?[safetySource]:[])],tested:false}};
+ // Older recipes did not carry verified diet metadata. Avoid deriving a dietary claim
+ // from a name; device tags only follow an actual appliance lane in the instructions.
+ const diets:Diet[]=[];
+ const devices:RecipeDevice[]=[]; if(lanes.has('fryer'))devices.push('Air Fryer'); if(lanes.has('blender'))devices.push('Thermomix'); if(!devices.length)devices.push('Bez urządzenia');
+ return {id,name,short:name,servings,note:`${note} Ilości dotyczą całego przepisu. Czasy są orientacyjne; sprawdzaj gotowość. Wersja domowa, nieprzetestowana w kuchni.`.trim(),ingredients:ing.map(([n,g,,q],i)=>({id:`i${i}`,n,q:q || `${g} g`})),equipment:equipment.map((n,i)=>({id:`e${i}`,n})),prep:[{id:'prep-clean',n:'Umyj ręce, warzywa i owoce; odmierz składniki.'},{id:'prep-read',n:'Przeczytaj cały przepis i sprawdź alergeny na opakowaniach.'}],tasks,book:{cuisine,category,diets,devices,nutrition:ing.map(([n,grams,kcal100,q])=>({n,grams,kcal100,q})),allergens,sources:[sources[cuisine],...(safe?[safetySource]:[])],tested:false}};
 }
 const P = 'Polska', A = 'Azjatycka', W = 'Międzynarodowa';
 const O = 'Obiady', Z = 'Zupy', S = 'Śniadania', K = 'Przekąski', N = 'Napoje', D = 'Desery';

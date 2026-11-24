@@ -387,6 +387,21 @@ const en: Record<string, string> = {
   'Przygotuj wszystko': 'Get everything ready',
   'Ty': 'You',
   'Czeka': 'Waiting',
+  'Książka': 'Cookbook',
+  'Użyteczne': 'Useful',
+  'Dieta': 'Diet',
+  'Urządzenie': 'Appliance',
+  'Wysokobiałkowa': 'High-protein',
+  'Niskowęglowodanowa': 'Low-carb',
+  'Śródziemnomorska': 'Mediterranean',
+  'Wegetariańska': 'Vegetarian',
+  'Wegańska': 'Vegan',
+  'Bezglutenowa': 'Gluten-free',
+  'Bez urządzenia': 'No appliance',
+  '200 przepisów, diety, ulubione i kcal na porcję': '200 recipes, diets, favourites and kcal per serving',
+  'Główne działy': 'Main sections',
+  'Nawigacja główna': 'Main navigation',
+  'Menu Kawy': 'Coffee menu',
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */

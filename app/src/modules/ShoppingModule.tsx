@@ -109,9 +109,5 @@ export function ShoppingModule({ active, tab, onTab }: { active: boolean; tab: S
         </div>)}
       </section>}
     </main>
-    {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${shopTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Zakupy')}>
-      {shopTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
-        <span className="nav-icon"><Icon d={x.icon} />{x.id === 'list' && open.length > 0 && <i />}</span><span>{t(x.label)}</span></button>)}
-    </nav>}
   </>;
 }

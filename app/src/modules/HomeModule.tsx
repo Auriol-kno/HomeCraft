@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './en';
 import { cToF, convert, EGG_BOIL, EGG_OTHER, EGG_SIZES, EGG_START, EGG_STEAM, EGG_TIPS, eggSeconds, fToC, FOODS, FOOD_CATEGORIES, INGREDIENTS, kitchenGrams, METHODS, ML, num, OVEN_C, OVEN_NOTES, UNITS, type EggMethod, type MethodId, type Unit } from './home-data';
 import { norm, SAFE_TEMPS } from './fryer-data';
-import { setPreset, useTimers } from './timers';
+import { setPreset } from './timers';
 import { settingText, TM_CATEGORIES, TM_RECIPES, TM_RULES } from './thermomix-data';
 import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
@@ -14,6 +14,7 @@ export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
   { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'eggs', label: 'Jajka', icon: ICONS.egg },
   { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'thermomix', label: 'Thermomix', icon: ICONS.mixer }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
 ];
+export const usefulTabs = homeTabs.filter(x=>x.id!=='thermomix');
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 function Pills<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: { id: T; n: string }[]; onChange: (v: T) => void }) {
   return <div className="hc-field"><span>{t(label)}</span><div className="hc-seg" role="group" aria-label={t(label)}>{options.map(o => <button key={o.id} aria-pressed={value === o.id} onClick={() => onChange(o.id)}>{t(o.n)}</button>)}</div></div>;
@@ -69,23 +70,17 @@ function Cooking({ onTimer }: { onTimer: () => void }) {
 }
 
 export type ThermomixView = 'recipes' | 'timers' | 'rules';
-const thermomixViews: { id: ThermomixView; label: string; icon: string }[] = [
+export const thermomixViews: { id: ThermomixView; label: string; icon: string }[] = [
   { id: 'recipes', label: 'Przepisy', icon: ICONS.dishes }, { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'rules', label: 'Zasady używania', icon: ICONS.modes },
 ];
 function Thermomix({ onTimer, view, onView }: { onTimer: () => void; view: ThermomixView; onView: (view: ThermomixView) => void }) {
   const [cat, setCat] = useState<string>('Wszystkie'), [q, setQ] = useState('');
-  const running = useTimers().filter(x => !x.ack).length;
   const nq = norm(q.trim());
   const list = TM_RECIPES.filter(r => (cat === 'Wszystkie' || r.c === cat) && (!nq || norm(r.n + ' ' + r.c + ' ' + r.ing.join(' ')).includes(nq)));
   return <section className="screen" aria-label={t('Thermomix')}>
-    <nav className="hc-device-tabs" role="tablist" aria-label={t('Menu Thermomix')}>
-      {thermomixViews.map(x => <button key={x.id} role="tab" id={`tm-tab-${x.id}`} aria-selected={view === x.id} onClick={() => onView(x.id)}>
-        <Icon d={x.icon} /><span>{t(x.label)}</span>{x.id === 'timers' && running > 0 && <i aria-label={t('Aktywny timer')} />}
-      </button>)}
-    </nav>
-    {view === 'timers' && <div role="tabpanel" id="tm-panel-timers" aria-labelledby="tm-tab-timers"><TimersScreen /></div>}
-    {view === 'rules' && <div role="tabpanel" id="tm-panel-rules" aria-labelledby="tm-tab-rules" className="hc-card"><h3 className="hc-h3">{t('Zasady używania')}</h3><table className="hc-table"><tbody>{TM_RULES.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td className="left">{t(b)}</td></tr>)}</tbody></table></div>}
-    {view === 'recipes' && <div role="tabpanel" id="tm-panel-recipes" aria-labelledby="tm-tab-recipes">
+    {view === 'timers' && <div aria-label={t('Timery Thermomix')}><TimersScreen /></div>}
+    {view === 'rules' && <div aria-label={t('Zasady używania')} className="hc-card"><h3 className="hc-h3">{t('Zasady używania')}</h3><table className="hc-table"><tbody>{TM_RULES.map(([a, b]) => <tr key={a}><td>{t(a)}</td><td className="left">{t(b)}</td></tr>)}</tbody></table></div>}
+    {view === 'recipes' && <div aria-label={t('Przepisy Thermomix')}>
     <p className="subtle">{t('Podstawowe ustawienia Thermomix TM6, które ustawisz ręcznie na urządzeniu: czas, temperatura i obroty. Działają bez Cookidoo i bez internetu.')}</p>
     <input className="hc-input" type="search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('Szukaj: ryż, zupa, pizza…')} aria-label={t('Szukaj przepisu')} autoComplete="off" />
     <div className="hc-chips" role="group" aria-label={t('Kategorie')}>{TM_CATEGORIES.map(c => <button key={c} aria-pressed={cat === c} onClick={() => setCat(c)}>{t(c)}</button>)}</div>
@@ -152,14 +147,6 @@ function Measures() {
   </section>;
 }
 
-export function KitchenBottomNav({ tab, fryerActive, onTab, onFryer }: { tab: HomeTab; fryerActive: boolean; onTab: (t: HomeTab) => void; onFryer: () => void }) {
-  const running = useTimers().filter(x => !x.ack).length;
-  return <nav className="bottom-nav hc-nav hc-kitchen-nav" style={{ gridTemplateColumns: `repeat(${homeTabs.length+1},minmax(0,1fr))` }} aria-label={t('Nawigacja Kuchnia')}>
-    {homeTabs.map(x => <Fragment key={x.id}><button aria-label={x.id === 'cook' ? `${t('Czasy')} — ${t(x.label)}` : x.id === 'thermomix' ? `TM6 — ${t(x.label)}` : x.id === 'timers' && running > 0 ? `${t(x.label)} — ${t('Aktywny timer')}` : t(x.label)} aria-current={!fryerActive && tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
-      <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i aria-hidden="true" />}</span><span>{x.id === 'cook' ? t('Czasy') : x.id === 'thermomix' ? 'TM6' : t(x.label)}</span></button>{x.id === 'timers' && <button onClick={onFryer} aria-label="Air Fryer" aria-current={fryerActive ? 'page' : undefined}><span className="nav-icon"><Icon d={ICONS.fryer}/></span><span>Fryer</span></button>}</Fragment>)}
-  </nav>;
-}
-
 export function HomeModule({ active, tab, thermomixView, onThermomixView, onTab, onPlan }: { active: boolean; tab: HomeTab; thermomixView: ThermomixView; onThermomixView: (view: ThermomixView) => void; onTab: (t: HomeTab) => void; onPlan?: () => void }) {
   const main = useRef<HTMLElement>(null);
   useEffect(() => { if (active) { main.current?.scrollTo(0, 0); if (tab !== 'recipes') main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab,active]);
@@ -174,7 +161,7 @@ export function HomeModule({ active, tab, thermomixView, onThermomixView, onTab,
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'thermomix' && <Thermomix onTimer={() => onThermomixView('timers')} view={thermomixView} onView={onThermomixView} />}
       {tab === 'measures' && <Measures />}
-      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('100 przepisów, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('200 przepisów, diety, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
     </main>
   </>;
 }

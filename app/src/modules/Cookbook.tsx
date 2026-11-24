@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CookingTimeline } from './CookingTimeline';
 import { RECIPES, schedule, recipeById, totalMinutes, handsMinutes, minLabel } from './kitchen-data';
 import type { Recipe } from './kitchen-types';
-import { bookInfo, BOOK_CATEGORIES, BOOK_CUISINES, EMPTY_FILTERS, filterRecipes, recipeKcal, type BookSort } from './cookbook-data';
+import { bookInfo, BOOK_CATEGORIES, BOOK_CUISINES, BOOK_DIETS, BOOK_DEVICES, EMPTY_FILTERS, filterRecipes, recipeKcal, type BookSort } from './cookbook-data';
 import { toggleBookFavourite, useBookFavourites } from './cookbook-store';
 import { getKitchen, selectKitchenRecipe } from './kitchen-store';
 import { actOn, useTimers } from './timers';
@@ -37,6 +37,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   <article className="hc-card hc-book-detail">
    <div className="hc-book-top"><p className="hc-tag">{t(info.cuisine)} · {t(info.category)}</p>{star(selected)}</div>
    <h2 ref={heading} tabIndex={-1} className="hc-k-title">{selected.name}</h2>
+   <p className="hc-book-labels">{info.diets.map(d=><span key={d}>{t(d)}</span>)}{info.devices.map(d=><span key={d}>{t(d)}</span>)}</p>
    <p className="hc-book-facts"><b>≈ {recipeKcal(selected)} {t('kcal / porcję')}</b><span>{selected.servings} {t('porcje')}</span><span>{minLabel(totalMinutes(selected))} · {t('Twoja praca')}: {handsMinutes(selected)} min</span></p>
    <CookingTimeline plan={schedule(selected,0)} relative showSteps />
    <p>{selected.note}</p>
@@ -68,6 +69,10 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
     <label className="hc-field"><span>{t('Kuchnia')}</span><select className="hc-input" aria-label={t('Kuchnia')} value={filters.cuisine} onChange={e=>change({cuisine:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CUISINES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
     <label className="hc-field"><span>{t('Rodzaj posiłku')}</span><select className="hc-input" aria-label={t('Rodzaj posiłku')} value={filters.category} onChange={e=>change({category:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CATEGORIES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
    </div>
+   <div className="hc-book-filter-row">
+    <label className="hc-field"><span>{t('Dieta')}</span><select className="hc-input" aria-label={t('Dieta')} value={filters.diet} onChange={e=>change({diet:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_DIETS.map(d=><option key={d} value={d}>{t(d)}</option>)}</select></label>
+    <label className="hc-field"><span>{t('Urządzenie')}</span><select className="hc-input" aria-label={t('Urządzenie')} value={filters.device} onChange={e=>change({device:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_DEVICES.map(d=><option key={d} value={d}>{t(d)}</option>)}</select></label>
+   </div>
    <label className="hc-field"><span>{t('Sortowanie')}</span><select className="hc-input" aria-label={t('Sortowanie')} value={filters.sort} onChange={e=>change({sort:e.target.value as BookSort})}>
     <option value="name">{t('Nazwa A–Z')}</option><option value="time">{t('Najkrótszy czas')}</option><option value="kcal">{t('Najmniej kcal na porcję')}</option><option value="kcal-desc">{t('Najwięcej kcal na porcję')}</option>
    </select></label>
@@ -77,7 +82,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   {!list.length&&<div className="hc-card"><p>{t('Brak pasujących przepisów. Zmień filtry lub dodaj przepisy do ulubionych.')}</p><button className="hc-ghost" onClick={()=>change({...EMPTY_FILTERS})}>{t('Wyczyść filtry')}</button></div>}
   <div className="hc-book-grid">{list.slice(0,limit).map(r=><article key={r.id} className="hc-card hc-book-card">
    <div className="hc-book-top"><p className="hc-tag">{t(bookInfo(r).cuisine)} · {t(bookInfo(r).category)}</p>{star(r)}</div>
-   <h2>{r.name}</h2><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
+   <h2>{r.name}</h2><p className="hc-book-labels">{bookInfo(r).diets.slice(0,2).map(d=><span key={d}>{t(d)}</span>)}{bookInfo(r).devices.slice(0,1).map(d=><span key={d}>{t(d)}</span>)}</p><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
    <button className="hc-ghost" onClick={()=>open(r)} aria-label={`${t('Otwórz przepis')}: ${r.name}`}>{t('Otwórz przepis')} →</button>
   </article>)}</div>
   {list.length>limit&&<button className="hc-primary" onClick={()=>setLimit(n=>{rememberedLimit=n+20;return rememberedLimit;})}>{t('Pokaż kolejne 20')}</button>}
