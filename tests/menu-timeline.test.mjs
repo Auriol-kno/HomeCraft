@@ -19,7 +19,7 @@ for(const d of DISHES){const before=JSON.stringify(d),p=dishTimeline(d);assert.e
 assert(taskUses({lane:'stove',resources:['hands']},'hands'));
 assert(!taskUses({lane:'stove',resources:['hands']},'oven'));
 assert.deepEqual(timelineBounds([]),{start:0,end:0,minutes:0});
-console.log('PASS: read-only timeline for 200 recipes and 37 Air Fryer dishes, shared resources and exact reminders');
+console.log('PASS: read-only timeline for 350 recipes and 37 Air Fryer dishes, shared resources and exact reminders');
 
 const ribs=dishTimeline(DISHES.find(d=>d.id==='zeberka'));assert.equal(timelineBounds(ribs).minutes,34);assert.equal(ribs[1].fryer.temp,230);assert.equal(ribs[1].min,4);
 assert.equal(timelineEvents(dishTimeline(DISHES.find(d=>d.id==='frytki-mroz')))[0].minute,7.5);
