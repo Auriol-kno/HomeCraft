@@ -1,3 +1,4 @@
+const {openModule}=require('./navigation.cjs');
 const {chromium}=require('@playwright/test');
 const {spawn}=require('node:child_process');
 const assert=require('node:assert/strict');
@@ -23,8 +24,8 @@ let browser,pageForFailure;
   });assert(!issues.overflow,'overflow '+label);assert.deepEqual(issues.small,[],'touch targets '+label);
  };
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));await shot('01-start');
- for(const tab of ['Air Fryer','Dom','Zakupy','Kawa']){await p.getByRole('tab',{name:tab,exact:true}).click();await shot('02-module-'+tab.replace(' ','-'));}
- await p.getByRole('tab',{name:'Dom',exact:true}).click();await p.getByRole('button',{name:/Książka kucharska/}).click();
+ for(const tab of ['Air Fryer','Kuchnia','Zakupy','Kawa']){await openModule(p,tab);await shot('02-module-'+tab.replace(' ','-'));}
+ await p.getByRole('tab',{name:'Kuchnia',exact:true}).click();await p.getByRole('button',{name:/Książka kucharska/}).click();
  await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/100 \/ 100/);
  assert.equal(await p.locator('.hc-book-card').count(),20);
  await p.getByRole('button',{name:'Pokaż kolejne 20'}).click();assert.equal(await p.locator('.hc-book-card').count(),40);

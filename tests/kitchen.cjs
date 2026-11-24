@@ -1,3 +1,4 @@
+const {openModule}=require('./navigation.cjs');
 // Browser test for Kitchen OS ("Zaplanuj gotowanie"): the whole sample dinner on a narrow iPhone screen
 // with a controlled clock, data safety of the other modules, reload, 320 px and desktop layouts.
 const {chromium}=require('@playwright/test');
@@ -28,10 +29,10 @@ let browser;
  await p.clock.pauseAt(new Date('2026-11-24T16:00:30+01:00'));
 
  // 1. Entry from Air Fryer (and Dom) under "Zaplanuj gotowanie"; the module bar keeps its four sections.
- assert.equal(await p.locator('.module-bar button.mod').count(),4);
- await p.getByRole('tab',{name:'Dom'}).click();
+ assert.equal(await p.locator('.module-bar button.mod').count(),3);
+ await p.getByRole('tab',{name:'Kuchnia'}).click();
  assert(await p.locator('main:not([hidden]) .hc-k-entry').isVisible(),'Dom shows the plan entry');
- await p.getByRole('tab',{name:'Air Fryer'}).click();
+ await openModule(p,'Air Fryer');
  assert.equal(await p.locator('.hc-dish').count(),37,'Air Fryer dishes unchanged');
  await shot('01-air-fryer-entry');
  await p.getByRole('button',{name:/Zaplanuj gotowanie/}).click();
@@ -117,7 +118,7 @@ let browser;
  await shot('06-done');
 
  // 8. Existing modules still switch, keep their data, and the coffee history is untouched.
- for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Dom','nav[aria-label="Nawigacja Dom"]'],['Zakupy','.hc-iname']]){await p.getByRole('tab',{name:tab}).click();await p.locator(sel).first().waitFor({state:'attached'});}
+ for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Kuchnia','nav[aria-label="Nawigacja Kuchnia"]'],['Zakupy','.hc-iname']]){await openModule(p,tab);await p.locator(sel).first().waitFor({state:'attached'});}
  assert.deepEqual((await p.evaluate(()=>JSON.parse(localStorage.getItem('cremalab.iphone.v3')))).hist,coffee.hist,'coffee history untouched');
  await ctx.close();
 

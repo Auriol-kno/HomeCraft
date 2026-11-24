@@ -80,7 +80,7 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Książka otwiera się z karty w Timerach; dolny pasek Dom zachowuje pięć dotychczasowych zakładek, bez ciasnej szóstej pozycji. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
+Książka otwiera się z karty w Timerach w Kuchni; dolne menu zawiera także skrót Air Fryer obok Timerów. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
@@ -134,3 +134,33 @@ Wariant Vercel: `npx vite build --base=/`, potem
 Wariant Pages: `npm run build`, potem `npm test`. Nie commituj wygenerowanych plików strony.
 Safari na fizycznym iPhonie wymaga osobnego testu: alarm nie jest gwarantowany przy
 zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia systemu.
+
+## Kuchnia i rozkład czasu (demo)
+
+Górne menu: Kawa / Kuchnia / Zakupy. Dawny dział Dom nosi nazwę **Kuchnia**;
+Air Fryer otwiera się z dolnego paska Kuchni, bezpośrednio obok Timerów (krótki
+podpis „Fryer”, pełna etykieta „Air Fryer”). Dolny pasek Air Fryera ma przycisk
+powrotu do Kuchni. Zachowane są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
+klucze localStorage; zmiana nazwy nie wymaga migracji. W EN sekcja to „Kitchen”,
+a filtr kuchni pochodzenia przepisów pozostaje „Cuisine”.
+
+Każda ze 100 kart książki ma widoczny rozkład czasu z tego samego harmonogramu co
+Plan: pasy osoby i używanego sprzętu, czas całkowity oraz rozwijane „Etapy i czasy”.
+Oś w karcie liczy minuty od rozpoczęcia; w Planie pokazuje rzeczywiste godziny.
+Pasy uwzględniają także współdzielone zasoby (np. osoba mieszająca na kuchence).
+To podgląd bez zapisu: nie zastępuje sesji, nie zmienia godziny podania i nie uruchamia timerów.
+
+Również każde z 37 dań Air Fryera ma oś rozgrzewania i pracy urządzenia oraz
+momenty obrócenia/potrząśnięcia. Ta oś **nie obejmuje przygotowania z opisów**, dla
+którego nie mamy osobnych danych o czasie (np. namaczania frytek); karta mówi o tym
+wprost. Czasów receptur, temperatur i alarmów nie zmieniono.
+
+Wspólny komponent: `CookingTimeline.tsx`; czyste projekcje: `timeline-data.ts`.
+Testy: `tests/menu-timeline.test.mjs` i `tests/menu-timeline.cjs`, w `npm test` i
+w dodatkowym przebiegu CI dla bazy `/`. Zrzuty: `test-results/menu-timeline/`.
+
+Przy odczycie timerów niekompletne starsze rekordy są normalizowane (np. brakujące
+marks/fired → puste tablice), bez zapisu migracji przy samym odczycie. Poprawne timery,
+w tym stan rund i alertu przed końcem, są zachowywane. Karta Air Fryera przywraca
+fokus po zamknięciu i zatrzymuje Tab wewnątrz modala. Żeberka pokazują również
+istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładność sekund.

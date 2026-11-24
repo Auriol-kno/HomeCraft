@@ -26,7 +26,7 @@ type Screen = 'home' | 'timer' | 'equipment' | 'history' | 'rating' | 'tea';
 type Equipment = 'grinder' | 'anna' | 'service';
 // 'plan' (Kitchen OS) has no tab in the module bar: it opens from "Zaplanuj gotowanie" in Air Fryer and Dom.
 type Module = 'coffee' | 'fryer' | 'dom' | 'shop' | 'plan';
-const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'fryer',label:'Air Fryer',icon:ICONS.fryer},{id:'dom',label:'Dom',icon:ICONS.home},{id:'shop',label:'Zakupy',icon:SHOP_ICON}];
+const modules: {id: Module; label: string; icon: string}[] = [{id:'coffee',label:'Kawa',icon:ICONS.coffee},{id:'dom',label:'Kuchnia',icon:ICONS.home},{id:'shop',label:'Zakupy',icon:SHOP_ICON}];
 // Hash routes: coffee keeps its own (#timer, #history ...); the new modules use #fryer/<tab> and #dom/<tab>.
 function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; shop: ShopTab; plan: KitchenTab} {
  const [a,b]=location.hash.slice(1).split('/');
@@ -106,7 +106,7 @@ export function App() {
    <button id="settingsBtn" className="settings-trigger" aria-label={t('Ustawienia')} aria-haspopup="dialog"><Icon name="settings"/></button>
   </header>
   <div className="module-bar" role="tablist" aria-label={t('Dział aplikacji')}>
-   {modules.map(m=><button key={m.id} role="tab" className="mod" aria-selected={module===m.id} onClick={()=>go(m.id)}><ModIcon d={m.icon}/><span>{m.id==='coffee'?t(m.label):tm(m.label)}</span>{m.id==='coffee'&&status.running&&module!=='coffee'&&<i className="dot" aria-label={t('Parzenie trwa')}/>}</button>)}
+   {modules.map(m=><button key={m.id} role="tab" className="mod" aria-selected={module===m.id||(m.id==='dom'&&module==='fryer')} onClick={()=>go(m.id)}><ModIcon d={m.icon}/><span>{m.id==='coffee'?t(m.label):tm(m.label,m.id==='dom'?'module':undefined)}</span>{m.id==='coffee'&&status.running&&module!=='coffee'&&<i className="dot" aria-label={t('Parzenie trwa')}/>}</button>)}
   </div>
   <main ref={main} hidden={module!=='coffee'} className="app-content" id="app-content">
    <div className="screen-heading">{(screen==='home'||screen==='timer')&&<p className="overline">{screen==='home'?t('ZACZNIJ OD FILIŻANKI'):t('PARZENIE')}</p>}<h1 id="screen-title" tabIndex={-1}>{t(screen==='timer'?status.method:titles[screen])}</h1>{status.running&&screen!=='timer'&&<button className="live-pill" onClick={()=>navigate('timer')}><span/>{t('Parzenie trwa')} · {clock(status.seconds)} →</button>}</div>
@@ -139,8 +139,8 @@ export function App() {
    <button className="dock-reset" onClick={()=>document.getElementById('resetBtn')?.click()}>{t('Zeruj')}</button>
   </div>}
   <nav className="bottom-nav" style={{gridTemplateColumns:`repeat(${destinations.length},minmax(0,1fr))`}} hidden={module!=='coffee'} aria-label={t('Nawigacja główna')}>{destinations.map(d=><button key={d.id} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i/>}</span><span>{t(d.label)}</span></button>)}</nav>
-  <FryerModule active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
-  <HomeModule active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
+  <FryerModule onKitchen={()=>go('dom','timers')} active={module==='fryer'} tab={fryerTab} onTab={x=>go('fryer',x)} onPlan={()=>go('plan','plan')}/>
+  <HomeModule onFryer={()=>go('fryer','dishes')} active={module==='dom'} tab={homeTab} onTab={x=>go('dom',x)} onPlan={()=>go('plan','plan')}/>
   <KitchenModule active={module==='plan'} tab={planTab} onTab={x=>go('plan',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <BrewingPanel html={overlays}/>

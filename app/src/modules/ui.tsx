@@ -23,14 +23,34 @@ export const ICONS = {
 /** Bottom sheet dialog used for dish details. */
 export function Sheet({ overline, title, onClose, children, headExtra }: { overline?: string; title: string; onClose: () => void; children: ReactNode; headExtra?: ReactNode }) {
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const sheet = useRef<HTMLDivElement>(null);
+  const close = useRef(onClose); close.current = onClose;
+  const timers = useTimers(), alarmOpen = timers.some(timer => timer.done && !timer.ack);
+  const hadAlarm = useRef(false);
+  useEffect(() => { if (hadAlarm.current && !alarmOpen) closeBtn.current?.focus(); hadAlarm.current = alarmOpen; }, [alarmOpen]);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKey); closeBtn.current?.focus();
-    const prev = document.activeElement as HTMLElement | null;
-    return () => { document.removeEventListener('keydown', onKey); prev?.focus?.(); };
-  }, [onClose]);
+    const opener = document.activeElement as HTMLElement | null;
+    const inerted: HTMLElement[] = [];
+    let branch: HTMLElement | null = sheet.current?.parentElement || null;
+    while (branch?.parentElement) {
+      for (const sibling of Array.from(branch.parentElement.children)) if (sibling !== branch && sibling instanceof HTMLElement && sibling.getAttribute('role') !== 'alertdialog' && !sibling.inert) { sibling.inert = true; inerted.push(sibling); }
+      if (branch.parentElement === document.body) break;
+      branch = branch.parentElement;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      const modal = document.querySelector<HTMLElement>('.hc-alarm[role="alertdialog"]') || sheet.current;
+      if (e.key === 'Escape') { if (modal === sheet.current) { e.preventDefault(); close.current(); } return; }
+      if (e.key !== 'Tab') return;
+      const targets = Array.from(modal?.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[tabindex]:not([tabindex="-1"])') || []).filter(el => el.getClientRects().length > 0);
+      const first=targets[0], last=targets[targets.length-1];
+      if (!first) { e.preventDefault(); modal?.focus(); return; }
+      if (!modal?.contains(document.activeElement) || (e.shiftKey && document.activeElement === first) || (!e.shiftKey && document.activeElement === last)) { e.preventDefault(); (e.shiftKey?last:first).focus(); }
+    };
+    document.addEventListener('keydown',onKey);closeBtn.current?.focus();
+    return () => {document.removeEventListener('keydown',onKey);inerted.forEach(el=>{el.inert=false;});if(opener?.isConnected)opener.focus();};
+  }, []);
   return <div className="hc-scrim" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-    <div className="hc-sheet" role="dialog" aria-modal="true" aria-labelledby="hc-sheet-title">
+    <div ref={sheet} tabIndex={-1} className="hc-sheet" role="dialog" aria-modal="true" aria-labelledby="hc-sheet-title">
       <div className="hc-grab" />
       <div className="hc-sheet-head">
         <div>{overline && <p className="overline">{overline}</p>}<h2 id="hc-sheet-title">{title}</h2></div>

@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build && node scripts/publish.mjs",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node --experimental-strip-types tests/homecraft.test.mjs && node --experimental-strip-types tests/kitchen.test.mjs && node --experimental-strip-types tests/cookbook.test.mjs && node --experimental-strip-types tests/advice.test.mjs && node --experimental-strip-types tests/coffees.test.mjs && node tests/mobile.cjs && node tests/features.cjs && node tests/modules.cjs && node tests/kitchen.cjs && node tests/cookbook.cjs"
+    "test": "node --experimental-strip-types tests/homecraft.test.mjs && node --experimental-strip-types tests/kitchen.test.mjs && node --experimental-strip-types tests/cookbook.test.mjs && node --experimental-strip-types tests/menu-timeline.test.mjs && node --experimental-strip-types tests/advice.test.mjs && node --experimental-strip-types tests/coffees.test.mjs && node tests/mobile.cjs && node tests/features.cjs && node tests/modules.cjs && node tests/kitchen.cjs && node tests/cookbook.cjs && node tests/menu-timeline.cjs"
   },
   "dependencies": {
     "react": "^19.2.0",

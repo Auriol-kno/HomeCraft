@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { RECIPES, recipeById, totalMinutes, handsMinutes, minLabel } from './kitchen-data';
+import { CookingTimeline } from './CookingTimeline';
+import { RECIPES, schedule, recipeById, totalMinutes, handsMinutes, minLabel } from './kitchen-data';
 import type { Recipe } from './kitchen-types';
 import { bookInfo, BOOK_CATEGORIES, BOOK_CUISINES, EMPTY_FILTERS, filterRecipes, recipeKcal, type BookSort } from './cookbook-data';
 import { toggleBookFavourite, useBookFavourites } from './cookbook-store';
@@ -37,6 +38,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
    <div className="hc-book-top"><p className="hc-tag">{t(info.cuisine)} · {t(info.category)}</p>{star(selected)}</div>
    <h2 ref={heading} tabIndex={-1} className="hc-k-title">{selected.name}</h2>
    <p className="hc-book-facts"><b>≈ {recipeKcal(selected)} {t('kcal / porcję')}</b><span>{selected.servings} {t('porcje')}</span><span>{minLabel(totalMinutes(selected))} · {t('Twoja praca')}: {handsMinutes(selected)} min</span></p>
+   <CookingTimeline plan={schedule(selected,0)} relative showSteps />
    <p>{selected.note}</p>
    <p>{t('Alergeny')}: {info.allergens.length?info.allergens.join(', '):t('Sprawdź etykiety składników.')}</p>
    <p className="hc-book-note">{t('Kcal są szacunkowe: suma energii składników podzielona przez liczbę porcji. Uwzględniają podany tłuszcz i dodatki. Marki produktów i rzeczywisty uzysk zmieniają wynik.')}</p>

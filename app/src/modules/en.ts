@@ -2,6 +2,17 @@
 // (never by fragments), so a phrase without a translation stays readable Polish instead of
 // turning into a mixed sentence. Recipe content (dish names, steps, tips) is Polish only.
 const en: Record<string, string> = {
+"Czas urządzenia":"Appliance time",
+"Moduł Kuchnia":"Kitchen section",
+"Rozkład czasu gotowania":"Cooking timeline",
+"Całość":"Total",
+"od rozpoczęcia":"from the start",
+"Etapy i czasy":"Steps and timing",
+"Przypomnienia":"Reminders",
+"Nawigacja Kuchnia":"Kitchen navigation",
+"KUCHNIA":"KITCHEN",
+"Rozkład pokazuje czas urządzenia. Krojenie, namaczanie i odpoczynek opisano w krokach; nie są doliczane do tej osi.":"This timeline shows appliance time. Cutting, soaking and resting are described in the steps and are not included in this axis.",
+
   "Czasy": "Times",
  "Ekran i alarm":"Screen and alarm",
  "Sprawdź dźwięk":"Test sound",
@@ -378,4 +389,4 @@ const en: Record<string, string> = {
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */
-export const t = (pl: string): string => (isEnglish() ? en[pl] ?? pl : pl);
+export const t = (pl: string, context?: 'module'): string => (isEnglish() ? (context === 'module' && pl === 'Kuchnia' ? 'Kitchen' : en[pl] ?? pl) : pl);
