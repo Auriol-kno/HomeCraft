@@ -2,6 +2,7 @@
 // (never by fragments), so a phrase without a translation stays readable Polish instead of
 // turning into a mixed sentence. Recipe content (dish names, steps, tips) is Polish only.
 const en: Record<string, string> = {
+  "Czasy": "Times",
  "Ekran i alarm":"Screen and alarm",
  "Sprawdź dźwięk":"Test sound",
  "Zostaw aplikację otwartą. Po zablokowaniu ekranu lub przejściu w tło alarm może nie zabrzmieć.":"Keep the app open. When the screen locks or the app is in the background, the alarm may not sound.",

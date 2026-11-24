@@ -80,7 +80,7 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Książka otwiera się z karty w Timerach; dolny pasek Dom zachowuje pięć dotychczasowych zakładek, bez ciasnej szóstej pozycji.
+Książka otwiera się z karty w Timerach; dolny pasek Dom zachowuje pięć dotychczasowych zakładek, bez ciasnej szóstej pozycji. Krótkie podpisy „Czasy” i „TM6” zapobiegają nakładaniu tekstu przy 320 px; etykiety czytnika zachowują pełne nazwy.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
