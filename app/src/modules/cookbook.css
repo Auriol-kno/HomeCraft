@@ -41,3 +41,24 @@
 .hc-book h2{font-size:clamp(1.12rem,5vw,1.45rem);line-height:1.18}.hc-book .hc-k-title{font-size:clamp(1.45rem,6vw,2rem)}.hc-book p,.hc-book li,.hc-book button,.hc-book input,.hc-book select{font-size:clamp(.9rem,3.8vw,1rem)}
 
 .hc-health-title{display:flex;align-items:baseline;gap:8px}.hc-health-dot{display:inline-block;width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--muted);vertical-align:middle}.hc-health-dot.green{background:#38855c}.hc-health-dot.moderate{background:#b17b1b}.hc-health-dot.occasional{background:#b64d47}.hc-health-legend{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}.hc-health-legend span{display:inline-flex;gap:5px;align-items:center;font-size:12px}.hc-health-legend small{flex-basis:100%;font-size:12px;color:var(--muted)}
+
+/* Compact recipe cards with accessible touch targets. */
+:root .hc-book{gap:8px;line-height:1.4;font-size:14px}
+:root .hc-book-grid{gap:8px}
+:root .hc-book-card{padding:10px 12px;gap:5px}
+:root .hc-book-card h2{font-size:16px;line-height:1.25}
+:root .hc-book-card .hc-book-labels{gap:4px;margin:0}
+:root .hc-book-card .hc-book-labels span{padding:2px 6px;font-size:10px}
+:root .hc-book-card .hc-book-facts,:root .hc-book-card .hc-book-facts b{font-size:12px;gap:4px 10px}
+:root .hc-book-card .hc-ghost{min-height:44px;padding:4px 8px}
+:root .hc-book-top{gap:6px}
+:root .hc-book-star{min-height:44px;width:44px;flex-basis:44px}
+:root .hc-book-detail{gap:9px;padding:12px}
+:root .hc-book-ingredients li{padding:5px 0}
+:root .hc-book-steps li{padding:4px 0 7px}
+:root .hc-book-steps h4{font-size:15px;margin-bottom:3px}
+:root .hc-book-steps p{font-size:14px;line-height:1.45}
+:root .hc-book-filters{gap:7px;padding:10px}
+:root .hc-book-filter-row{gap:6px}
+:root .hc-book .hc-input{min-height:44px;font-size:16px;padding:5px 8px}
+.hc-rating{display:flex;align-items:center;flex-wrap:wrap;gap:3px}.hc-rating button{min-width:44px;min-height:44px;padding:2px;color:var(--accent);font-size:21px;background:transparent;border:0;box-shadow:none}.hc-rating small{color:var(--muted)}
