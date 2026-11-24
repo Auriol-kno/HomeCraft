@@ -72,3 +72,21 @@
 :root .hc-book .hc-rating button{min-width:44px;min-height:44px;padding:2px;font-size:21px;border:0;color:var(--accent);background:transparent;box-shadow:none}
 :root .hc-book .hc-rating button.hc-ghost{font-size:12px}
 :root .hc-book .hc-rating button[aria-pressed=true]{outline:1px solid var(--accent);outline-offset:-2px}
+
+/* Cookbook only: compact controls, no clipped neumorphic shadows in scroll strips.
+   Keep 44px touch targets while reducing the visible typography and padding by 10%. */
+html:root .app-shell .hc-book{min-width:0;max-width:100%;box-sizing:border-box}
+html:root .app-shell .hc-book .hc-book-sections{min-width:0;max-width:100%;width:100%;box-sizing:border-box;background:transparent;box-shadow:none;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:3px 2px;gap:5px}
+html:root .app-shell .hc-book .hc-book-sections::-webkit-scrollbar{display:none}
+html:root .app-shell .hc-book button{box-sizing:border-box;min-height:44px;min-width:44px;font-size:clamp(.81rem,3.42vw,.9rem);line-height:1.25;padding:9px 14.4px}
+html:root .app-shell .hc-book :is(.hc-ghost,.hc-primary){box-shadow:none;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+html:root .app-shell .hc-book .hc-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+html:root .app-shell .hc-book .hc-book-sections .hc-ghost{font-size:10.8px;padding:3.6px 9px;flex:0 0 auto;white-space:nowrap;overflow-wrap:normal;border-radius:999px}
+html:root .app-shell .hc-book .hc-book-sections .hc-ghost[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);outline:none}
+html:root .app-shell .hc-book .hc-book-card .hc-ghost{padding:3.6px 7.2px}
+html:root .app-shell .hc-book .hc-book-star{padding:0;width:44px;flex:0 0 44px;font-size:18px}
+html:root .app-shell .hc-book .hc-rating button{font-size:18.9px;padding:1.8px;border:0;box-shadow:none;background:transparent;color:var(--accent)}
+html:root .app-shell .hc-book .hc-rating button.hc-ghost{font-size:10.8px}
+html:root .app-shell .hc-book button[aria-pressed=true]:not(.hc-book-sections button){outline-offset:-2px}
+html:root .app-shell .hc-book button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
+html:root .app-shell .hc-book .hc-book-sections button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
