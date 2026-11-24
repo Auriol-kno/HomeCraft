@@ -112,7 +112,7 @@ W rosole kcal zakładają zjedzenie mięsa i warzyw. Zamienniki i inne marki zmi
 Receptury są własnymi domowymi opracowaniami, nie kopiami opisów źródłowych ani
 rankingiem popularności. Linki kategorii służą jako inspiracje do doboru dań, nie jako
 potwierdzenie dokładnej gramatury czy czasu. **Nie przetestowano ich w kuchni**.
-Większe porcje mogą wymagać dodatkowych partii i wydłużenia planu. Sprawdzaj gotowość,
+W wybranych przepisach Air Fryera partie są jawnie rozdzielone na kroki. Większe porcje mogą wymagać dodatkowych partii i wydłużenia planu. Sprawdzaj gotowość,
 a mięso termometrem: drób 75 °C (przyjęte zaokrąglenie w górę), mielona wieprzowina/
 wołowina 71 °C, ryby 63 °C, całe kawałki wieprzowiny 63 °C + 3 min odpoczynku.
 Podstawą progów jest FoodSafety.gov; nie zakładaj gotowości wyłącznie po czasie.

@@ -7,7 +7,7 @@ import { t } from './en';
 import { earliestServeAt, handsMinutes, hhmm, LANES, minLabel, recipeById, PANKO_DINNER, schedule, status, timeToday, totalMinutes, type Lane, type Planned, type Recipe, type Status } from './kitchen-data';
 import { getKitchen, resetKitchen, setKitchen, useKitchen, type KitchenSession } from './kitchen-store';
 import { SHOP_ADD_EVENT } from './shopping-data';
-import { actOn, addTimer, clock, remaining, TOAST_EVENT, useTick, useTimers, type KTimer } from './timers';
+import { soundMark, unlockAudio, actOn, addTimer, clock, remaining, TOAST_EVENT, useTick, useTimers, type KTimer } from './timers';
 import { ICONS, Icon } from './ui';
 
 export type KitchenTab = 'plan' | 'mise' | 'cook';
@@ -253,7 +253,7 @@ function CookView({ c, onTab }: { c: ReturnType<typeof useCooking>; onTab: (x: K
         </>}
       </>}
     <details className="details-card hc-k-all" open={st.finished || undefined}><summary>{t('Cały plan')} ({st.doneCount}/{st.total}) <span>+</span></summary><StepList plan={plan} s={s} now={now} editable timers={timers} /></details>
-    <p className="hc-k-note">{t('Czasy są orientacyjne. Kurczak jest gotowy przy min. 75 °C w środku: sprawdź termometrem. Na iPhonie zostaw aplikację otwartą; przy zablokowanym ekranie Safari może nie zadzwonić.')}</p>
+    <p className="hc-k-note">{t('Czasy są orientacyjne. Sprawdź gotowość według wskazówek przepisu. Przy zablokowanym ekranie alarm nie jest gwarantowany.')}</p>
   </section>;
 }
 
@@ -283,13 +283,25 @@ export function PlanCta({ onOpen }: { onOpen: () => void }) {
 export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: KitchenTab; onTab: (x: KitchenTab) => void }) {
   const c = useCooking(active);
   const main = useRef<HTMLElement>(null);
+  const [wakeStatus,setWakeStatus] = useState('Podtrzymanie ekranu włącza się podczas gotowania.');
   useEffect(() => { if(active){ main.current?.scrollTo(0, 0); main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab, active]);
-  // Keep the screen on while cooking on the Gotuj view (timers also do this while they count).
+  // Report the real wake-lock state; the OS may release or deny a lock at any time.
   useEffect(() => {
-    if (!active || tab !== 'cook' || !c.s.cooking || !navigator.wakeLock) return;
-    let lock: WakeLockSentinel | null = null, gone = false;
-    const take = () => { if (document.visibilityState === 'visible') navigator.wakeLock.request('screen').then(l => { if (gone) void l.release(); else lock = l; }).catch(() => {}); };
-    take(); document.addEventListener('visibilitychange', take);
+    if (!active || tab !== 'cook' || !c.s.cooking) { setWakeStatus('Podtrzymanie ekranu włącza się podczas gotowania.'); return; }
+    if (!navigator.wakeLock) { setWakeStatus('Podtrzymanie ekranu niedostępne.'); return; }
+    let lock: WakeLockSentinel | null = null, gone = false, pending = false;
+    const take = async () => {
+      if (gone || pending || lock || document.visibilityState !== 'visible') return;
+      pending = true;
+      try {
+        const acquired = await navigator.wakeLock.request('screen');
+        if (gone) { void acquired.release(); return; }
+        lock = acquired; setWakeStatus('Podtrzymanie ekranu aktywne.');
+        acquired.addEventListener('release', () => { lock = null; if (!gone) setWakeStatus('Podtrzymanie ekranu zwolnione przez system.'); });
+      } catch { if (!gone) setWakeStatus('System odmówił podtrzymania ekranu.'); }
+      finally { pending = false; }
+    };
+    void take(); document.addEventListener('visibilitychange', take);
     return () => { gone = true; document.removeEventListener('visibilitychange', take); void lock?.release().catch(() => {}); };
   }, [active, tab, c.s.cooking]);
   if (!active) return null;
@@ -298,6 +310,11 @@ export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: Ki
   return <>
     <main ref={main} className="app-content hc-kitchen" aria-label={t('Kitchen OS')}>
       <div className="screen-heading"><p className="overline">{t(heading[0])}</p><h1 tabIndex={-1}>{t(heading[1])}</h1></div>
+      <aside className="hc-card hc-k-device-note" aria-label={t('Ekran i alarm')}>
+        <p>{t('Zostaw aplikację otwartą. Po zablokowaniu ekranu lub przejściu w tło alarm może nie zabrzmieć.')}</p>
+        <p role="status">{t(wakeStatus)}</p>
+        <button className="hc-ghost" onClick={() => { unlockAudio(); soundMark(); }}>{t('Sprawdź dźwięk')}</button>
+      </aside>
       {tab === 'plan' && <PlanView c={c} onTab={onTab} />}
       {tab === 'mise' && <MiseView c={c} onTab={onTab} />}
       {tab === 'cook' && <CookView c={c} onTab={onTab} />}

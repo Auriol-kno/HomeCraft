@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { RECIPES, schedule, totalMinutes, PANKO_DINNER } from '../app/src/modules/kitchen-data.ts';
+import { RECIPES, schedule, totalMinutes, handsMinutes, PANKO_DINNER } from '../app/src/modules/kitchen-data.ts';
 import { bookInfo, recipeKcal, filterRecipes, EMPTY_FILTERS, parseFavourites, normalizeBook } from '../app/src/modules/cookbook-data.ts';
 assert.equal(RECIPES.length,100);
 assert.equal(new Set(RECIPES.map(r=>r.id)).size,100);
@@ -43,3 +43,11 @@ assert.equal(filterRecipes(EMPTY_FILTERS,[],fiveHundred).length,500);
 const multi={...PANKO_DINNER,tasks:[{id:'a',title:'a',detail:'',lane:'hands',resources:['stove'],min:5,after:[]},{id:'b',title:'b',detail:'',lane:'stove',min:5,after:[]},{id:'c',title:'c',detail:'',lane:'hands',min:2,after:['a','b']}]};
 const mp=schedule(multi,0);assert.equal(totalMinutes(multi),12);assert.equal(mp.length,3);
 console.log('PASS: 100 recipes, 500-record queries, kcal sums, stable ids, search/sort/favourites validation and resource-safe schedules');
+
+const get=id=>RECIPES.find(r=>r.id===id);
+assert(handsMinutes(get('book-007'))>=44,'active frying belongs to hands-on work');
+assert.equal(get('book-047').tasks.filter(t=>t.fryer?.mode==='AIR FRY').length,2,'two quesadilla batches');
+assert(get('book-047').tasks.filter(t=>t.fryer?.mode==='AIR FRY').every(t=>t.min===6));
+for(const id of ['book-017','book-020','book-061']){const r=get(id);const boil=r.tasks.find(t=>t.title==='Gotuj jajka od wrzenia');assert(boil&&boil.min===10&&boil.timer);assert.equal(r.tasks.find(t=>t.title==='Zagotuj wodę z jajkami').timer,undefined);}
+assert.deepEqual(get('book-045').tasks.find(t=>t.fryer?.mode==='AIR FRY').timer.marks,[8/22,16/22]);
+assert(get('book-024').equipment.some(i=>/Termometr/.test(i.n)));

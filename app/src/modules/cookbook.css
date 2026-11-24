@@ -34,3 +34,6 @@
 /* Plan controls use full ink where small accent text would miss AA in Palarnia day. */
 .hc-kitchen .hc-link,.hc-kitchen .hc-k-next b{color:var(--ink)}
 .hc-kitchen a.hc-ghost{display:inline-flex;align-items:center;min-height:44px}
+
+.hc-k-device-note{display:grid;gap:10px;color:var(--ink);font-size:14px;line-height:1.5;margin-bottom:16px}
+.hc-k-device-note p{margin:0}

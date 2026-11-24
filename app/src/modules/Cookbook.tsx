@@ -7,14 +7,16 @@ import { getKitchen, selectKitchenRecipe } from './kitchen-store';
 import { actOn, useTimers } from './timers';
 import { t } from './en';
 import './cookbook.css';
+let rememberedFilters = {...EMPTY_FILTERS};
+let rememberedLimit = 20;
 const chosen=()=>{const [a,b,id]=location.hash.slice(1).split('/');return a==='dom'&&b==='recipes'&&id?recipeById(id):undefined;};
 export function Cookbook({onPlan}:{onPlan:()=>void}){
  const favourites=useBookFavourites(), timers=useTimers();
- const [filters,setFilters]=useState({...EMPTY_FILTERS}),[limit,setLimit]=useState(20),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
+ const [filters,setFilters]=useState({...rememberedFilters}),[limit,setLimit]=useState(rememberedLimit),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
  const heading=useRef<HTMLHeadingElement>(null), lastRecipe=useRef<string|undefined>(undefined);
  useEffect(()=>{const sync=()=>{setSelected(chosen());setConfirm(false);};window.addEventListener('hashchange',sync);return()=>window.removeEventListener('hashchange',sync);},[]);
  useEffect(()=>{if(selected?.id!==lastRecipe.current){heading.current?.focus();lastRecipe.current=selected?.id;heading.current?.closest('main')?.scrollTo(0,0);}},[selected]);
- const change=(next:Partial<typeof filters>)=>{setFilters(f=>({...f,...next}));setLimit(20);};
+ const change=(next:Partial<typeof filters>)=>{setFilters(f=>{rememberedFilters={...f,...next};return rememberedFilters;});rememberedLimit=20;setLimit(20);};
  const open=(r:Recipe)=>{setSelected(r);setConfirm(false);location.hash=`dom/recipes/${r.id}`;};
  const back=()=>{setSelected(undefined);setConfirm(false);location.hash='dom/recipes';};
  const start=(r:Recipe)=>{
@@ -76,7 +78,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
    <h2>{r.name}</h2><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
    <button className="hc-ghost" onClick={()=>open(r)} aria-label={`${t('Otwórz przepis')}: ${r.name}`}>{t('Otwórz przepis')} →</button>
   </article>)}</div>
-  {list.length>limit&&<button className="hc-primary" onClick={()=>setLimit(n=>n+20)}>{t('Pokaż kolejne 20')}</button>}
+  {list.length>limit&&<button className="hc-primary" onClick={()=>setLimit(n=>{rememberedLimit=n+20;return rememberedLimit;})}>{t('Pokaż kolejne 20')}</button>}
   <p className="hc-book-note">{t('Kcal i czasy są orientacyjne. Przepisy nie zostały przetestowane na fizycznych urządzeniach. Większe ilości mogą wymagać kilku partii i dłuższego czasu.')}</p>
  </section>;
 }
