@@ -74,7 +74,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
  return <section className="screen hc-book" aria-label={t('Książka kucharska')}>
   <h2 ref={heading} tabIndex={-1}>{t('Wybierz przepis')}</h2>
   <p className="hc-book-intro">{RECIPES.length} {t('przepisów do codziennego gotowania. Wybierz danie, przygotuj składniki i gotuj z timerami.')}</p>
-  <div className="hc-book-sections" role="group" aria-label={t('Dział książki')}><button className="hc-ghost" aria-pressed={!filters.category} onClick={()=>change({category:''})}>{t('Wszystkie')}</button>{['Obiady','Ciasta','Chleby','Bułki','Wypieki'].map(c=><button key={c} className="hc-ghost" aria-pressed={filters.category===c} onClick={()=>change({category:filters.category===c?'':c})}>{t(c)}</button>)}</div>
+  <div className="hc-book-sections" role="group" aria-label={t('Dział książki')}><button className="hc-ghost" aria-pressed={!filters.category} onClick={()=>change({category:''})}>{t('Wszystkie')}</button>{['Obiady','Ciasta','Chleby','Bułki','Wypieki','Sałatki','Sosy','Dipy'].map(c=><button key={c} className="hc-ghost" aria-pressed={filters.category===c} onClick={()=>change({category:filters.category===c?'':c})}>{t(c)}</button>)}</div>
   <div className="hc-card hc-book-filters">
    <label className="hc-field"><span>{t('Szukaj przepisu lub składnika')}</span><input className="hc-input" type="search" aria-label={t('Szukaj przepisu lub składnika')} value={filters.query} onChange={e=>change({query:e.target.value})} placeholder={t('Np. kurczak, pierogi, tofu…')}/></label>
    <div className="hc-book-filter-row">
