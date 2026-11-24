@@ -3,10 +3,10 @@ import { RECIPES, totalMinutes } from './kitchen-data.ts';
 import type { Recipe } from './kitchen-types.ts';
 import type { CookbookInfo, CookbookRecipe } from './cookbook-recipes.ts';
 export const BOOK_KEY = 'homecraft.cookbook.favourites.v1';
-export const BOOK_CATEGORIES = ['Obiady','Zupy','Śniadania','Przekąski','Napoje','Desery'];
-export const BOOK_CUISINES = ['Polska','Azjatycka','Śródziemnomorska','Międzynarodowa'];
+export const BOOK_CATEGORIES = ['Obiady','Zupy','Śniadania','Przekąski','Napoje','Desery','Ciasta','Chleby','Bułki','Wypieki'];
+export const BOOK_CUISINES = ['Polska','Azjatycka','Śródziemnomorska','Międzynarodowa','Włoska','Francuska','Meksykańska','Japońska','Tajska','Indyjska','Grecka','Koreańska','Turecka','Hiszpańska','Amerykańska'];
 export const BOOK_DIETS = ['Wysokobiałkowa','Niskowęglowodanowa','Śródziemnomorska','Wegetariańska','Wegańska','Bezglutenowa'];
-export const BOOK_DEVICES = ['Air Fryer','Thermomix','Bez urządzenia'];
+export const BOOK_DEVICES = ['Air Fryer','Thermomix','Bez urządzenia','Piekarnik'];
 const panko: CookbookInfo = {cuisine:'Międzynarodowa',category:'Obiady',diets:['Wysokobiałkowa'],devices:['Air Fryer'],tested:false,allergens:['gluten','jaja','mleko','gorczyca'],sources:['https://cosori.com/pages/air-fryer-recipes'],nutrition:[
  {n:'Pierś z kurczaka',grams:500,kcal100:120},{n:'Jajka',grams:110,kcal100:143},{n:'Panko',grams:80,kcal100:350},{n:'Mąka',grams:30,kcal100:364},{n:'Przyprawy',grams:5,kcal100:100},{n:'Ziemniaki',grams:700,kcal100:77},{n:'Olej (łyżka i spray)',grams:20,kcal100:884},{n:'Sałata',grams:150,kcal100:15},{n:'Pomidor',grams:170,kcal100:18},{n:'Ogórek',grams:150,kcal100:15},{n:'Oliwa',grams:20,kcal100:884},{n:'Sok z cytryny',grams:25,kcal100:22},{n:'Miód',grams:7,kcal100:304},{n:'Musztarda',grams:5,kcal100:66},
 ]};
