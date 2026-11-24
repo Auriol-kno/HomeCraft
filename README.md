@@ -75,11 +75,12 @@ Czasy gotowania, ilości wody i gramatury są **orientacyjne**: zależą od wiel
 
 ## Książka kucharska (demo)
 
-Dom → Przepisy (`#dom/recipes`) zawiera 100 receptur, w tym 20 azjatyckich,
+Dom → Książka kucharska (`#dom/recipes`) zawiera 100 receptur, w tym 20 azjatyckich,
 polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adres
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
+Książka otwiera się z karty w Timerach; dolny pasek Dom zachowuje pięć dotychczasowych zakładek, bez ciasnej szóstej pozycji.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga

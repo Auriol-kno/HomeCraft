@@ -4,7 +4,7 @@
 .hc-book-filter-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .hc-book .hc-field{min-width:0}.hc-book .hc-input{font-size:16px}
 .hc-book-switches{display:flex;gap:8px;flex-wrap:wrap}
-.hc-book button{min-height:44px;min-width:44px;white-space:normal;overflow-wrap:anywhere}
+.hc-book button{min-height:48px;min-width:44px;white-space:normal;overflow-wrap:anywhere}
 .hc-book button[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:2px}
 .hc-book-grid{display:grid;gap:14px}.hc-book-card{display:grid;gap:12px;align-content:start;margin:0}
 .hc-book-top{display:flex;align-items:center;justify-content:space-between;gap:12px}

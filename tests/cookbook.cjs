@@ -9,7 +9,7 @@ let browser,pageForFailure;
 (async()=>{
  for(let i=0;i<60;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));if(i===59)throw Error('Preview unavailable');}
  browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']}:{})});
- const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Europe/Warsaw',serviceWorkers:'block'});
+ const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Europe/Warsaw',serviceWorkers:'block',reducedMotion:'reduce'});
  await ctx.clock.install({time:new Date('2026-11-24T10:00:00+01:00')});
  await ctx.addInitScript(()=>{if(!localStorage.getItem('book-seed')){localStorage.setItem('book-seed','1');localStorage.setItem('homecraft.cookbook.favourites.v1','{broken');localStorage.setItem('homecraft.fryer.favs.v1','["keep"]');}});
  const p=await ctx.newPage(),errors=[];pageForFailure=p;p.on('pageerror',e=>errors.push(e.message));
@@ -90,12 +90,12 @@ let browser,pageForFailure;
  await p.evaluate(()=>localStorage.setItem('homecraft.cookbook.favourites.v1','{"v":1,"ids":[null,"bad",2]}'));await go('dom/recipes/not-found');assert.equal(await p.locator('.hc-book-card').count(),20);
  assert.deepEqual(errors,[]);await ctx.close();
  // Real offline check, separate from deterministic clock tests: allow service worker and await cached assets.
- const offline=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'allow'});
- const off=await offline.newPage();await off.goto(url+'#dom/recipes');await off.locator('.hc-book-card').first().waitFor();
+ const offline=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'allow',reducedMotion:'reduce'});
+ const off=await offline.newPage();pageForFailure=off;const offlineErrors=[];off.on('pageerror',e=>offlineErrors.push(e.message));await off.goto(url+'#dom/recipes');await off.locator('.hc-book-card').first().waitFor();
  await off.evaluate(async()=>{await navigator.serviceWorker.ready;});
  await off.waitForFunction(()=>!!navigator.serviceWorker.controller);
  await off.waitForFunction(async()=>{const urls=performance.getEntriesByType('resource').map(e=>e.name).filter(u=>/\.(js|css)$/.test(u));return urls.length>0&&(await Promise.all(urls.map(u=>caches.match(u,{ignoreVary:true})))).every(Boolean);});
  await offline.setOffline(true);await off.reload();await off.locator('.hc-book-card').first().waitFor();assert.equal(await off.locator('.hc-book-card').count(),20);
- await off.screenshot({path:`${shots}/offline-${base==='/'?'root':'pages'}.png`});await offline.close();
+ await off.screenshot({path:`${shots}/offline-${base==='/'?'root':'pages'}.png`});assert.deepEqual(offlineErrors,[]);await offline.close();
  console.log('PASS: cookbook flow, filters, favourites/reload, kcal, shopping, complete cooking with controlled clock, confirmation, corrupted storage, EN, 5 themes × 2 modes × 3 widths, screenshots. Base '+base);
 })().catch(async e=>{console.error(e);if(pageForFailure&&!pageForFailure.isClosed()){await pageForFailure.screenshot({path:shots+'/failure.png'});fs.writeFileSync(shots+'/failure.html',await pageForFailure.content());console.error((await pageForFailure.locator('body').innerText()).slice(-4500));}process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
