@@ -6,6 +6,7 @@ import { setPreset, useTimers } from './timers';
 import { settingText, TM_CATEGORIES, TM_RECIPES, TM_RULES } from './thermomix-data';
 import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
+import { PlanCta } from './KitchenModule';
 
 export type HomeTab = 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix';
 export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
@@ -139,7 +140,7 @@ function Measures() {
   </section>;
 }
 
-export function HomeModule({ active, tab, onTab }: { active: boolean; tab: HomeTab; onTab: (t: HomeTab) => void }) {
+export function HomeModule({ active, tab, onTab, onPlan }: { active: boolean; tab: HomeTab; onTab: (t: HomeTab) => void; onPlan?: () => void }) {
   const main = useRef<HTMLElement>(null);
   const timers = useTimers();
   useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
@@ -153,7 +154,7 @@ export function HomeModule({ active, tab, onTab }: { active: boolean; tab: HomeT
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'thermomix' && <Thermomix onTimer={toTimers} />}
       {tab === 'measures' && <Measures />}
-      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
     </main>
     {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${homeTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Dom')}>
       {homeTabs.map(x => <button key={x.id} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>

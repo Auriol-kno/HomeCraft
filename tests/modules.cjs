@@ -87,6 +87,10 @@ let browser;
  await p.getByRole('button',{name:'Start',exact:true}).click();await p.waitForTimeout(400);
  await p.getByRole('button',{name:'Okrążenie',exact:true}).click();await p.waitForTimeout(250);
  assert.equal(await p.locator('.hc-laps tbody tr').count(),1);
+ // Running: the digits sit below the pivot on an opaque backing (the hand passes behind), and Pauza fills with time.
+ const sw=await p.evaluate(()=>{const d=document.querySelector('.hc-sw-mid .hc-dial-time'),dial=document.querySelector('.hc-sw-mid').parentElement.getBoundingClientRect(),r=d.getBoundingClientRect(),btn=[...document.querySelectorAll('.hc-sw-ctrl button')].find(x=>x.textContent==='Pauza');
+  return {below:r.top>dial.top+dial.height/2,bg:getComputedStyle(d).backgroundColor,fill:btn.classList.contains('hc-fill')&&/%/.test(btn.style.getPropertyValue('--fill'))};});
+ assert(sw.below,'stopwatch digits below the hand pivot');assert(!/rgba\(0, 0, 0, 0\)|transparent/.test(sw.bg),'digits have a backing');assert(sw.fill,'Pauza fills while running');
  await p.getByRole('button',{name:'Pauza',exact:true}).click();
  await p.reload();await p.waitForSelector('.module-bar');await tab('Dom');await p.getByRole('button',{name:'Stoper',exact:true}).click();
  assert.equal(await p.locator('.hc-laps tbody tr').count(),1,'laps survive a reload');

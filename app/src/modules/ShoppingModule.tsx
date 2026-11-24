@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { t } from './en';
-import { cap, CATS, guessCat, listText, parseEntry, STAPLES, type Cat, type Item } from './shopping-data';
+import { cap, CATS, guessCat, listText, parseEntry, SHOP_ADD_EVENT, STAPLES, type Cat, type Item } from './shopping-data';
 import { Icon } from './ui';
 
 export type ShopTab = 'list' | 'staples';
@@ -25,6 +25,24 @@ export function ShoppingModule({ active, tab, onTab }: { active: boolean; tab: S
   const main = useRef<HTMLElement>(null);
   useEffect(() => { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { /* storage blocked */ } }, [items]);
   useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
+  // Products sent from other modules (e.g. missing Kitchen OS ingredients); skips ones already on the list.
+  useEffect(() => {
+    const on = (e: Event) => {
+      const list = (e as CustomEvent<{ name: string; qty?: string }[]>).detail;
+      if (!Array.isArray(list)) return;
+      setItems(v => {
+        let out = v;
+        for (const x of list) {
+          const n = cap(String(x?.name || '').trim()).slice(0, 80);
+          if (!n || out.some(i => !i.done && i.name.toLowerCase() === n.toLowerCase())) continue;
+          out = [{ id: newId(), name: n, qty: String(x.qty || '').slice(0, 20), cat: guessCat(n), done: false }, ...out];
+        }
+        return out;
+      });
+    };
+    window.addEventListener(SHOP_ADD_EVENT, on);
+    return () => window.removeEventListener(SHOP_ADD_EVENT, on);
+  }, []);
   useEffect(() => { if (!note) return; const id = setTimeout(() => setNote(''), 2500); return () => clearTimeout(id); }, [note]);
   const open = items.filter(i => !i.done), done = items.filter(i => i.done);
   const has = (n: string) => items.some(i => !i.done && i.name.toLowerCase() === n.toLowerCase());
