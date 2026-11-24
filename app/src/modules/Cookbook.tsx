@@ -11,6 +11,18 @@ import './cookbook.css';
 let rememberedFilters = {...EMPTY_FILTERS};
 let rememberedLimit = 20;
 const chosen=()=>{const [a,b,id]=location.hash.slice(1).split('/');return a==='dom'&&b==='recipes'&&id?recipeById(id):undefined;};
+// Editorial ingredient-based estimate; not Nutri-Score or a clinical assessment.
+function HealthDot({recipe}:{recipe:Recipe}){
+ const info=bookInfo(recipe);
+ const names=info.nutrition.map(i=>i.n.toLocaleLowerCase('pl'));
+ const plants=info.nutrition.filter((_,i)=>/broku|szpinak|pomidor|papryk|cukini|kalafior|marchew|warzyw|sałat|kapust|fasol|soczew|ciecier|komos|owsian|jabł|malin|jagod|awokado|ogór|grosz|bakłaż|szparag/.test(names[i])).reduce((n,i)=>n+i.grams,0);
+ const total=info.nutrition.reduce((n,i)=>n+i.grams,0);
+ const sweet=names.some(n=>/cukier|syrop|czekolad|masło orzechowe z cukrem/.test(n));
+ const rich=names.some(n=>/boczek|kiełbas|śmietan|mascarpone/.test(n));
+ const level=!total?'unknown':info.category==='Desery'||sweet||rich?'occasional':plants/total>=.35?'green':'moderate';
+ const labels={green:'Więcej składników roślinnych',moderate:'Umiarkowany udział składników roślinnych',occasional:'Raczej okazjonalnie',unknown:'Brak danych'};
+ return <span className={'hc-health-dot '+level} role="img" aria-label={t(labels[level])} title={t(labels[level])}/>;
+}
 export function Cookbook({onPlan}:{onPlan:()=>void}){
  const favourites=useBookFavourites(), timers=useTimers();
  const [filters,setFilters]=useState({...rememberedFilters}),[limit,setLimit]=useState(rememberedLimit),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
@@ -36,7 +48,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   <button className="hc-ghost" onClick={back}>← {t('Wróć do książki')}</button>
   <article className="hc-card hc-book-detail">
    <div className="hc-book-top"><p className="hc-tag">{t(info.cuisine)} · {t(info.category)}</p>{star(selected)}</div>
-   <h2 ref={heading} tabIndex={-1} className="hc-k-title">{selected.name}</h2>
+   <h2 ref={heading} tabIndex={-1} className="hc-k-title hc-health-title"><HealthDot recipe={selected}/>{selected.name}</h2>
    <p className="hc-book-labels">{info.diets.map(d=><span key={d}>{t(d)}</span>)}{info.devices.map(d=><span key={d}>{t(d)}</span>)}</p>
    <p className="hc-book-facts"><b>≈ {recipeKcal(selected)} {t('kcal / porcję')}</b><span>{selected.servings} {t('porcje')}</span><span>{minLabel(totalMinutes(selected))} · {t('Twoja praca')}: {handsMinutes(selected)} min</span></p>
    <CookingTimeline plan={schedule(selected,0)} relative showSteps />
@@ -80,9 +92,9 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   </div>
   <p role="status">{t('Wyniki')}: {list.length} / {RECIPES.length}</p>
   {!list.length&&<div className="hc-card"><p>{t('Brak pasujących przepisów. Zmień filtry lub dodaj przepisy do ulubionych.')}</p><button className="hc-ghost" onClick={()=>change({...EMPTY_FILTERS})}>{t('Wyczyść filtry')}</button></div>}
-  <div className="hc-book-grid">{list.slice(0,limit).map(r=><article key={r.id} className="hc-card hc-book-card">
+  <p className="hc-health-legend"><span><i className="hc-health-dot green"/>{t("Więcej roślin")}</span><span><i className="hc-health-dot moderate"/>{t("Umiarkowanie")}</span><span><i className="hc-health-dot occasional"/>{t("Okazjonalnie")}</span><small>{t("Orientacyjna ocena składników, nie pełna wartość odżywcza.")}</small></p><div className="hc-book-grid">{list.slice(0,limit).map(r=><article key={r.id} className="hc-card hc-book-card">
    <div className="hc-book-top"><p className="hc-tag">{t(bookInfo(r).cuisine)} · {t(bookInfo(r).category)}</p>{star(r)}</div>
-   <h2>{r.name}</h2><p className="hc-book-labels">{bookInfo(r).diets.slice(0,2).map(d=><span key={d}>{t(d)}</span>)}{bookInfo(r).devices.slice(0,1).map(d=><span key={d}>{t(d)}</span>)}</p><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
+   <h2 className="hc-health-title"><HealthDot recipe={r}/>{r.name}</h2><p className="hc-book-labels">{bookInfo(r).diets.slice(0,2).map(d=><span key={d}>{t(d)}</span>)}{bookInfo(r).devices.slice(0,1).map(d=><span key={d}>{t(d)}</span>)}</p><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
    <button className="hc-ghost" onClick={()=>open(r)} aria-label={`${t('Otwórz przepis')}: ${r.name}`}>{t('Otwórz przepis')} →</button>
   </article>)}</div>
   {list.length>limit&&<button className="hc-primary" onClick={()=>setLimit(n=>{rememberedLimit=n+20;return rememberedLimit;})}>{t('Pokaż kolejne 20')}</button>}
