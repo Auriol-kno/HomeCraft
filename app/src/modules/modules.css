@@ -471,3 +471,11 @@ html:root[data-theme="bar"] dialog.settings{background:var(--bg);border:0;box-sh
 html:root[data-theme="bar"] .app-shell .hc-dish{background:var(--bg);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
 html:root[data-theme="bar"] .app-shell .hc-dish:active{box-shadow:inset 5px 5px 11px var(--nm-d),inset -5px -5px 11px var(--nm-l)}
 }
+@layer overrides{
+/* Stopwatch: digits sit in the lower half of the dial on the face colour, so the hand passes behind them. */
+.hc-dial-mid.hc-sw-mid{transform:translateY(13%);gap:0}
+.hc-dial-mid.hc-sw-mid>*{background:var(--surface);border-radius:8px;padding:1px 8px}
+html:root[data-theme="bar"] .app-shell .hc-dial-mid.hc-sw-mid>*,html:root[data-theme="line"] .app-shell .hc-dial-mid.hc-sw-mid>*{background:var(--bg)}
+/* Running stopwatch: Pauza fills left to right with a lighter tint of its own text colour, one pass per minute. */
+html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient(90deg,color-mix(in srgb,currentColor 30%,transparent) var(--fill,0%),transparent var(--fill,0%))}
+}

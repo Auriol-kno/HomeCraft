@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent as KEvent, type PointerEvent as PEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent as KEvent, type PointerEvent as PEvent } from 'react';
 import { t } from './en';
 import { actOn, addTimer, clearPreset, clock, peekPreset, remaining, unlockAudio, useTick, useTimers, type KTimer } from './timers';
 
@@ -205,11 +205,13 @@ function Stoper() {
           <line className="d-hand" x1="140" y1="154" x2="140" y2="44" transform={`rotate(${secAng} 140 140)`} />
           <circle cx="140" cy="140" r="7" className="d-knob" />
         </svg>
-        <div className="hc-dial-mid sm"><b className="hc-dial-time" role="timer" aria-label={t('Stoper')}>{f.m}:{f.s}<small>.{f.c}</small></b><span>{sw.laps.length ? `${t('okrążenie')} ${sw.laps.length + 1}` : t('min : s')}</span></div>
+        {/* Below the pivot, on its own backing, so the sweeping hand never covers the digits. */}
+        <div className="hc-dial-mid sm hc-sw-mid"><b className="hc-dial-time" role="timer" aria-label={t('Stoper')}>{f.m}:{f.s}<small>.{f.c}</small></b><span>{sw.laps.length ? `${t('okrążenie')} ${sw.laps.length + 1}` : t('min : s')}</span></div>
       </div>
       <div className="hc-sw-ctrl">
         <button type="button" onClick={sw.running ? lap : reset} disabled={!sw.running && ms === 0}>{sw.running ? t('Okrążenie') : t('Zeruj')}</button>
-        <button type="button" className="hc-primary" onClick={toggle}>{sw.running ? t('Pauza') : ms > 0 ? t('Wznów') : t('Start')}</button>
+        {/* While running, the button fills with a second colour through the current minute, in step with the ring. */}
+        <button type="button" className={'hc-primary' + (sw.running ? ' hc-fill' : '')} style={sw.running ? { '--fill': `${(ms % 60000) / 600}%` } as CSSProperties : undefined} onClick={toggle}>{sw.running ? t('Pauza') : ms > 0 ? t('Wznów') : t('Start')}</button>
       </div>
     </div>
     {splits.length > 0 && <div className="hc-card"><table className="hc-table hc-laps"><thead><tr><th>#</th><th>{t('Okrążenie')}</th><th>{t('Łącznie')}</th></tr></thead><tbody>
