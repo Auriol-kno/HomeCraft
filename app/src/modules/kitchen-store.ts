@@ -1,11 +1,12 @@
 // Saved Kitchen OS session (one at a time). Own key, so coffee, timers, favourites and shopping
 // data are never read or rewritten here. Invalid or unknown data falls back to a fresh plan.
 import { useSyncExternalStore } from 'react';
+import { recordBookCooking } from './cookbook-store';
 import { defaultServeAt, PANKO_DINNER, recipeById, type Recipe } from './kitchen-data';
 
 export const KITCHEN_KEY = 'homecraft.kitchen.v1';
 export interface KitchenSession {
-  v: 1; recipe: string; serveAt: number; cooking: boolean;
+  v: 1; recipe: string; serveAt: number; cooking: boolean; recorded?:boolean;
   started: Record<string, number>; done: Record<string, number>;
   /** Linked shared-timer ids by task id. */
   timers: Record<string, string>;
@@ -29,7 +30,7 @@ function load(): KitchenSession {
     const mise = new Set([...recipe.ingredients, ...recipe.equipment, ...recipe.prep].map(x => x.id));
     const timers: Record<string, string> = {};
     if (raw.timers && typeof raw.timers === 'object') for (const [k, v] of Object.entries(raw.timers)) if (ids.has(k) && typeof v === 'string') timers[k] = v;
-    return { v: 1, recipe: recipe.id, serveAt: raw.serveAt, cooking: !!raw.cooking, started: nums(raw.started, ids), done: nums(raw.done, ids), timers,
+    return { v: 1, recipe: recipe.id, serveAt: raw.serveAt, cooking: !!raw.cooking, recorded: !!raw.recorded || recipe.tasks.every(t=>raw.done?.[t.id]!=null), started: nums(raw.started, ids), done: nums(raw.done, ids), timers,
       mise: Array.isArray(raw.mise) ? raw.mise.filter((x: unknown): x is string => typeof x === 'string' && mise.has(x)) : [] };
   } catch { return fresh(); }
 }
@@ -38,7 +39,13 @@ const listeners = new Set<() => void>();
 const get = () => (session ??= load());
 export const getKitchen = get;
 export function setKitchen(update: (s: KitchenSession) => KitchenSession) {
-  session = update(get());
+  const previous=get(), next=update(previous);
+  const recipe=recipeById(next.recipe);
+  // Count a completed session once even if the user undoes and rechecks the final task.
+  if(recipe&&previous.recipe===next.recipe&&next.cooking&&!next.recorded&&recipe.tasks.every(t=>next.done[t.id]!=null)){
+   recordBookCooking(next.recipe);next.recorded=true;
+  }
+  session=next;
   try { localStorage.setItem(KITCHEN_KEY, JSON.stringify(session)); } catch { /* storage blocked */ }
   listeners.forEach(l => l());
 }
