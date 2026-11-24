@@ -66,11 +66,11 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
   }
  }
  await p.evaluate(()=>localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'pastel',mode:'dark',language:'en',density:'standard'})));
- await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main sections'}).getByRole('button',{name:'Kitchen',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
+ await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:'Cookbook',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
  assert(await p.getByLabel('Cuisine',{exact:true}).count()===0); // Recipe card, no filter; context translation stays separate.
  await go('dom/recipes');assert(await p.getByLabel('Cuisine',{exact:true}).isVisible());
  await openModule(p,'Air Fryer');assert.equal(await p.locator('.hc-dish').count(),37);
  await p.reload();assert.equal(await p.locator('.hc-dish').count(),37,'legacy fryer route reload');
  await p.evaluate(()=>{localStorage.setItem('homecraft.timers.v1',JSON.stringify([{id:'legacy-missing-arrays',total:3600,endAt:Date.now()+3600000}]));localStorage.setItem('homecraft.cookbook.favourites.v1','{broken');});await go('dom/timers');await p.locator('.hc-timer').first().waitFor();await go('dom/recipes');assert.equal(await p.locator('.hc-book-card').count(),20);
- assert.deepEqual(errors,[]);console.log('PASS: persistent global navigation, 200-recipe timeline, Air Fryer preview/milestones, read-only session, 320/390/desktop × 5 themes × day/night, EN, reload. Base '+base);
+ assert.deepEqual(errors,[]);console.log('PASS: persistent global navigation, 350-recipe timeline, Air Fryer preview/milestones, read-only session, 320/390/desktop × 5 themes × day/night, EN, reload. Base '+base);
 })().catch(async e=>{console.error(e);if(p&&!p.isClosed()){await p.screenshot({path:shots+'/failure.png'});fs.writeFileSync(shots+'/failure.html',await p.content());}process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
