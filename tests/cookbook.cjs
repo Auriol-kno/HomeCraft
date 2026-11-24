@@ -42,7 +42,7 @@ let browser;
  await p.getByRole('button',{name:/Gotuję teraz: podanie o/}).click();
  await p.getByRole('button',{name:/Dalej: przygotuj składniki/}).click();
  await p.getByRole('button',{name:/Dodaj nieodhaczone składniki do Zakupów/}).click();
- await p.getByRole('tab',{name:'Zakupy',exact:true}).click();assert(await p.getByText('Pierś z kurczaka',{exact:true}).isVisible());await p.goBack();
+ await p.getByRole('tab',{name:'Zakupy',exact:true}).click();await p.locator('main:not([hidden]) .hc-iname').filter({hasText:'Pierś z kurczaka'}).waitFor();await p.goBack();
  await p.getByRole('button',{name:/Zaczynamy gotowanie/}).click();
  await shot('04-cook');
  // Complete all steps, using the shared timers and controlled clock.
