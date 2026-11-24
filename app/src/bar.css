@@ -3,7 +3,7 @@
    rounded tabular numerals that read from arm's length, a floating tab bar and
    large pill controls that work with wet fingers. Day and night share one structure. */
 @layer appearance{
-:root[data-theme="bar"]{
+:root:is([data-theme="bar"],[data-theme="pastel"]){
  color-scheme:light;
  --bg:#f3f1ec;--surface:#ffffffb8;--surface-2:#ebe6dd;--track:#e2dcd1;--line:#d8d0c3;
  --ink:#1c1714;--soft:#3b322b;--muted:#685c52;--dim:#74685d;--accent:#a94f1c;--on-accent:#fff;
@@ -17,55 +17,55 @@
  --timer:var(--title);
  --r-card:24px;--r-ctl:16px;
 }
-:root[data-theme="bar"] body,:root[data-theme="bar"] .app-shell{
+:root:is([data-theme="bar"],[data-theme="pastel"]) body,:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell{
  background:radial-gradient(120% 55% at 0% 0%,var(--glow-a),transparent 62%),radial-gradient(110% 50% at 100% 100%,var(--glow-b),transparent 60%),var(--bg);
  background-attachment:fixed;
 }
 /* Header: no rule, brand with a caramel dot, round glass settings button. */
-:root[data-theme="bar"] .app-header{border-color:transparent;min-height:68px}
-:root[data-theme="bar"] .brand-button{color:var(--ink);font-family:var(--title);font-weight:800;letter-spacing:-.6px}
-:root[data-theme="bar"] .brand-button b{color:var(--accent)}
-:root[data-theme="bar"] .settings-trigger{width:46px;height:46px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);color:var(--ink);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
-:root[data-theme="bar"] .screen-heading h1{font-family:var(--title);font-weight:800;letter-spacing:-.8px}
-:root[data-theme="bar"] .overline{color:var(--accent);font-weight:700;letter-spacing:1.2px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .app-header{border-color:transparent;min-height:68px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .brand-button{color:var(--ink);font-family:var(--title);font-weight:800;letter-spacing:-.6px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .brand-button b{color:var(--accent)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .settings-trigger{width:46px;height:46px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);color:var(--ink);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .screen-heading h1{font-family:var(--title);font-weight:800;letter-spacing:-.8px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .overline{color:var(--accent);font-weight:700;letter-spacing:1.2px}
 /* Frosted cards. */
-:root[data-theme="bar"] .card,:root[data-theme="bar"] .recipe,:root[data-theme="bar"] .details-card,:root[data-theme="bar"] .settings,
-:root[data-theme="bar"] .wide-link,:root[data-theme="bar"] .hint-card{
+:root:is([data-theme="bar"],[data-theme="pastel"]) .card,:root:is([data-theme="bar"],[data-theme="pastel"]) .recipe,:root:is([data-theme="bar"],[data-theme="pastel"]) .details-card,:root:is([data-theme="bar"],[data-theme="pastel"]) .settings,
+:root:is([data-theme="bar"],[data-theme="pastel"]) .wide-link,:root:is([data-theme="bar"],[data-theme="pastel"]) .hint-card{
  border-radius:var(--r-card);background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
  -webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);
 }
-:root[data-theme="bar"] .details-card>.engine-panel>.card{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
-:root[data-theme="bar"] .recipe h1{font-family:var(--title)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .details-card>.engine-panel>.card{background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .recipe h1{font-family:var(--title)}
 /* Controls: soft pills; the chosen one is filled with caramel. */
-:root[data-theme="bar"] .app-shell button,:root[data-theme="bar"] .app-shell select{border-radius:var(--r-ctl);box-shadow:none}
-:root[data-theme="bar"] .recipe .tabs button,:root[data-theme="bar"] .presets button,:root[data-theme="bar"] .segment button{
+:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell button,:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell select{border-radius:var(--r-ctl);box-shadow:none}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .recipe .tabs button,:root:is([data-theme="bar"],[data-theme="pastel"]) .presets button,:root:is([data-theme="bar"],[data-theme="pastel"]) .segment button{
  border:1px solid var(--line);background:#ffffff73;color:var(--ink);border-radius:18px}
-:root[data-theme="bar"] .presets{border:0;padding:0;gap:8px;background:none}
-:root[data-theme="bar"] .segment{border:0;padding:4px;gap:4px;border-radius:20px;background:var(--surface-2)}
-:root[data-theme="bar"] .segment button{border-color:transparent;background:none}
-:root[data-theme="bar"] .recipe .tabs button[aria-selected="true"],:root[data-theme="bar"] .presets button[aria-pressed="true"],
-:root[data-theme="bar"] .segment button[aria-pressed="true"],:root[data-theme="bar"] .g-choice button[aria-pressed="true"]{
+:root:is([data-theme="bar"],[data-theme="pastel"]) .presets{border:0;padding:0;gap:8px;background:none}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .segment{border:0;padding:4px;gap:4px;border-radius:20px;background:var(--surface-2)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .segment button{border-color:transparent;background:none}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .recipe .tabs button[aria-selected="true"],:root:is([data-theme="bar"],[data-theme="pastel"]) .presets button[aria-pressed="true"],
+:root:is([data-theme="bar"],[data-theme="pastel"]) .segment button[aria-pressed="true"],:root:is([data-theme="bar"],[data-theme="pastel"]) .g-choice button[aria-pressed="true"]{
  background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 6px 16px #a94f1c33}
-:root[data-theme="bar"] .guide-cta{border-radius:22px;background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 10px 24px #a94f1c40}
-:root[data-theme="bar"] .tiles{border-color:var(--line)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .guide-cta{border-radius:22px;background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 10px 24px #a94f1c40}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .tiles{border-color:var(--line)}
 /* Timer: big rounded tabular digits, a thick rounded progress bar,
    START in caramel and STOP in espresso so the state is readable across the bar. */
-:root[data-theme="bar"] .screen[aria-label="Parzenie"] .b-time b{font-family:var(--timer);font-variant-numeric:tabular-nums;letter-spacing:-3px;font-weight:800}
-:root[data-theme="bar"] .screen[aria-label="Parzenie"] .brew-progress{height:14px;border-radius:999px;background:var(--track)}
-:root[data-theme="bar"] .screen[aria-label="Parzenie"] .brew-progress::before{border-radius:999px;background:linear-gradient(90deg,#d98a4e,var(--accent))}
-:root[data-theme="bar"] .btn.main,:root[data-theme="bar"] .btn.main.run{background:var(--accent);border:0;color:var(--on-accent);border-radius:24px;box-shadow:0 12px 28px #a94f1c47}
-:root[data-theme="bar"] .btn.main.run{background:var(--stop);color:var(--on-stop);box-shadow:0 12px 28px #1c171440}
-:root[data-theme="bar"] .btn.ghost{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:20px}
-:root[data-theme="bar"] .control-dock{border-radius:26px;background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
+:root:is([data-theme="bar"],[data-theme="pastel"]) .screen[aria-label="Parzenie"] .b-time b{font-family:var(--timer);font-variant-numeric:tabular-nums;letter-spacing:-3px;font-weight:800}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .screen[aria-label="Parzenie"] .brew-progress{height:14px;border-radius:999px;background:var(--track)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .screen[aria-label="Parzenie"] .brew-progress::before{border-radius:999px;background:linear-gradient(90deg,#d98a4e,var(--accent))}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .btn.main,:root:is([data-theme="bar"],[data-theme="pastel"]) .btn.main.run{background:var(--accent);border:0;color:var(--on-accent);border-radius:24px;box-shadow:0 12px 28px #a94f1c47}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .btn.main.run{background:var(--stop);color:var(--on-stop);box-shadow:0 12px 28px #1c171440}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .btn.ghost{border:1px solid var(--line);background:var(--glass);color:var(--ink);border-radius:20px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .control-dock{border-radius:26px;background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
  -webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6)}
-:root[data-theme="bar"] .dock-time b{font-family:var(--timer);font-variant-numeric:tabular-nums}
-:root[data-theme="bar"] .live-pill{border-radius:999px}
-:root[data-theme="bar"] .stars button.on,:root[data-theme="bar"] .stars button[aria-pressed="true"]{color:var(--accent)}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .dock-time b{font-family:var(--timer);font-variant-numeric:tabular-nums}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .live-pill{border-radius:999px}
+:root:is([data-theme="bar"],[data-theme="pastel"]) .stars button.on,:root:is([data-theme="bar"],[data-theme="pastel"]) .stars button[aria-pressed="true"]{color:var(--accent)}
 }
 
 /* Night: espresso bar. Same structure, glass on near-black, light caramel accent. */
 @layer mode{
-:root[data-mode="dark"][data-theme="bar"]{
+:root[data-mode="dark"]:is([data-theme="bar"],[data-theme="pastel"]){
  color-scheme:dark;
  --bg:#120f0d;--surface:#ffffff10;--surface-2:#221c18;--track:#2c2520;--line:#3b322b;
  --ink:#f5efe8;--soft:#ddd2c6;--muted:#b3a698;--dim:#a39586;--accent:#f0a35e;--on-accent:#1a120c;
@@ -75,7 +75,7 @@
  --tint-near:#33261a;--tint-stop:#1c2c21;--tint-over:#3a1f1a;--tint-step:#231c17;
 }
 @media (prefers-color-scheme:dark){
-:root[data-mode="system"][data-theme="bar"]{
+:root[data-mode="system"]:is([data-theme="bar"],[data-theme="pastel"]){
  color-scheme:dark;
  --bg:#120f0d;--surface:#ffffff10;--surface-2:#221c18;--track:#2c2520;--line:#3b322b;
  --ink:#f5efe8;--soft:#ddd2c6;--muted:#b3a698;--dim:#a39586;--accent:#f0a35e;--on-accent:#1a120c;
@@ -84,6 +84,6 @@
  --glow-a:#4a2a1466;--glow-b:#1d2a2266;
  --tint-near:#33261a;--tint-stop:#1c2c21;--tint-over:#3a1f1a;--tint-step:#231c17;
 }}
-:root[data-theme="bar"][data-mode="dark"] .recipe .tabs button:not([aria-selected="true"]),:root[data-theme="bar"][data-mode="dark"] .presets button:not([aria-pressed="true"]){background:#ffffff0a}
-@media (prefers-color-scheme:dark){:root[data-theme="bar"][data-mode="system"] .recipe .tabs button:not([aria-selected="true"]),:root[data-theme="bar"][data-mode="system"] .presets button:not([aria-pressed="true"]){background:#ffffff0a}}
+:root:is([data-theme="bar"],[data-theme="pastel"])[data-mode="dark"] .recipe .tabs button:not([aria-selected="true"]),:root:is([data-theme="bar"],[data-theme="pastel"])[data-mode="dark"] .presets button:not([aria-pressed="true"]){background:#ffffff0a}
+@media (prefers-color-scheme:dark){:root:is([data-theme="bar"],[data-theme="pastel"])[data-mode="system"] .recipe .tabs button:not([aria-selected="true"]),:root:is([data-theme="bar"],[data-theme="pastel"])[data-mode="system"] .presets button:not([aria-pressed="true"]){background:#ffffff0a}}
 }

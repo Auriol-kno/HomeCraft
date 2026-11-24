@@ -1,0 +1,69 @@
+/* Pastel (id "pastel"): the main HomeCraft look. Sage-mint backdrop with soft layered waves,
+   pale frosted cards with deep soft shadows, terracotta as the action colour, muted teal as the
+   second colour and graphite pills. It reuses the Kawiarnia ("bar") structure (rounded type,
+   glass cards, floating tab bar, pill controls); this file only sets the palette and backdrop.
+   All text/background pairs used for reading are WCAG AA (≥ 4.5:1). */
+@layer appearance{
+:root[data-theme="pastel"]{
+ color-scheme:light;
+ /* --bg is the pale card / control surface; the sage page colour is --page. */
+ --page:#b9c9c4;--bg:#e8edea;--surface:#eef1eeeb;--surface-2:#dbe3e0;--track:#cdd8d4;--line:#bfccc8;
+ --ink:#24302f;--soft:#3a4846;--muted:#424f4c;--dim:#4a5855;--accent:#9c4f26;--on-accent:#fff;
+ --good:#2f6b4f;--bad:#a3302a;--cool:#2f6f6b;--wash:#a9572a12;--stop:#24302f;--on-stop:#fff;
+ --glass:#eef1eeeb;--glass-line:#ffffffcc;--glass-shadow:0 1px 0 #ffffffb3 inset,0 2px 4px #2c3d3a14,0 16px 34px #2c3d3a2e;
+ --glow-a:#d3dfdb;--glow-b:#93aaa5;
+ --tint-near:#f4e2d0;--tint-stop:#dcebe4;--tint-over:#f2d9d2;--tint-step:#e4ebe8;
+ --scene-top:#4f6a66;--scene-bottom:#22302e;
+ --peach:#e8b48a;--teal:#7fa6a2;
+}
+/* Backdrop: sage gradient with soft layered "paper waves", like the reference dashboard. */
+:root[data-theme="pastel"] body,:root[data-theme="pastel"] .app-shell{
+ background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 800' preserveAspectRatio='none'%3E%3Cpath d='M0 560C80 520 120 610 210 580S330 470 400 500V800H0Z' fill='%23a7bab5' opacity='.55'/%3E%3Cpath d='M0 650C90 610 150 700 240 670S350 600 400 620V800H0Z' fill='%2396aca7' opacity='.55'/%3E%3Cpath d='M0 0H400V150C320 190 260 110 180 150S60 210 0 180Z' fill='%23c9d7d3' opacity='.7'/%3E%3C/svg%3E") center/100% 100% no-repeat,
+  radial-gradient(90% 45% at 10% 0%,var(--glow-a),transparent 70%),
+  radial-gradient(80% 45% at 100% 100%,var(--glow-b),transparent 70%),
+  var(--page);
+ background-attachment:fixed;
+}
+:root[data-theme="pastel"] .app-header{border-color:transparent}
+:root[data-theme="pastel"] .brand-button b{color:var(--accent)}
+:root[data-theme="pastel"] .screen-heading h1{color:var(--ink)}
+:root[data-theme="pastel"] .screen-heading .overline{color:#7f3d1c}
+:root[data-theme="pastel"] .screen-heading h1{border-color:#24302f33}
+}
+@layer mode{
+:root[data-mode="dark"][data-theme="pastel"]{
+ color-scheme:dark;
+ --page:#18211f;--bg:#18211f;--surface:#ffffff10;--surface-2:#24302e;--track:#2d3a38;--line:#3a4a47;
+ --ink:#e7eeeb;--soft:#cbd8d4;--muted:#a8b8b4;--dim:#9aaba7;--accent:#e8a06c;--on-accent:#1b1410;
+ --good:#8fd1aa;--bad:#ff8a7a;--cool:#8fc7c1;--wash:#e8a06c1f;--stop:#e7eeeb;--on-stop:#18211f;
+ --glass:#ffffff12;--glass-line:#ffffff1f;--glass-shadow:0 1px 0 #ffffff0d inset,0 14px 32px #00000066;
+ --glow-a:#2f4a4566;--glow-b:#4a362a55;
+ --tint-near:#33291f;--tint-stop:#1d2f29;--tint-over:#3a221e;--tint-step:#222c2a;
+}
+@media (prefers-color-scheme:dark){
+:root[data-mode="system"][data-theme="pastel"]{
+ color-scheme:dark;
+ --page:#18211f;--bg:#18211f;--surface:#ffffff10;--surface-2:#24302e;--track:#2d3a38;--line:#3a4a47;
+ --ink:#e7eeeb;--soft:#cbd8d4;--muted:#a8b8b4;--dim:#9aaba7;--accent:#e8a06c;--on-accent:#1b1410;
+ --good:#8fd1aa;--bad:#ff8a7a;--cool:#8fc7c1;--wash:#e8a06c1f;--stop:#e7eeeb;--on-stop:#18211f;
+ --glass:#ffffff12;--glass-line:#ffffff1f;--glass-shadow:0 1px 0 #ffffff0d inset,0 14px 32px #00000066;
+ --glow-a:#2f4a4566;--glow-b:#4a362a55;
+ --tint-near:#33291f;--tint-stop:#1d2f29;--tint-over:#3a221e;--tint-step:#222c2a;
+}}
+/* Night: headings on the page go back to the light accent. */
+:root[data-mode="dark"][data-theme="pastel"] .screen-heading .overline{color:var(--accent)}
+:root[data-mode="dark"][data-theme="pastel"] .screen-heading h1{border-color:var(--line)}
+@media (prefers-color-scheme:dark){:root[data-mode="system"][data-theme="pastel"] .screen-heading .overline{color:var(--accent)}:root[data-mode="system"][data-theme="pastel"] .screen-heading h1{border-color:var(--line)}}
+/* Night: the paper waves become faint teal layers. */
+:root[data-mode="dark"][data-theme="pastel"] body,:root[data-mode="dark"][data-theme="pastel"] .app-shell{
+ background:radial-gradient(90% 45% at 10% 0%,var(--glow-a),transparent 70%),radial-gradient(80% 45% at 100% 100%,var(--glow-b),transparent 70%),var(--bg);background-attachment:fixed}
+@media (prefers-color-scheme:dark){:root[data-mode="system"][data-theme="pastel"] body,:root[data-mode="system"][data-theme="pastel"] .app-shell{
+ background:radial-gradient(90% 45% at 10% 0%,var(--glow-a),transparent 70%),radial-gradient(80% 45% at 100% 100%,var(--glow-b),transparent 70%),var(--bg);background-attachment:fixed}}
+}
+/* Soft relief shadows used by the controls (defined in the overrides layer, so set there). */
+@layer overrides{
+html:root[data-theme="pastel"]{--nm-d:#7f969180;--nm-l:#ffffffb3}
+html:root[data-theme="pastel"][data-mode="dark"]{--nm-d:#000000a6;--nm-l:#ffffff12}
+@media(prefers-color-scheme:dark){html:root[data-theme="pastel"][data-mode="system"]{--nm-d:#000000a6;--nm-l:#ffffff12}}
+}
