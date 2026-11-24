@@ -159,7 +159,7 @@ export function HomeModule({ active, tab, onTab, onPlan }: { active: boolean; ta
       {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('100 przepisów, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
     </main>
     {active && <nav className="bottom-nav hc-nav" style={{ gridTemplateColumns: `repeat(${homeTabs.length},minmax(0,1fr))` }} aria-label={t('Nawigacja Dom')}>
-      {homeTabs.map(x => <button key={x.id} aria-label={t(x.label)} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
+      {homeTabs.map(x => <button key={x.id} aria-label={x.id === 'cook' ? `${t('Czasy')} — ${t(x.label)}` : x.id === 'thermomix' ? `TM6 — ${t(x.label)}` : t(x.label)} aria-current={tab === x.id ? 'page' : undefined} onClick={() => onTab(x.id)}>
         <span className="nav-icon"><Icon d={x.icon} />{x.id === 'timers' && running > 0 && <i />}</span><span>{x.id === 'cook' ? t('Czasy') : x.id === 'thermomix' ? 'TM6' : t(x.label)}</span></button>)}
     </nav>}
   </>;
