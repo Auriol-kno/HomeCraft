@@ -402,6 +402,11 @@ const en: Record<string, string> = {
   'Główne działy': 'Main sections',
   'Nawigacja główna': 'Main navigation',
   'Menu Kawy': 'Coffee menu',
+  'Rodzaj parzenia': 'Brew method',
+  'Najwyżej ocenione': 'Top rated',
+  'Twoja ocena': 'Your rating',
+  'Usuń ocenę': 'Clear rating',
+  'Bez oceny': 'Not rated',
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */
