@@ -545,7 +545,7 @@ input[type=range]{height:30px}
   --tint-near:#FFF0C8; --tint-stop:#E4F1DB; --tint-over:#FCE5DE; --tint-step:#F5E5D3;
   --stop:#8D2919; --on-stop:#FFF8EF;
 }
-:root[data-theme="bar"]{
+:root:is([data-theme="bar"],[data-theme="pastel"]){
   --bg:#14100F; --surface:#1D1715; --surface-2:#2D211C; --track:#3A2D27; --line:#59463B;
   --ink:#FAECD9; --soft:#E4CDBB; --muted:#BDA795; --dim:#A28A76;
   --accent:#F3A76E; --on-accent:#24150D;
@@ -595,7 +595,7 @@ body{background:radial-gradient(ellipse 28rem 22rem at 50% 0%,var(--wash),transp
 .b-time b{font-family:var(--timer); font-size:clamp(36px,12vw,57px)}
 .brew-progress{--progress:0%; background:var(--track); border-radius:999px; height:5px; margin-top:12px; overflow:hidden}
 .brew-progress::before{content:""; display:block; width:var(--progress); height:100%; background:var(--accent)}
-[data-theme="bar"] .brew-progress::before{
+:is([data-theme="bar"],[data-theme="pastel"]) .brew-progress::before{
   background:repeating-linear-gradient(90deg,var(--accent) 0 9px,transparent 9px 12px);
 }
 [data-theme="studio"] .brew-progress{height:7px}

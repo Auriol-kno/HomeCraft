@@ -14,7 +14,7 @@ Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w t
   - **Miarki:** przelicznik szklanka / łyżka / łyżeczka / ml / g / dag / kg dla 30 produktów (np. szklanka cukru = 220 g = 22 dag), tabela miarek, °C ↔ °F, bezpieczne temperatury mięs.
   - **Timery:** wspólne dla wszystkich działów. Przetrwają odświeżenie, trzymają ekran włączony, dzwonią i wibrują, a pływający znacznik czasu jest widoczny też w dziale Kawa.
 
-Motywy (Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
+Motywy (**Pastel** jako główny wygląd: szałwiowe tło z miękkimi falami, jasne karty z miękkim cieniem, terakota i teal; oraz Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
 
 ## Uruchomienie i rozwój
 
@@ -38,6 +38,9 @@ GitHub Pages publikuje `main / (root)` (Settings → Pages). `npm run build` spr
 Aplikacja działa offline (service worker) i da się ją dodać do ekranu początkowego.
 
 ## Dane i migracja
+
+Pastel jest motywem domyślnym. Jeśli na urządzeniu był zapisany dawny domyślny motyw Palarnia, aplikacja raz przełącza go na Pastel (znacznik `homecraft.pastelDefault.v1`); inne wybrane motywy zostają, a Palarnię można wybrać ponownie w Ustawieniach. Pastel korzysta z układu Kawiarni (`bar.css`), a `pastel.css` ustawia tylko paletę i tło.
+
 
 Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania) i `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”: godzina podania, odhaczone kroki i składniki; nie dotyka pozostałych kluczy). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
 
