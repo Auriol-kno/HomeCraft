@@ -3,7 +3,7 @@ import { RECIPES, totalMinutes, handsMinutes } from './kitchen-data.ts';
 import type { Recipe } from './kitchen-types.ts';
 import type { CookbookInfo, CookbookRecipe } from './cookbook-recipes.ts';
 export const BOOK_KEY = 'homecraft.cookbook.favourites.v1';
-export const BOOK_CATEGORIES = ['Obiady','Zupy','Śniadania','Przekąski','Napoje','Desery','Ciasta','Chleby','Bułki','Wypieki'];
+export const BOOK_CATEGORIES = ['Obiady','Zupy','Śniadania','Przekąski','Napoje','Desery','Ciasta','Chleby','Bułki','Wypieki','Sałatki','Sosy','Dipy'];
 export const BOOK_CUISINES = ['Polska','Azjatycka','Śródziemnomorska','Międzynarodowa','Włoska','Francuska','Meksykańska','Japońska','Tajska','Indyjska','Grecka','Koreańska','Turecka','Hiszpańska','Amerykańska'];
 export const BOOK_DIETS = ['Wysokobiałkowa','Niskowęglowodanowa','Śródziemnomorska','Wegetariańska','Wegańska','Bezglutenowa'];
 export const BOOK_DEVICES = ['Air Fryer','Thermomix','Bez urządzenia','Piekarnik'];
