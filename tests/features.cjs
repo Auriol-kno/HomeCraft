@@ -80,7 +80,7 @@ let browser;
   await p.context().setOffline(false);await p.context().close();}
 
  // 7. Home: the guide button is visible without scrolling on a small phone.
- {const p=await open({viewport:{width:375,height:667}});const box=await p.locator('#guideCta').boundingBox();const navBox=await p.locator('nav').boundingBox();
+ {const p=await open({viewport:{width:375,height:667}});const box=await p.locator('#guideCta').boundingBox();const navBox=await p.locator('nav.bottom-nav:not([hidden])').boundingBox();
   assert(box&&box.y+box.height<=navBox.y+1,'guide button above the fold');await p.context().close();}
 
 
