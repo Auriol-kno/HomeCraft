@@ -1,0 +1,26 @@
+name: Kitchen OS design lab checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/design-lab/**'
+      - 'tests/design-lab.cjs'
+      - '.github/workflows/design-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  design-lab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node tests/design-lab.cjs
+      - name: Keep production app untouched
+        run: |
+          git diff --exit-code -- app/src/ app/public/ vite.config.ts package.json
