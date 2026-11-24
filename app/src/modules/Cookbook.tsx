@@ -61,12 +61,12 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   <h2 ref={heading} tabIndex={-1}>{t('Wybierz przepis')}</h2>
   <p className="hc-book-intro">{RECIPES.length} {t('przepisów do codziennego gotowania. Wybierz danie, przygotuj składniki i gotuj z timerami.')}</p>
   <div className="hc-card hc-book-filters">
-   <label className="hc-field"><span>{t('Szukaj przepisu lub składnika')}</span><input className="hc-input" type="search" value={filters.query} onChange={e=>change({query:e.target.value})} placeholder={t('Np. kurczak, pierogi, tofu…')}/></label>
+   <label className="hc-field"><span>{t('Szukaj przepisu lub składnika')}</span><input className="hc-input" type="search" aria-label={t('Szukaj przepisu lub składnika')} value={filters.query} onChange={e=>change({query:e.target.value})} placeholder={t('Np. kurczak, pierogi, tofu…')}/></label>
    <div className="hc-book-filter-row">
-    <label className="hc-field"><span>{t('Kuchnia')}</span><select className="hc-input" value={filters.cuisine} onChange={e=>change({cuisine:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CUISINES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
-    <label className="hc-field"><span>{t('Rodzaj posiłku')}</span><select className="hc-input" value={filters.category} onChange={e=>change({category:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CATEGORIES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
+    <label className="hc-field"><span>{t('Kuchnia')}</span><select className="hc-input" aria-label={t('Kuchnia')} value={filters.cuisine} onChange={e=>change({cuisine:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CUISINES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
+    <label className="hc-field"><span>{t('Rodzaj posiłku')}</span><select className="hc-input" aria-label={t('Rodzaj posiłku')} value={filters.category} onChange={e=>change({category:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CATEGORIES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
    </div>
-   <label className="hc-field"><span>{t('Sortowanie')}</span><select className="hc-input" value={filters.sort} onChange={e=>change({sort:e.target.value as BookSort})}>
+   <label className="hc-field"><span>{t('Sortowanie')}</span><select className="hc-input" aria-label={t('Sortowanie')} value={filters.sort} onChange={e=>change({sort:e.target.value as BookSort})}>
     <option value="name">{t('Nazwa A–Z')}</option><option value="time">{t('Najkrótszy czas')}</option><option value="kcal">{t('Najmniej kcal na porcję')}</option><option value="kcal-desc">{t('Najwięcej kcal na porcję')}</option>
    </select></label>
    <div className="hc-book-switches"><button className="hc-ghost" aria-pressed={filters.quick} onClick={()=>change({quick:!filters.quick})}>{t('Do 30 min')}</button><button className="hc-ghost" aria-pressed={filters.favouritesOnly} onClick={()=>change({favouritesOnly:!filters.favouritesOnly})}>★ {t('Ulubione')} ({favourites.length})</button></div>

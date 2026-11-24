@@ -5,14 +5,14 @@ const fs=require('node:fs');
 const base=process.env.BOOK_BASE||'/HomeCraft/', url='http://127.0.0.1:4177'+base;
 const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4177','--base',base],{stdio:'pipe'});
 const shots='test-results/cookbook';fs.mkdirSync(shots,{recursive:true});
-let browser;
+let browser,pageForFailure;
 (async()=>{
  for(let i=0;i<60;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));if(i===59)throw Error('Preview unavailable');}
  browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']}:{})});
  const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Europe/Warsaw',serviceWorkers:'block'});
  await ctx.clock.install({time:new Date('2026-11-24T10:00:00+01:00')});
  await ctx.addInitScript(()=>{if(!localStorage.getItem('book-seed')){localStorage.setItem('book-seed','1');localStorage.setItem('homecraft.cookbook.favourites.v1','{broken');localStorage.setItem('homecraft.fryer.favs.v1','["keep"]');}});
- const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const p=await ctx.newPage(),errors=[];pageForFailure=p;p.on('pageerror',e=>errors.push(e.message));
  const go=async hash=>{await p.goto(url+'#'+hash);await p.reload();await p.locator('.module-bar').waitFor();};
  const shot=async name=>p.screenshot({path:`${shots}/${name}.png`});
  const layout=async label=>{
@@ -98,4 +98,4 @@ let browser;
  await offline.setOffline(true);await off.reload();await off.locator('.hc-book-card').first().waitFor();assert.equal(await off.locator('.hc-book-card').count(),20);
  await off.screenshot({path:`${shots}/offline-${base==='/'?'root':'pages'}.png`});await offline.close();
  console.log('PASS: cookbook flow, filters, favourites/reload, kcal, shopping, complete cooking with controlled clock, confirmation, corrupted storage, EN, 5 themes × 2 modes × 3 widths, screenshots. Base '+base);
-})().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
+})().catch(async e=>{console.error(e);if(pageForFailure&&!pageForFailure.isClosed()){await pageForFailure.screenshot({path:shots+'/failure.png'});fs.writeFileSync(shots+'/failure.html',await pageForFailure.content());console.error((await pageForFailure.locator('body').innerText()).slice(-4500));}process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
