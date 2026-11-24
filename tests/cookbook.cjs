@@ -26,7 +26,7 @@ let browser,pageForFailure;
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));await shot('01-start');
  for(const tab of ['Air Fryer','Kuchnia','Zakupy','Kawa']){await openModule(p,tab);await shot('02-module-'+tab.replace(' ','-'));}
  await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Książka kucharska'}).click();
- await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/200 \/ 200/);
+ await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/350 \/ 350/);
  assert.equal(await p.locator('.hc-book-card').count(),20);
  await p.getByRole('button',{name:'Pokaż kolejne 20'}).click();assert.equal(await p.locator('.hc-book-card').count(),40);
  await p.getByLabel('Kuchnia',{exact:true}).selectOption('Azjatycka');assert((await p.locator('.hc-book-card').count())>=20);
@@ -41,6 +41,7 @@ let browser,pageForFailure;
  await p.getByRole('button',{name:'Dodaj do ulubionych: Kurczak teriyaki z ryżem',exact:true}).click();
  await p.getByRole('button',{name:'Otwórz przepis: Kurczak teriyaki z ryżem',exact:true}).click();
  assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Kurczak teriyaki z ryżem');
+ await p.getByRole('group',{name:'Twoja ocena'}).getByRole('button',{name:'5 / 5',exact:true}).click();await p.reload();assert.equal(await p.getByRole('group',{name:'Twoja ocena'}).getByRole('button',{name:'5 / 5',exact:true}).getAttribute('aria-pressed'),'true');
  await shot('03-detail-390');await layout('detail 390');
  await p.reload();assert(await p.getByRole('button',{name:'Usuń z ulubionych: Kurczak teriyaki z ryżem',exact:true}).isVisible());
  await p.getByRole('button',{name:/Zaplanuj ten przepis/}).click();
@@ -48,7 +49,7 @@ let browser,pageForFailure;
  await p.getByRole('button',{name:/Gotuję teraz: podanie o/}).click();
  await p.getByRole('button',{name:/Dalej: przygotuj składniki/}).click();
  await p.getByRole('button',{name:/Dodaj nieodhaczone składniki do Zakupów/}).click();
- await p.getByRole('navigation',{name:'Główne działy'}).getByRole('button',{name:'Zakupy',exact:true}).click();await p.locator('main:not([hidden]) .hc-iname').filter({hasText:'Pierś z kurczaka'}).waitFor();await p.goBack();
+ await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Zakupy',exact:true}).click();await p.locator('main:not([hidden]) .hc-iname').filter({hasText:'Pierś z kurczaka'}).waitFor();await p.goBack();
  await p.getByRole('button',{name:/Zaczynamy gotowanie/}).click();
  await shot('04-cook');
  // Complete all steps, using the shared timers and controlled clock.
