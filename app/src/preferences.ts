@@ -8,8 +8,8 @@ const themes:Theme[]=['pastel','palarnia','bar','soft','line'];
 // 'sage' (Szałwia) was replaced by 'bar' (Kawiarnia) in the same place in the list.
 const migrate=(t:unknown)=>t==='sage'?'bar':t;
 const modes:Mode[]=['system','light','dark'];
-const fallback:Preferences={theme:'pastel',density:'standard',language:'pl',mode:'system'};
-export const readPreferences=():Preferences=>{try{const p=JSON.parse(localStorage.getItem(key)||'{}');const theme=migrate(p.theme) as Theme;return {theme:themes.includes(theme)?theme:'pastel',density:p.density==='compact'?'compact':'standard',language:p.language==='en'?'en':'pl',mode:modes.includes(p.mode)?p.mode:'system'};}catch{return {...fallback};}};
+const fallback:Preferences={theme:'pastel',density:'standard',language:'pl',mode:'light'};
+export const readPreferences=():Preferences=>{try{const p=JSON.parse(localStorage.getItem(key)||'{}');const theme=migrate(p.theme) as Theme;return {theme:themes.includes(theme)?theme:'pastel',density:p.density==='compact'?'compact':'standard',language:p.language==='en'?'en':'pl',mode:modes.includes(p.mode)?p.mode:'light'};}catch{return {...fallback};}};
 const darkQuery=typeof matchMedia==='function'?matchMedia('(prefers-color-scheme: dark)'):null;
 export const isDark=(p:Preferences)=>p.mode==='dark'||(p.mode==='system'&&!!darkQuery?.matches);
 const bars:Record<Theme,[string,string]>={pastel:['#B9C9C4','#18211F'],palarnia:['#F5EEE2','#1B1512'],bar:['#F3F1EC','#120F0D'],soft:['#E7E7E5','#1F2125'],line:['#ECEEE6','#151714']};
