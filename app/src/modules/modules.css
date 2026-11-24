@@ -134,6 +134,79 @@ select.hc-input{appearance:auto}
 .hc-big{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}.hc-big b{font:700 34px/1 var(--body);letter-spacing:-1px;font-variant-numeric:tabular-nums;color:var(--accent)}.hc-big span{font-size:15px;color:var(--soft)}
 .hc-conv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .hc-conv div{display:grid;gap:2px;text-align:center}.hc-conv b{font:700 18px var(--body);font-variant-numeric:tabular-nums}.hc-conv span{font-size:11px;color:var(--muted)}
+/* Kitchen OS (Zaplanuj gotowanie): Plan → Przygotuj → Gotuj. Large type while cooking. */
+.hc-k-entry{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 14px;border:1px solid var(--accent);border-radius:var(--r-card,16px);background:var(--wash,var(--surface));color:var(--ink);text-align:left;box-shadow:none}
+.hc-k-entry svg{width:26px;height:26px;color:var(--accent)}
+.hc-k-entry b{display:block;font:700 16px var(--body)}.hc-k-entry small{display:block;font-size:12.5px;color:var(--soft);margin-top:2px}
+.hc-k-entry>span:last-child{font:700 20px var(--body);color:var(--accent)}
+.hc-link{border:0;background:none;padding:6px 0;min-height:44px;color:var(--accent);font:700 14px var(--body);text-decoration:underline;text-underline-offset:3px;text-align:left;box-shadow:none}
+.hc-k-facts{display:flex;flex-wrap:wrap;gap:6px}
+.hc-k-facts span{font:650 12.5px var(--body);color:var(--ink);background:var(--surface-2);border-radius:999px;padding:4px 10px}
+.hc-k-serve-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hc-k-clock{font:750 44px/1 var(--body);letter-spacing:-1.5px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.hc-k-bump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.hc-k-bump .hc-chip-btn{min-height:46px;padding:0 4px}
+.hc-k-input{grid-column:1/-1;min-height:48px;padding:4px 10px;text-align:center;font:650 18px var(--body);font-variant-numeric:tabular-nums}
+.hc-k-warn{margin:0;padding:10px 12px;border-radius:12px;border:1px solid var(--bad);color:var(--ink);font-size:14px}
+.hc-k-warn .hc-link{display:block;padding-bottom:0}
+.hc-k-summary{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--soft)}
+.hc-k-summary b{font:750 22px var(--body);color:var(--ink);font-variant-numeric:tabular-nums;margin-left:4px}
+.hc-k-lanes{display:grid;gap:6px;margin:4px 0}
+.hc-k-lane{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px}
+.hc-k-lane>span{font:650 11.5px var(--body);color:var(--soft);white-space:nowrap}
+.hc-k-lane>div{position:relative;height:22px;border-radius:6px;background:var(--surface-2)}
+.hc-k-lane i{position:absolute;top:3px;bottom:3px;border-radius:4px;min-width:3px;margin-left:1px}
+.l-hands{--lane:var(--accent)}.l-fryer{--lane:#c46a2c}.l-wait{--lane:var(--muted)}
+.hc-k-lane i{background:var(--lane)}
+.hc-k-nowline{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--bad)}
+.hc-k-axis{display:flex;justify-content:space-between;padding-left:72px;font:600 11px var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+.hc-k-cta{display:grid;gap:8px}
+.hc-k-cta .subtle{margin:0;text-align:center}
+.hc-k-confirm{display:grid;gap:8px;padding:12px;border:1px solid var(--bad);border-radius:14px}
+.hc-k-note{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.hc-k-hero{border-color:var(--accent);gap:10px}
+.hc-k-hero-now{margin:0;font:700 19px/1.3 var(--body);color:var(--ink)}.hc-k-hero-now span{color:var(--accent)}
+.hc-k-finish{margin:0;font-size:15px;color:var(--soft)}.hc-k-finish b{font:750 22px var(--body);color:var(--ink);font-variant-numeric:tabular-nums}.hc-k-finish em{font-style:normal;color:var(--bad);font-weight:700}
+.hc-k-status{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.hc-k-status>div{display:grid;gap:2px;padding:8px 10px;border-radius:12px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.hc-k-status span{font:700 10.5px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hc-k-status b{font:750 22px/1.1 var(--body);font-variant-numeric:tabular-nums;color:var(--ink)}
+.hc-k-late{display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid var(--bad);background:var(--surface)}
+.hc-k-late p{margin:0;font-size:15px}
+.hc-k-sect{margin:6px 0 0;font:800 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.hc-k-sect small{font-weight:650;letter-spacing:.04em;text-transform:none;color:var(--soft);font-size:12.5px}
+.hc-k-now{border-left:5px solid var(--lane);gap:10px}
+.hc-k-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 13px var(--body);color:var(--soft);font-variant-numeric:tabular-nums}
+.hc-k-lane-tag{display:inline-block;font:750 11px var(--body);letter-spacing:.04em;padding:2px 8px;border-radius:999px;border:1.5px solid var(--lane);color:var(--ink)}
+.hc-k-title{margin:0;font:750 24px/1.2 var(--body);letter-spacing:-.5px;color:var(--ink);text-wrap:balance}
+.hc-k-detail{margin:0;font-size:17px;line-height:1.45;color:var(--ink)}
+.hc-k-device{margin:2px 0}
+.hc-k-safety{margin:0;padding:8px 12px;border-left:3px solid var(--bad);background:var(--surface-2);border-radius:0 10px 10px 0;font-size:14.5px;color:var(--ink)}
+.hc-k-block{margin:0;font:650 14px var(--body);color:var(--bad)}
+.hc-k-timer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;background:#1d1715;color:#e8dccb;border-radius:14px;padding:12px 14px}
+.hc-k-timer b{font:700 46px/1 var(--mono);color:#f0b36a;font-variant-numeric:tabular-nums}
+.hc-k-timer span{grid-row:2;font:600 12px var(--body);opacity:.75}
+.hc-k-timer .hc-ghost{grid-row:1/3;grid-column:2;min-height:48px;background:#ffffff12;color:#e8dccb;border-color:#4a3d33}
+.hc-k-over{margin:0;font:750 17px var(--body);color:var(--bad)}
+.hc-k-actions{display:grid}
+.hc-k-actions .hc-primary,.hc-k-actions .hc-ghost{min-height:58px;font-size:18px}
+.hc-k-actions button:disabled{opacity:.45}
+.hc-k-early{margin:0;padding:8px 12px;border-radius:10px;background:var(--surface-2);font-size:14px;color:var(--soft)}.hc-k-early b{color:var(--ink)}
+.hc-k-wait{gap:10px}.hc-k-wait p{font-size:16px}
+.hc-k-next{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.hc-k-next li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.hc-k-next b{font:750 18px var(--body);font-variant-numeric:tabular-nums;color:var(--accent)}
+.hc-k-next span{font:650 16px/1.3 var(--body);color:var(--ink)}.hc-k-next small{display:block;font:500 13px var(--body);color:var(--muted);margin-top:2px}
+.hc-k-steps{list-style:none;margin:8px 0 0;padding:0;display:grid}
+.hc-k-steps li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:56px;padding:6px 0 6px 8px;border-top:1px solid var(--line);border-left:3px solid var(--lane)}
+.hc-k-steps li:first-child{border-top:0}
+.hc-k-time{font:700 15px var(--body);font-variant-numeric:tabular-nums;color:var(--soft)}
+.hc-k-step b{display:block;font:650 15px/1.3 var(--body);color:var(--ink)}
+.hc-k-step small{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+.hc-k-steps li.is-done .hc-k-step b{text-decoration:line-through;color:var(--muted)}
+.hc-k-steps li.is-active{background:var(--wash,var(--surface-2))}
+.hc-k-all summary{font-weight:700}
+@media(min-width:760px){.hc-kitchen .screen{max-width:680px}.hc-k-title{font-size:28px}}
 .hc-nav{z-index:10}
 @media(prefers-reduced-motion:reduce){.hc-timer.done{animation:none}}
 }
@@ -380,21 +453,29 @@ select.hc-input{appearance:auto}
 }
 /* Kawiarnia (bar): the soft raised / pressed-in look of the bottom menu on the whole interface */
 @layer overrides{
-html:root[data-theme="bar"] .app-shell :is(.card,.details-card,.hc-card,.recipe,.hint-card,.control-dock,.hc-setter,.hc-stack>div,.hc-timer){background:var(--bg);color:var(--ink);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell .hc-timer *{color:inherit}
-html:root[data-theme="bar"] .app-shell .hc-timer .hc-timer-top span,html:root[data-theme="bar"] .app-shell .hc-timer small{color:var(--muted)}
-html:root[data-theme="bar"] .app-shell .hc-timer .r-track{stroke:var(--track)}
-html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc:not(.main):not(.rst),.settings-trigger,.hc-laps-btn){background:var(--bg);color:var(--ink);border:0;box-shadow:5px 5px 11px var(--nm-d),-5px -5px 11px var(--nm-l);transition:box-shadow .15s}
-html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.hc-info-btn):is([aria-pressed="true"],[aria-selected="true"],[aria-expanded="true"]),
-html:root[data-theme="bar"] .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc,.segment button,.presets button):active{background:var(--bg);color:var(--accent);box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell :is(.btn.main,.hc-primary,.hc-info-main,.hc-dc.main,.hc-timer-ctrl button.hot){border:0;box-shadow:6px 6px 14px var(--nm-d),-5px -5px 12px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell :is(.hc-input,input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){background:var(--bg);color:var(--ink);border:0;box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell :is(.hc-device,.hc-dev-row>div,.hc-mini,.hc-brew>div,.hc-facts div){background:var(--bg);border:0;box-shadow:inset 3px 3px 8px var(--nm-d),inset -3px -3px 8px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell .hc-device{border-top:0;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell .hc-dial .d-face{fill:var(--bg);stroke:none;filter:drop-shadow(6px 6px 10px var(--nm-d)) drop-shadow(-6px -6px 10px var(--nm-l))}
-html:root[data-theme="bar"] dialog.settings{background:var(--bg);border:0;box-shadow:12px 12px 28px var(--nm-d),-8px -8px 22px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.card,.details-card,.hc-card,.recipe,.hint-card,.control-dock,.hc-setter,.hc-stack>div,.hc-timer){background:var(--bg);color:var(--ink);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-timer *{color:inherit}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-timer .hc-timer-top span,html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-timer small{color:var(--muted)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-timer .r-track{stroke:var(--track)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc:not(.main):not(.rst),.settings-trigger,.hc-laps-btn){background:var(--bg);color:var(--ink);border:0;box-shadow:5px 5px 11px var(--nm-d),-5px -5px 11px var(--nm-l);transition:box-shadow .15s}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.segment button,.presets button,.recipe .tabs button,.hc-toggle,.hc-chip,.hc-info-btn):is([aria-pressed="true"],[aria-selected="true"],[aria-expanded="true"]),
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.hc-quick button,.hc-fine button,.hc-seg button,.hc-chips button,.hc-ml button,.hc-tea-time,.hc-ghost,.wide-link,.btn.ghost,.hc-timer-ctrl button,.hc-step button,.hc-info-btn,.hc-dc,.segment button,.presets button):active{background:var(--bg);color:var(--accent);box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.btn.main,.hc-primary,.hc-info-main,.hc-dc.main,.hc-timer-ctrl button.hot){border:0;box-shadow:6px 6px 14px var(--nm-d),-5px -5px 12px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.hc-input,input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){background:var(--bg);color:var(--ink);border:0;box-shadow:inset 4px 4px 9px var(--nm-d),inset -4px -4px 9px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell :is(.hc-device,.hc-dev-row>div,.hc-mini,.hc-brew>div,.hc-facts div){background:var(--bg);border:0;box-shadow:inset 3px 3px 8px var(--nm-d),inset -3px -3px 8px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-device{border-top:0;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-dial .d-face{fill:var(--bg);stroke:none;filter:drop-shadow(6px 6px 10px var(--nm-d)) drop-shadow(-6px -6px 10px var(--nm-l))}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) dialog.settings{background:var(--bg);border:0;box-shadow:12px 12px 28px var(--nm-d),-8px -8px 22px var(--nm-l)}
 }
 @layer overrides{
-html:root[data-theme="bar"] .app-shell .hc-dish{background:var(--bg);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
-html:root[data-theme="bar"] .app-shell .hc-dish:active{box-shadow:inset 5px 5px 11px var(--nm-d),inset -5px -5px 11px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-dish{background:var(--bg);border:0;border-radius:24px;box-shadow:7px 7px 16px var(--nm-d),-7px -7px 16px var(--nm-l)}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-dish:active{box-shadow:inset 5px 5px 11px var(--nm-d),inset -5px -5px 11px var(--nm-l)}
+}
+@layer overrides{
+/* Stopwatch: digits sit in the lower half of the dial on the face colour, so the hand passes behind them. */
+.hc-dial-mid.hc-sw-mid{transform:translateY(13%);gap:0}
+.hc-dial-mid.hc-sw-mid>*{background:var(--surface);border-radius:8px;padding:1px 8px}
+html:root:is([data-theme="bar"],[data-theme="pastel"]) .app-shell .hc-dial-mid.hc-sw-mid>*,html:root[data-theme="line"] .app-shell .hc-dial-mid.hc-sw-mid>*{background:var(--bg)}
+/* Running stopwatch: Pauza fills left to right with a lighter tint of its own text colour, one pass per minute. */
+html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient(90deg,color-mix(in srgb,currentColor 30%,transparent) var(--fill,0%),transparent var(--fill,0%))}
 }

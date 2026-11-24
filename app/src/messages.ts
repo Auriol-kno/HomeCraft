@@ -56,6 +56,7 @@ Sterowanie parzeniem|Brew controls
 parzenie trwa|brewing
 Wygląd i język|Appearance and language
 Motyw aplikacji|App theme
+Pastel · szałwia i terakota|Pastel · sage and terracotta
 Palarnia · krem i bordo|Roastery · cream and burgundy
 Kawiarnia · szkło i karmel|Café · glass and caramel
 Soft · jasny relief|Soft · light relief

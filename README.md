@@ -7,13 +7,14 @@ Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w t
 - **Dom (pomoc w domu):** nowy dział, który będzie rósł. Pierwsza zakładka to **Timery**: okrągły minutnik z pokrętłem, szybkimi czasami i opcjami zaawansowanymi (alert przed końcem, rundy, dźwięk, wibracje, przypomnienie w połowie) oraz stoper z okrążeniami.
 - **Thermomix TM6 (w Domu):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu.
 - **Herbata (przy kawie):** piąta zakładka menu kawy. 24 herbaty i napary w kategoriach (białe, zielone, żółte, oolong, czarne, pu-erh, ziołowe, owocowe, rooibos i mate): temperatura wody, ilość liści przeliczana na wybraną ilość wody, czasy kolejnych zalań ustawiane jednym dotknięciem w minutniku, przycisk „Info i ciekawostki” (czym jest, jak powstaje, dlaczego tak smakuje, pochodzenie, ciekawostki) oraz ogólny przewodnik. Kod jest odseparowany (`modules/TeaScreen.tsx`, `modules/tea-data.ts`), więc zakładkę łatwo usunąć.
+- **Zaplanuj gotowanie (Kitchen OS, demo):** przycisk w Air Fryerze (Dania) i w Domu (Timery). Jeden scenariusz: kurczak w panko z Air Fryera, frytki i sałatka na 2 porcje. **Plan** (wybór dania i godziny podania, plan liczony wstecz, pasy „Ty / Air Fryer / Czeka”), **Przygotuj** (składniki, sprzęt i czynności do odhaczenia, brakujące składniki trafiają do Zakupów), **Gotuj** (co teraz, co następne, o której koniec, równoległe kroki, timery ze wspólnego silnika, opóźnienie i przeliczenie planu). Ustawienia Air Fryera są do wpisania ręcznie; aplikacja nie steruje urządzeniem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
   - **Jajka:** czasy na miękko, półtwardo i na twardo (we wrzątku i na parze) z korektą na wielkość i temperaturę jajka, jajko w koszulce, sadzone, jajecznica, test świeżości.
   - **Gotowanie:** ponad 30 produktów (ziemniaki, warzywa, kasze, ryż, makaron, strączkowe, mięso i ryby) z czasami w garnku, na parze, w piekarniku i w Air Fryerze, proporcjami wody i jednym przyciskiem do timera.
   - **Miarki:** przelicznik szklanka / łyżka / łyżeczka / ml / g / dag / kg dla 30 produktów (np. szklanka cukru = 220 g = 22 dag), tabela miarek, °C ↔ °F, bezpieczne temperatury mięs.
   - **Timery:** wspólne dla wszystkich działów. Przetrwają odświeżenie, trzymają ekran włączony, dzwonią i wibrują, a pływający znacznik czasu jest widoczny też w dziale Kawa.
 
-Motywy (Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
+Motywy (**Pastel** jako główny wygląd: szałwiowe tło z miękkimi falami, jasne karty z miękkim cieniem, terakota i teal; oraz Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
 
 ## Uruchomienie i rozwój
 
@@ -26,7 +27,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Dom `#dom/timers|eggs|cook|thermomix|measures`, Zakupy `#shop/list|staples`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Dom `#dom/timers|eggs|cook|thermomix|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 
@@ -38,7 +39,10 @@ Aplikacja działa offline (service worker) i da się ją dodać do ekranu począ
 
 ## Dane i migracja
 
-Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery) i `homecraft.fryer.favs.v1` (ulubione dania). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
+Pastel jest motywem domyślnym. Jeśli na urządzeniu był zapisany dawny domyślny motyw Palarnia, aplikacja raz przełącza go na Pastel (znacznik `homecraft.pastelDefault.v1`); inne wybrane motywy zostają, a Palarnię można wybrać ponownie w Ustawieniach. Pastel korzysta z układu Kawiarni (`bar.css`), a `pastel.css` ustawia tylko paletę i tło.
+
+
+Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania) i `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”: godzina podania, odhaczone kroki i składniki; nie dotyka pozostałych kluczy). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
 
 Ulubione i timery z dawnej Ściągi Air Fryer (artefakt Claude) są w innym adresie, więc trzeba je oznaczyć gwiazdką od nowa.
 
@@ -49,6 +53,7 @@ Ulubione i timery z dawnej Ściągi Air Fryer (artefakt Claude) są w innym adre
 - `app/src/modules/TimersScreen.tsx`, `timers.ts`: okrągły minutnik, stoper i wspólny magazyn timerów.
 - `app/src/modules/shopping-data.ts`, `ShoppingModule.tsx`: lista zakupów.
 - `app/src/modules/home-data.ts`, `HomeModule.tsx`: jajka, czasy gotowania, miarki, temperatury. **Nowy temat w dziale Dom to nowy wpis w `home-data.ts` i zakładka w `HomeModule.tsx`.**
+- `app/src/modules/kitchen-data.ts`, `kitchen-store.ts`, `KitchenModule.tsx`: Zaplanuj gotowanie. Scenariusz i planowanie wstecz od godziny podania (jedna osoba i jeden kosz Air Fryera naraz), zapis sesji i trzy widoki. Nowy scenariusz to nowy `Recipe` w `kitchen-data.ts`.
 - `app/src/modules/timers.ts`: wspólny silnik timerów (czas bezwzględny, dźwięk, wibracja, wake lock).
 - `app/src/modules/ui.tsx`: wspólne elementy (arkusz szczegółów, timery, alarm, powiadomienie).
 - `app/src/modules/en.ts`: angielskie napisy interfejsu nowych działów. Treść przepisów (nazwy dań, kroki) jest po polsku.
@@ -62,7 +67,7 @@ npx playwright install --with-deps chromium
 npm test
 ```
 
-Przy systemowym Chromium: `CHROMIUM_PATH=/usr/bin/chromium npm test`. Testy: `tests/homecraft.test.mjs` (dane i przeliczniki, w tym szklanka cukru, jajka, spójność słowników), `tests/modules.cjs` (przeglądarka: przełączanie działów, 37 dań, timery, jajka, miarki, alarm, angielski, 320 px), a także wszystkie testy Crema Lab (`advice`, `coffees`, `mobile`, `features`).
+Przy systemowym Chromium: `CHROMIUM_PATH=/usr/bin/chromium npm test`. Testy: `tests/homecraft.test.mjs` (dane i przeliczniki, w tym szklanka cukru, jajka, spójność słowników), `tests/modules.cjs` (przeglądarka: przełączanie działów, 37 dań, timery, jajka, miarki, alarm, angielski, 320 px), `tests/kitchen.test.mjs` (planowanie: zależności, brak nakładania się pracy i kosza, opóźnienie), `tests/kitchen.cjs` (przeglądarka: cały scenariusz z kontrolowanym zegarem, alarm, przeładowanie, Zakupy, 320 / 390 px i desktop), a także wszystkie testy Crema Lab (`advice`, `coffees`, `mobile`, `features`).
 
 ## Zastrzeżenia
 

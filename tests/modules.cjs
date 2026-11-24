@@ -87,6 +87,10 @@ let browser;
  await p.getByRole('button',{name:'Start',exact:true}).click();await p.waitForTimeout(400);
  await p.getByRole('button',{name:'Okrążenie',exact:true}).click();await p.waitForTimeout(250);
  assert.equal(await p.locator('.hc-laps tbody tr').count(),1);
+ // Running: the digits sit below the pivot on an opaque backing (the hand passes behind), and Pauza fills with time.
+ const sw=await p.evaluate(()=>{const d=document.querySelector('.hc-sw-mid .hc-dial-time'),dial=document.querySelector('.hc-sw-mid').parentElement.getBoundingClientRect(),r=d.getBoundingClientRect(),btn=[...document.querySelectorAll('.hc-sw-ctrl button')].find(x=>x.textContent==='Pauza');
+  return {below:r.top>dial.top+dial.height/2,bg:getComputedStyle(d).backgroundColor,fill:btn.classList.contains('hc-fill')&&/%/.test(btn.style.getPropertyValue('--fill'))};});
+ assert(sw.below,'stopwatch digits below the hand pivot');assert(!/rgba\(0, 0, 0, 0\)|transparent/.test(sw.bg),'digits have a backing');assert(sw.fill,'Pauza fills while running');
  await p.getByRole('button',{name:'Pauza',exact:true}).click();
  await p.reload();await p.waitForSelector('.module-bar');await tab('Dom');await p.getByRole('button',{name:'Stoper',exact:true}).click();
  assert.equal(await p.locator('.hc-laps tbody tr').count(),1,'laps survive a reload');
@@ -141,7 +145,7 @@ let browser;
  await p.getByRole('button',{name:'Usuń kupione'}).click();assert.equal(await p.locator('.hc-items li').count(),4);
 
  // One soft, raised bottom-nav look in every theme and mode, and a dark module bar that contrasts with the page.
- for(const [th,mo] of [['palarnia','light'],['bar','light'],['soft','light'],['palarnia','dark'],['bar','dark'],['soft','dark'],['line','light'],['line','dark']]){
+ for(const [th,mo] of [['pastel','light'],['pastel','dark'],['palarnia','light'],['bar','light'],['soft','light'],['palarnia','dark'],['bar','dark'],['soft','dark'],['line','light'],['line','dark']]){
   await p.evaluate(([a,b])=>{document.documentElement.dataset.theme=a;document.documentElement.dataset.mode=b;},[th,mo]);
   const look=await p.evaluate(()=>{const nav=document.querySelector('nav.bottom-nav:not([hidden])'),btn=nav.querySelector('button'),cur=nav.querySelector('[aria-current=page]');return {sh:getComputedStyle(btn).boxShadow,r:getComputedStyle(btn).borderRadius,act:getComputedStyle(cur).boxShadow};});
   assert.notEqual(look.sh,'none',`${th}/${mo} nav buttons are raised`);assert.match(look.act,/inset/,`${th}/${mo} active tab is pressed in`);assert.equal(look.r,th==='line'?'22px':'20px');
