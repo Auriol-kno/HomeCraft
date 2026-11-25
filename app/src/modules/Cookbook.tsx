@@ -38,7 +38,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   timers.filter(timer=>linked.includes(timer.id)).forEach(timer=>actOn(timer.id,'del'));
   selectKitchenRecipe(r);setConfirm(false);onPlan();
  };
- const star=(r:Recipe)=><button className="hc-ghost hc-book-star" aria-pressed={favourites.includes(r.id)} aria-label={`${t(favourites.includes(r.id)?'Usuń z ulubionych':'Dodaj do ulubionych')}: ${r.name}`} onClick={()=>toggleBookFavourite(r.id)}>{favourites.includes(r.id)?'★':'☆'}</button>;
+ const star=(r:Recipe)=><button className="hc-ghost hc-book-star" aria-pressed={favourites.includes(r.id)} aria-label={`${t(favourites.includes(r.id)?'Usuń z ulubionych':'Dodaj do ulubionych')}: ${r.name}`} onClick={event=>{event.stopPropagation();toggleBookFavourite(r.id);}}>{favourites.includes(r.id)?'★':'☆'}</button>;
  if(selected){const info=bookInfo(selected), review=feedback[selected.id];return <section className="screen hc-book" aria-label={t('Szczegóły przepisu')}>
   <button className="hc-ghost" onClick={back}>← {t('Wróć do książki')}</button>
   <article className="hc-card hc-book-detail">
@@ -98,10 +98,10 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
   <p role="status">{t('Wyniki')}: {list.length} / {RECIPES.length}</p>
   {!list.length&&<div className="hc-card"><p>{t('Brak pasujących przepisów. Zmień filtry lub dodaj przepisy do ulubionych.')}</p><button className="hc-ghost" onClick={()=>change({...EMPTY_FILTERS})}>{t('Wyczyść filtry')}</button></div>}
   <p className="hc-health-legend"><span><i className="hc-health-dot green"/>{t("Więcej roślin")}</span><span><i className="hc-health-dot moderate"/>{t("Umiarkowanie")}</span><span><i className="hc-health-dot occasional"/>{t("Okazjonalnie")}</span><small>{t("Orientacyjna ocena składników, nie pełna wartość odżywcza.")}</small></p><div className="hc-book-grid">{list.slice(0,limit).map(r=><article key={r.id} className="hc-card hc-book-card">
+   <button type="button" className="hc-book-open" onClick={()=>open(r)} aria-label={`${t('Otwórz przepis')}: ${r.name}`}/>
    <div className="hc-book-top"><p className="hc-tag">{t(bookInfo(r).cuisine)} · {t(bookInfo(r).category)}</p>{star(r)}</div>
    <h2 className="hc-health-title"><HealthDot recipe={r}/>{r.name}</h2><p className="hc-book-labels">{bookInfo(r).diets.slice(0,2).map(d=><span key={d}>{t(d)}</span>)}{bookInfo(r).devices.slice(0,1).map(d=><span key={d}>{t(d)}</span>)}</p><p className="hc-book-facts"><b>≈ {recipeKcal(r)} {t('kcal / porcję')}</b><span>{minLabel(totalMinutes(r))} · {r.servings} {t('porcje')}</span></p>
    <p className="hc-book-review"><span>{feedback[r.id]?.rating?'★ '+feedback[r.id].rating+'/5':t('Bez oceny')}</span><span>{t(difficultyLabel(r))}</span>{!!feedback[r.id]?.count&&<span>{feedback[r.id].count}× {t('Przygotowano')}</span>}</p>
-   <button className="hc-ghost" onClick={()=>open(r)} aria-label={`${t('Otwórz przepis')}: ${r.name}`}>{t('Otwórz przepis')} →</button>
   </article>)}</div>
   {list.length>limit&&<button className="hc-primary" onClick={()=>setLimit(n=>{rememberedLimit=n+20;return rememberedLimit;})}>{t('Pokaż kolejne 20')}</button>}
   <p className="hc-book-note">{t('Kcal i czasy są orientacyjne. Przepisy nie zostały przetestowane na fizycznych urządzeniach. Większe ilości mogą wymagać kilku partii i dłuższego czasu.')}</p>

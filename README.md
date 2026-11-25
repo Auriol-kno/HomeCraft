@@ -80,7 +80,9 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Stałe dolne menu prowadzi do Książki, Kawy, Air Fryera, TM6 i Użytecznych. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia jest ekranem startowym z wejściem do książki, inteligentnego wyboru dań, zakupów i planowania. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+
+Editorial ma osobną jasną i ciemną paletę. Zdjęcia nagłówków są wyświetlane w całości (`contain`) i łagodnie przechodzą w rzeczywisty kolor tła, dzięki czemu nie mają twardych odcięć. Dolne menu Editorial i Kawiarni używa szklano-karmelowych przycisków z zagłębionym stanem aktywnym.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
