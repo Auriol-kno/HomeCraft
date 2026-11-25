@@ -18,14 +18,14 @@ html:root[data-theme="editorial"] .screen-heading::before{content:'';position:ab
 html:root[data-theme="editorial"] .screen-heading h1{font:500 clamp(25px,6.5vw,35px)/1.08 var(--ed-serif);letter-spacing:-.6px;color:var(--ed-hero-text);margin:0;overflow-wrap:normal}
 html:root[data-theme="editorial"] .screen-heading .overline{color:#e7aa85;font-size:9px;letter-spacing:2px;margin:0 0 8px}
 html:root[data-theme="editorial"] .screen-heading::after{content:var(--ed-subtitle,'');font:400 11px/1.45 var(--body);color:#e1d9cb;margin-top:8px}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="recipes"]{--ed-art:url('./editorial/cookbook.svg');--ed-subtitle:'Przepisy · inspiracje · gotowanie'}
-html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="home"],[data-editorial-section="timer"],[data-editorial-section="equipment"],[data-editorial-section="history"],[data-editorial-section="rating"]){--ed-art:url('./editorial/coffee.svg');--ed-subtitle:'Kawa · technika · smak'}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="tea"]{--ed-art:url('./editorial/tea.svg');--ed-subtitle:'Liście · temperatura · czas'}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="fermentation"]{--ed-art:url('./editorial/ferment.svg');--ed-subtitle:'Kultury · nastawy · dziennik'}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="fryer"]{--ed-art:url('./editorial/fryer.svg');--ed-subtitle:'Chrupiące dania i precyzyjne czasy'}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="thermomix"]{--ed-art:url('./editorial/tm6.svg');--ed-subtitle:'Przepisy i techniki TM6'}
-html:root[data-theme="editorial"] .app-shell[data-editorial-section="shop"]{--ed-art:url('./editorial/shop.svg');--ed-subtitle:'Lista produktów i plan zakupów'}
-html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="timers"],[data-editorial-section="eggs"],[data-editorial-section="cook"],[data-editorial-section="measures"],[data-editorial-section="plan"]){--ed-art:url('./editorial/tools.svg');--ed-subtitle:'Codzienna organizacja kuchni'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="recipes"]{--ed-art:url('./editorial/cookbook.webp');--ed-subtitle:'Przepisy · inspiracje · gotowanie'}
+html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="home"],[data-editorial-section="timer"],[data-editorial-section="equipment"],[data-editorial-section="history"],[data-editorial-section="rating"]){--ed-art:url('./editorial/coffee.webp');--ed-subtitle:'Kawa · technika · smak'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="tea"]{--ed-art:url('./editorial/tea.webp');--ed-subtitle:'Liście · temperatura · czas'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="fermentation"]{--ed-art:url('./editorial/ferment.webp');--ed-subtitle:'Kultury · nastawy · dziennik'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="fryer"]{--ed-art:url('./editorial/fryer.webp');--ed-subtitle:'Chrupiące dania i precyzyjne czasy'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="thermomix"]{--ed-art:url('./editorial/tm6.webp');--ed-subtitle:'Przepisy i techniki TM6'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="shop"]{--ed-art:url('./editorial/shop.webp');--ed-subtitle:'Lista produktów i plan zakupów'}
+html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="timers"],[data-editorial-section="eggs"],[data-editorial-section="cook"],[data-editorial-section="measures"],[data-editorial-section="plan"]){--ed-art:url('./editorial/tools.webp');--ed-subtitle:'Codzienna organizacja kuchni'}
 html:root[data-theme="editorial"][lang="en"] .screen-heading::after{content:none}
 html:root[data-theme="editorial"] .screen{gap:10px;animation:none}
 html:root[data-theme="editorial"] .app-shell :is(.hc-card,.screen .card,.details-card,.recipe,.brew,.settings){background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:none;color:var(--ink)}
@@ -61,3 +61,68 @@ html:root[data-theme="editorial"] .hc-ferment-product-icon{background:var(--wash
 html:root[data-theme="editorial"] .app-shell .settings{padding:16px}
 html:root[data-theme="editorial"] .app-shell .settings fieldset{border-color:var(--line)}
 @media(max-width:350px){html:root[data-theme="editorial"] .hc-book-grid{grid-template-columns:minmax(0,1fr)}html:root[data-theme="editorial"] .screen-heading{padding-right:34%}}
+
+/* Photography-led Editorial layout. Kept inside the theme so legacy themes retain their UI. */
+html:root[data-theme="editorial"] body{background:var(--bg);font-family:var(--body);letter-spacing:-.01em}
+html:root[data-theme="editorial"] .app-shell{max-width:760px;margin:0 auto;border-inline:1px solid color-mix(in srgb,var(--line) 72%,transparent)}
+html:root[data-theme="editorial"] .app-header{position:relative;z-index:30}
+html:root[data-theme="editorial"] .brand-button{min-height:44px;padding:2px 0;font-weight:760}
+html:root[data-theme="editorial"] .brand-mark{width:34px;height:34px;box-shadow:inset 0 1px #ffffff38}
+html:root[data-theme="editorial"] .settings-trigger{min-width:44px;min-height:44px}
+html:root[data-theme="editorial"] .screen-heading{min-height:154px;padding:20px 47% 22px 18px}
+html:root[data-theme="editorial"] .screen-heading::before{background-image:linear-gradient(90deg,#20211fff 0%,#20211ff2 34%,#20211f9e 55%,#20211f12 100%),var(--ed-art,none);background-position:center,right center;background-size:cover,auto 100%}
+html:root[data-theme="editorial"] .screen-heading h1{font-size:clamp(29px,8vw,42px);line-height:.98;text-wrap:balance}
+html:root[data-theme="editorial"] .screen-heading .overline{font-size:10px;font-weight:750;letter-spacing:.18em}
+html:root[data-theme="editorial"] .screen-heading::after{font-size:12px;line-height:1.35;max-width:24ch}
+html:root[data-theme="editorial"] .screen{padding-bottom:4px}
+html:root[data-theme="editorial"] .screen>h2{font:500 clamp(23px,6.5vw,31px)/1.1 var(--ed-serif);margin:3px 0;color:var(--ink)}
+html:root[data-theme="editorial"] .screen>h3,
+html:root[data-theme="editorial"] .hc-card>h3{font-family:var(--ed-serif);font-weight:600}
+html:root[data-theme="editorial"] .app-shell :is(.hc-card,.screen .card,.details-card,.recipe,.brew,.settings,.hc-dish){background:linear-gradient(145deg,color-mix(in srgb,var(--surface) 97%,#fff),var(--surface));border-color:color-mix(in srgb,var(--line) 88%,transparent)}
+html:root[data-theme="editorial"] .app-shell :is(.hc-card,.details-card,.hc-dish){padding:13px}
+html:root[data-theme="editorial"] .hc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html:root[data-theme="editorial"] .hc-dish{border-radius:12px;gap:7px}
+html:root[data-theme="editorial"] .hc-dish-top b{font-family:var(--ed-serif);font-size:17px;font-weight:600}
+html:root[data-theme="editorial"] .hc-mini{border-radius:8px;background:#20211f}
+html:root[data-theme="editorial"] .hc-chips{margin-inline:-14px;padding-inline:14px;scroll-padding-inline:14px}
+html:root[data-theme="editorial"] .hc-chips button{border-radius:9px;background:var(--surface)}
+html:root[data-theme="editorial"] .hc-book-sections{margin-inline:-14px;padding-inline:14px!important;scroll-padding-inline:14px}
+html:root[data-theme="editorial"] .hc-book .hc-book-sections .hc-ghost{border-radius:10px;background:var(--surface)}
+html:root[data-theme="editorial"] .hc-book-card{border-radius:12px}
+html:root[data-theme="editorial"] .hc-book-card h2{font-family:var(--ed-serif);font-size:18px;font-weight:600;letter-spacing:-.02em}
+html:root[data-theme="editorial"] .hc-book-card>button{background:transparent!important;border-color:var(--accent)!important;color:var(--accent)!important}
+html:root[data-theme="editorial"] .hc-book-detail>h3{font-family:var(--ed-serif);font-size:21px;font-weight:600;border-top:1px solid var(--line);padding-top:12px}
+html:root[data-theme="editorial"] .hc-book-detail .hc-primary{position:sticky;bottom:8px;z-index:3;box-shadow:0 7px 20px #20150e26}
+html:root[data-theme="editorial"] .hc-book-ingredients li{min-height:42px;align-items:center}
+html:root[data-theme="editorial"] .hc-book-steps{counter-reset:editorial-step;list-style:none;padding:0!important}
+html:root[data-theme="editorial"] .hc-book-steps li{counter-increment:editorial-step;position:relative;padding-left:42px}
+html:root[data-theme="editorial"] .hc-book-steps li::before{content:counter(editorial-step);position:absolute;left:0;top:6px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--wash);color:var(--accent);font-weight:800}
+html:root[data-theme="editorial"] .hc-device-tabs button{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:none}
+html:root[data-theme="editorial"] .hc-device-tabs button[aria-selected="true"]{background:var(--wash);border-color:var(--accent);box-shadow:none;color:var(--accent)}
+html:root[data-theme="editorial"] .hc-timer,
+html:root[data-theme="editorial"] .hc-setter{background:var(--surface);border-radius:14px}
+html:root[data-theme="editorial"] .nav-stack{position:relative;z-index:25;padding-bottom:env(safe-area-inset-bottom)}
+html:root[data-theme="editorial"] .context-nav{border-bottom:1px solid var(--line)}
+html:root[data-theme="editorial"] .primary-nav button[aria-current="page"]{position:relative}
+html:root[data-theme="editorial"] .primary-nav button[aria-current="page"]::after{content:'';position:absolute;bottom:1px;width:22px;height:2px;border-radius:2px;background:var(--accent)}
+html:root[data-theme="editorial"] :is(.bottom-nav,.context-nav) button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+html:root[data-theme="editorial"] :is(.hc-primary,.btn.main,.guide-cta):active{transform:translateY(1px)}
+html:root[data-theme="editorial"] .settings-dialog{background:color-mix(in srgb,#20211f 58%,transparent)}
+html:root[data-theme="editorial"] .settings{border-radius:18px 18px 0 0!important;border-bottom:0!important}
+html:root[data-theme="editorial"] .settings h2{font-size:30px}
+html:root[data-theme="editorial"] .appearance-settings select{min-height:48px}
+
+@media(max-width:359px){
+ html:root[data-theme="editorial"] .screen-heading{min-height:138px;padding-right:40%}
+ html:root[data-theme="editorial"] .screen-heading h1{font-size:27px}
+ html:root[data-theme="editorial"] .screen-heading::after{font-size:11px}
+ html:root[data-theme="editorial"] .hc-grid{grid-template-columns:minmax(0,1fr)}
+ html:root[data-theme="editorial"] .hc-book-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(min-width:600px){
+ html:root[data-theme="editorial"] .app-content{padding-inline:22px}
+ html:root[data-theme="editorial"] .screen-heading{margin-inline:-22px;min-height:190px;padding-left:28px}
+ html:root[data-theme="editorial"] .hc-book-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ html:root[data-theme="editorial"] .hc-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){html:root[data-theme="editorial"] *{scroll-behavior:auto!important}}

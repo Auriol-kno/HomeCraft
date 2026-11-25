@@ -26,9 +26,15 @@ let browser,pageForFailure;
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));await shot('01-start');
  for(const tab of ['Air Fryer','Kuchnia','Zakupy','Kawa']){await openModule(p,tab);await shot('02-module-'+tab.replace(' ','-'));}
  await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Książka kucharska'}).click();
- await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/350 \/ 350/);
+ await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/600 \/ 600/);
+ assert.match(await p.locator('main:not([hidden]) .screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/cookbook[^)]*\.webp/);
+ for(const [route,image] of [['home','coffee'],['tea','tea'],['fermentation','ferment'],['fryer/dishes','fryer'],['dom/thermomix/recipes','tm6'],['dom/timers','tools'],['shop/list','shop'],['dom/recipes','cookbook']]){
+  await go(route);const bg=await p.locator('main:not([hidden]) .screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage);assert.match(bg,new RegExp(image+'[^)]*\\.webp'),`Editorial photo ${image}`);
+  const src=bg.match(/url\(["']?([^"')]+)/)?.[1];assert(src&&await p.request.get(src).then(r=>r.ok()),`Editorial photo response ${image}`);
+ }
  assert.equal(await p.locator('.hc-book-card').count(),20);
  await p.getByRole('button',{name:'Pokaż kolejne 20'}).click();assert.equal(await p.locator('.hc-book-card').count(),40);
+ await p.getByRole('button',{name:/Filtry i sortowanie/}).click();
  await p.getByLabel('Kuchnia',{exact:true}).selectOption('Azjatycka');assert((await p.locator('.hc-book-card').count())>=20);
  await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');assert((await p.locator('.hc-book-card').count())>=2);
  await p.getByLabel('Sortowanie').selectOption('kcal');
@@ -83,7 +89,7 @@ let browser,pageForFailure;
  // All themes, both modes, iPhone 320/390 and desktop, list and detail. Sample screenshots for every combination.
  for(const width of [320,390,1280]){
   await p.setViewportSize({width,height:width===320?740:900});
-  for(const theme of ['pastel','palarnia','bar','soft','line'])for(const mode of ['light','dark']){
+  for(const theme of ['editorial','pastel','palarnia','bar','soft','line'])for(const mode of ['light','dark']){
    await p.evaluate(({theme,mode})=>{localStorage.setItem('homecraft.pastelDefault.v1','1');localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme,mode,density:'standard',language:'pl'}));},{theme,mode});
    for(const view of ['dom/recipes','dom/recipes/book-021']){
     await go(view);await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.documentElement.dataset.theme),theme);assert.equal(await p.evaluate(()=>document.documentElement.dataset.mode),mode);await layout(`${width}-${theme}-${mode}-${view}`);
@@ -104,5 +110,5 @@ let browser,pageForFailure;
  await off.waitForFunction(async()=>{const urls=performance.getEntriesByType('resource').map(e=>e.name).filter(u=>/\.(js|css)$/.test(u));return urls.length>0&&(await Promise.all(urls.map(u=>caches.match(u,{ignoreVary:true})))).every(Boolean);});
  await offline.setOffline(true);await off.reload();await off.locator('.hc-book-card').first().waitFor();assert.equal(await off.locator('.hc-book-card').count(),20);
  await off.screenshot({path:`${shots}/offline-${base==='/'?'root':'pages'}.png`});assert.deepEqual(offlineErrors,[]);await offline.close();
- console.log('PASS: cookbook flow, filters, favourites/reload, kcal, shopping, complete cooking with controlled clock, confirmation, corrupted storage, EN, 5 themes × 2 modes × 3 widths, screenshots. Base '+base);
+ console.log('PASS: cookbook flow, filters, favourites/reload, kcal, shopping, complete cooking with controlled clock, confirmation, corrupted storage, EN, 6 themes × 2 modes × 3 widths, screenshots. Base '+base);
 })().catch(async e=>{console.error(e);if(pageForFailure&&!pageForFailure.isClosed()){await pageForFailure.screenshot({path:shots+'/failure.png'});fs.writeFileSync(shots+'/failure.html',await pageForFailure.content());console.error((await pageForFailure.locator('body').innerText()).slice(-4500));}process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});

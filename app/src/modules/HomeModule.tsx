@@ -161,7 +161,7 @@ export function HomeModule({ active, tab, thermomixView, onThermomixView, onTab,
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'thermomix' && <Thermomix onTimer={() => onThermomixView('timers')} view={thermomixView} onView={onThermomixView} />}
       {tab === 'measures' && <Measures />}
-      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('200 przepisów, diety, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
+      {tab === 'timers' && active && <section className="screen" aria-label={t('Timery')}><button className="hc-book-entry" onClick={() => onTab('recipes')}><span>📖</span><span><b>{t('Książka kucharska')}</b><small>{t('600 przepisów, diety, ulubione i kcal na porcję')}</small></span><span>→</span></button>{onPlan && <PlanCta onOpen={onPlan} />}<TimersScreen /></section>}
     </main>
   </>;
 }

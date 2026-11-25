@@ -429,6 +429,7 @@ const en: Record<string, string> = {
   'Bezglutenowa': 'Gluten-free',
   'Bez urządzenia': 'No appliance',
   '200 przepisów, diety, ulubione i kcal na porcję': '200 recipes, diets, favourites and kcal per serving',
+  '600 przepisów, diety, ulubione i kcal na porcję': '600 recipes, diets, favourites and kcal per serving',
   'Główne działy': 'Main sections',
   'Nawigacja główna': 'Main navigation',
   'Menu Kawy': 'Coffee menu',

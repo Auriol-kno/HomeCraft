@@ -19,7 +19,7 @@ let browser;
 
  // 1. Day / night / system: every theme gets a dark palette, system follows the phone.
  {const p=await open({colorScheme:'light'});
-  for(const theme of ['pastel','palarnia','bar','soft','line']){
+  for(const theme of ['editorial','pastel','palarnia','bar','soft','line']){
    await p.click('#settingsBtn');await p.selectOption('#appTheme',theme);await p.selectOption('#appMode','dark');await p.locator('#settingsDialog button[type=submit]').click();
    assert.equal(await p.evaluate(()=>document.documentElement.dataset.mode),'dark');
    assert(luminance(await bg(p))<.05,`${theme} night background is dark`);
@@ -110,13 +110,13 @@ let browser;
   const back=await p.evaluate(()=>[JSON.parse(localStorage.getItem('cremalab.coffees.v1')||'null'),Object.keys(JSON.parse(localStorage.getItem('cremalab.photos.v1')||'{}')).length]);
   assert.equal(back[0]?.list[0]?.name,'Hayb Brazylia');assert.equal(back[1],1);
   await p.context().close();}
- // Pastel is the main look: fresh installs get it, a saved Palarnia (old default) moves once, other choices stay.
+ // Editorial is the main look: fresh installs and the previous default migrate once, other choices stay.
  {const pref=t=>`localStorage.getItem('homecraft.pastelDefault.v1')||localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'${t}',mode:'light',density:'standard',language:'pl'}));`;
   const theme=p=>p.evaluate(()=>document.documentElement.dataset.theme);
-  let p=await open();assert.equal(await theme(p),'pastel','fresh install');await p.context().close();
-  p=await open({},pref('palarnia'));assert.equal(await theme(p),'pastel','old default moves to Pastel');
+  let p=await open();assert.equal(await theme(p),'editorial','fresh install');await p.context().close();
+  p=await open({},pref('palarnia'));assert.equal(await theme(p),'editorial','old default moves to Editorial');
   await p.evaluate(()=>{localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'palarnia',mode:'light',density:'standard',language:'pl'}));});await p.reload();await p.locator('#tabs button').first().waitFor({state:'attached'});
   assert.equal(await theme(p),'palarnia','choosing Palarnia again is kept');await p.context().close();
   p=await open({},pref('line'));assert.equal(await theme(p),'line','another chosen theme stays');await p.context().close();}
- assert.deepEqual(errors,[]);console.log('PASS: night/day/system mode for 5 themes, Pastel default and one-time move from Palarnia, docked controls during preview, rating prompt, history delete, missed alert after lock, manifest + offline start, guide button above the fold, coffee database with photo.');
+ assert.deepEqual(errors,[]);console.log('PASS: night/day/system mode for legacy themes, Editorial default and one-time migration, docked controls during preview, rating prompt, history delete, missed alert after lock, manifest + offline start, guide button above the fold, coffee database with photo.');
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill('SIGTERM');});

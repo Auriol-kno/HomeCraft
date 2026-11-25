@@ -14,7 +14,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  const go=async hash=>{await p.goto(url+'#'+hash);await p.reload();await p.locator('.primary-nav').waitFor();};
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));
  const nav=p.getByRole('navigation',{name:'Nawigacja główna'});
- assert.deepEqual(await nav.getByRole('button').allInnerTexts(),['Książka','Kawa','Fryer','TM6','Użyteczne']);
+ assert.deepEqual(await nav.getByRole('button').allInnerTexts(),['Książka','Napoje','Fryer','TM6','Użyteczne','Zakupy']);
  await nav.getByRole('button',{name:'Air Fryer',exact:true}).click();
  const fryerMenu=p.getByRole('navigation',{name:'Menu Air Fryer'});
  assert(await nav.isVisible(),'Global bottom navigation is persistent in Air Fryer');
@@ -52,7 +52,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  assert.deepEqual(await p.evaluate(()=>({k:localStorage.getItem('homecraft.kitchen.v1'),t:localStorage.getItem('homecraft.timers.v1')})),before,'preview does not replace cooking session');
  await p.reload();assert.deepEqual(await p.evaluate(()=>({k:localStorage.getItem('homecraft.kitchen.v1'),t:localStorage.getItem('homecraft.timers.v1')})),before,'reload preserves active session');
  // Review each width/theme/mode: all lower menu destinations and each kind of timeline.
- for(const width of [320,390,1280])for(const theme of ['pastel','palarnia','bar','soft','line'])for(const mode of ['light','dark']){
+ for(const width of [320,390,1280])for(const theme of ['editorial','pastel','palarnia','bar','soft','line'])for(const mode of ['light','dark']){
   await p.setViewportSize({width,height:900});
   await p.evaluate(({theme,mode})=>{localStorage.setItem('homecraft.pastelDefault.v1','1');localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme,mode,language:'pl',density:'standard'}));},{theme,mode});
   for(const view of ['dom/timers','dom/recipes/book-021','fryer/dishes']){
@@ -72,5 +72,5 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  await openModule(p,'Air Fryer');assert.equal(await p.locator('.hc-dish').count(),37);
  await p.reload();assert.equal(await p.locator('.hc-dish').count(),37,'legacy fryer route reload');
  await p.evaluate(()=>{localStorage.setItem('homecraft.timers.v1',JSON.stringify([{id:'legacy-missing-arrays',total:3600,endAt:Date.now()+3600000}]));localStorage.setItem('homecraft.cookbook.favourites.v1','{broken');});await go('dom/timers');await p.locator('.hc-timer').first().waitFor();await go('dom/recipes');assert.equal(await p.locator('.hc-book-card').count(),20);
- assert.deepEqual(errors,[]);console.log('PASS: persistent global navigation, 350-recipe timeline, Air Fryer preview/milestones, read-only session, 320/390/desktop × 5 themes × day/night, EN, reload. Base '+base);
+ assert.deepEqual(errors,[]);console.log('PASS: persistent global navigation, 600-recipe timeline, Air Fryer preview/milestones, read-only session, 320/390/desktop × 6 themes × day/night, EN, reload. Base '+base);
 })().catch(async e=>{console.error(e);if(p&&!p.isClosed()){await p.screenshot({path:shots+'/failure.png'});fs.writeFileSync(shots+'/failure.html',await p.content());}process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
