@@ -17,17 +17,17 @@ export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
 export const usefulTabs = homeTabs.filter(x=>x.id!=='thermomix');
 const kitchenCards = [
   {id:'recipes',title:'Książka kucharska',note:'600 przepisów, diety, ulubione i kcal',icon:ICONS.dishes},
-  {id:'fridge',title:'Moja lodówka',note:'Produkty, które masz już w domu',icon:ICONS.egg},
-  {id:'smart',title:'Inteligentne przepisy',note:'Dania dopasowane do składników i urządzeń',icon:ICONS.pot},
-  {id:'shopping',title:'Automatyczna lista zakupów',note:'Uzupełnianie brakujących produktów',icon:ICONS.scale},
-  {id:'plan',title:'Plan posiłków',note:'Planowanie gotowania krok po kroku',icon:ICONS.timer},
+  {id:'fridge',title:'Moja lodówka',note:'Funkcja w przygotowaniu',icon:ICONS.egg},
+  {id:'smart',title:'Szukaj według składników',note:'Wyszukiwanie przepisów i filtrowanie urządzeń',icon:ICONS.pot},
+  {id:'shopping',title:'Lista zakupów',note:'Produkty pogrupowane według działów sklepu',icon:ICONS.scale},
+  {id:'plan',title:'Zaplanuj gotowanie',note:'Planowanie jednego dania krok po kroku',icon:ICONS.timer},
   {id:'expenses',title:'Kontrola wydatków',note:'Koszt posiłków — funkcja w przygotowaniu',icon:ICONS.modes},
 ] as const;
 function KitchenLanding({onTab,onPlan,onShop}:{onTab:(tab:HomeTab)=>void;onPlan?:()=>void;onShop?:()=>void}){
- const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes'||id==='smart')onTab('recipes');else if(id==='fridge'||id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
+ const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes'||id==='smart')onTab('recipes');else if(id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
  return <section className="screen hc-kitchen-home" aria-label={t('Kuchnia','module')}>
   <div className="hc-kitchen-intro"><p className="hc-tag">HOMECRAFT</p><h2>{t('Co dziś ugotujemy?')}</h2><p>{t('Od produktów, które masz, do gotowego posiłku.')}</p></div>
-  <div className="hc-kitchen-menu">{kitchenCards.map(card=><button key={card.id} type="button" onClick={()=>open(card.id)} disabled={card.id==='expenses'}><span className="hc-kitchen-menu-icon"><Icon d={card.icon}/></span><span><b>{t(card.title)}</b><small>{t(card.note)}</small></span><span aria-hidden="true">→</span></button>)}</div>
+  <div className="hc-kitchen-menu">{kitchenCards.map(card=><button key={card.id} type="button" onClick={()=>open(card.id)} disabled={card.id==='fridge'||card.id==='expenses'}><span className="hc-kitchen-menu-icon"><Icon d={card.icon}/></span><span><b>{t(card.title)}</b><small>{t(card.note)}</small></span><span aria-hidden="true">→</span></button>)}</div>
  </section>;
 }
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
