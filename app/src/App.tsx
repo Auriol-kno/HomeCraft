@@ -101,7 +101,7 @@ export function App() {
  const viewingTimers=(module==='fryer'&&fryerTab==='timers')||(module==='dom'&&(homeTab==='timers'||(homeTab==='thermomix'&&thermomixView==='timers')));
  const openBackup=()=>{navigate('history');requestAnimationFrame(()=>{const d=document.getElementById('backupCard') as HTMLDetailsElement|null;if(d){d.open=true;d.scrollIntoView({block:'center'});}});};
  const dismissHint=()=>{try{localStorage.setItem(hintKey,'1');}catch{}setInstallHint(false);};
- return <div className="app-shell" data-screen={module==='coffee'?screen:module} data-dock={dock&&module==='coffee'?'on':undefined}>
+ return <div className="app-shell" data-screen={module==='coffee'?screen:module} data-editorial-section={module==='dom'?homeTab:module==='coffee'?screen:module} data-editorial-view={module==='dom'&&homeTab==='thermomix'?thermomixView:module==='fryer'?fryerTab:module==='shop'?shopTab:module==='plan'?planTab:''} data-dock={dock&&module==='coffee'?'on':undefined}>
   <header className="app-header">
    <button className="brand-button" onClick={()=>go('dom','recipes')} aria-label={t('HomeCraft — książka kucharska')}><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M5 20 20 6l15 14h-3v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V20Z" fill="currentColor"/><path d="M27 11V7h4v8Z" fill="currentColor" opacity=".7"/><circle cx="20" cy="24" r="7" fill="var(--accent)"/><path d="M20 20v4.5l3 1.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg></span><span>Home<b>Craft</b></span></button>
    <span id="chip" hidden/>
