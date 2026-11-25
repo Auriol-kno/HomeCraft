@@ -1,6 +1,6 @@
 // HomeCraft offline cache. The page is network-first (updates arrive when online);
 // hashed assets and icons are cache-first. Bump VERSION to drop old caches.
-const VERSION = 'homecraft-device-navigation-v4';
+const VERSION = 'homecraft-editorial-v1';
 // Servers may send `Vary: Origin`; module scripts and the page differ in that header, so ignore Vary.
 const MATCH = { ignoreVary: true };
 const CORE = ['./', './manifest.webmanifest', './icon.png', './icon-192.png', './icon-512.png'];
@@ -19,7 +19,7 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) return;
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).then(res => { const copy = res.clone(); if (res.ok) caches.open(VERSION).then(c => c.put('./', copy)); return res; })
+    e.respondWith(fetch(req,{cache:'no-store'}).then(res => { const copy = res.clone(); if (res.ok) caches.open(VERSION).then(c => c.put('./', copy)); return res; })
       .catch(() => caches.match('./', { ...MATCH, ignoreSearch: true }).then(r => r || caches.match(req, MATCH))));
     return;
   }
