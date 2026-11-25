@@ -24,7 +24,7 @@ export function ShoppingModule({ active, tab, onTab }: { active: boolean; tab: S
   const [text, setText] = useState(''), [note, setNote] = useState('');
   const main = useRef<HTMLElement>(null);
   useEffect(() => { try { localStorage.setItem(KEY, JSON.stringify(items)); } catch { /* storage blocked */ } }, [items]);
-  useEffect(() => { main.current?.scrollTo(0, 0); }, [tab]);
+  useEffect(() => { if(active){main.current?.scrollTo(0, 0);requestAnimationFrame(()=>main.current?.querySelector('h1')?.focus({preventScroll:true}));} }, [tab,active]);
   // Products sent from other modules (e.g. missing Kitchen OS ingredients); skips ones already on the list.
   useEffect(() => {
     const on = (e: Event) => {

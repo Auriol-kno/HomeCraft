@@ -12,6 +12,7 @@ import history from './screens/history.html?raw';
 import overlays from './screens/overlays.html?raw';
 import { Backup, lastBackup } from './Backup';
 import { readPreferences, savePreferences, type Preferences } from './preferences';
+import { activateCustomTheme, createCustomTheme, deleteCustomTheme, readCustomThemes } from './custom-theme';
 import { startLocalization, t } from './i18n';
 import './modules/modules.css';
 import { t as tm } from './modules/en';
@@ -72,10 +73,16 @@ export function App() {
   const stopLocalization=startLocalization();
   const sync=()=>{const p=readPreferences();(document.getElementById('appTheme') as HTMLSelectElement).value=p.theme;(document.getElementById('appMode') as HTMLSelectElement).value=p.mode;(document.getElementById('appDensity') as HTMLSelectElement).value=p.density;(document.getElementById('appLanguage') as HTMLSelectElement).value=p.language;setLanguage(p.language);};
   const settings=document.getElementById('settingsDialog')!;
+  const customList=document.getElementById('customThemeList') as HTMLSelectElement,customName=document.getElementById('customThemeName') as HTMLInputElement,customButton=document.getElementById('customButtonColor') as HTMLInputElement,customAccent=document.getElementById('customAccentColor') as HTMLInputElement,customStatus=document.getElementById('customThemeStatus')!;
+  const refreshCustom=()=>{const store=readCustomThemes(),value=customList.value||store.active||'';customList.replaceChildren(new Option(t('Kolory motywu bazowego'),''),...store.themes.map(x=>new Option(x.name,x.id)));customList.value=store.themes.some(x=>x.id===value)?value:'';};
+  const saveCustom=()=>{try{const saved=createCustomTheme(customName.value,customButton.value,customAccent.value);customStatus.textContent=saved?t('Motyw zapisany i zastosowany.'):t('Podaj nazwę i poprawne kolory.');if(saved){customName.value='';refreshCustom();customList.value=saved.id;}}catch{customStatus.textContent=t('Nie udało się zapisać motywu.');}};
+  const applyCustom=()=>{try{activateCustomTheme(customList.value||null);customStatus.textContent=customList.value?t('Motyw zastosowany.'):t('Przywrócono kolory motywu bazowego.');}catch{customStatus.textContent=t('Nie udało się zastosować motywu.');}};
+  const removeCustom=()=>{if(!customList.value){customStatus.textContent=t('Wybierz motyw użytkownika do usunięcia.');return;}try{deleteCustomTheme(customList.value);refreshCustom();customStatus.textContent=t('Motyw usunięty.');}catch{customStatus.textContent=t('Nie udało się usunąć motywu.');}};
   const preferenceChange=(event:Event)=>{const el=event.target as HTMLSelectElement;const fields:Record<string,keyof Preferences>={appTheme:'theme',appMode:'mode',appDensity:'density',appLanguage:'language'};const field=fields[el.id];if(field)savePreferences({...readPreferences(),[field]:el.value});};
-  sync();settings.addEventListener('change',preferenceChange);window.addEventListener('crema:preferences',sync);
+  const saveButton=document.getElementById('customThemeSave')!,applyButton=document.getElementById('customThemeApply')!,deleteButton=document.getElementById('customThemeDelete')!;
+  sync();refreshCustom();settings.addEventListener('change',preferenceChange);saveButton.addEventListener('click',saveCustom);applyButton.addEventListener('click',applyCustom);deleteButton.addEventListener('click',removeCustom);window.addEventListener('crema:preferences',sync);window.addEventListener('homecraft:custom-theme',refreshCustom);
   const change=()=>{const h=parseHash();setModule(h.module);if(h.module==='fryer')setFryerTab(h.fryer);else if(h.module==='dom'){setHomeTab(h.dom);setThermomixView(h.thermomix);}else if(h.module==='shop')setShopTab(h.shop);else if(h.module==='plan')setPlanTab(h.plan);else setScreen(initialScreen());};window.addEventListener('hashchange',change);
-  return ()=>{window.removeEventListener('hashchange',change);settings.removeEventListener('change',preferenceChange);window.removeEventListener('crema:preferences',sync);stopLocalization();};
+  return ()=>{window.removeEventListener('hashchange',change);settings.removeEventListener('change',preferenceChange);saveButton.removeEventListener('click',saveCustom);applyButton.removeEventListener('click',applyCustom);deleteButton.removeEventListener('click',removeCustom);window.removeEventListener('crema:preferences',sync);window.removeEventListener('homecraft:custom-theme',refreshCustom);stopLocalization();};
  },[navigate]);
  useEffect(()=>{
   // Keep Start/Stop and Reset reachable while the extraction preview pushes them off screen.

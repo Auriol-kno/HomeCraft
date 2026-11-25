@@ -28,6 +28,21 @@
       <label for="appLanguage">Język aplikacji</label>
       <select id="appLanguage"><option value="pl">Polski</option><option value="en">English</option></select>
     </fieldset>
+    <fieldset class="custom-theme-settings">
+      <legend>Własne kolory</legend>
+      <p class="subtle">Dopasuj osobno kolor głównych przycisków i akcentów. Kolory zapisują się tylko na tym urządzeniu.</p>
+      <label for="customThemeName">Nazwa motywu</label>
+      <input id="customThemeName" maxlength="30" placeholder="Np. Mój karmel" autocomplete="off">
+      <div class="custom-theme-colors">
+        <label for="customButtonColor">Przyciski <input id="customButtonColor" type="color" value="#a84f2a"></label>
+        <label for="customAccentColor">Akcenty <input id="customAccentColor" type="color" value="#a84f2a"></label>
+      </div>
+      <button type="button" id="customThemeSave">Zapisz nowy motyw</button>
+      <label for="customThemeList">Zapisane motywy</label>
+      <select id="customThemeList"><option value="">Kolory motywu bazowego</option></select>
+      <div class="custom-theme-actions"><button type="button" id="customThemeApply">Zastosuj</button><button type="button" id="customThemeDelete">Usuń wybrany</button></div>
+      <p id="customThemeStatus" class="subtle" role="status" aria-live="polite"></p>
+    </fieldset>
     <fieldset class="alert-settings">
       <legend>Alerty parzenia</legend>
       <p class="subtle">Wybierz, jak aplikacja ma sygnalizować kolejne etapy i koniec parzenia.</p>

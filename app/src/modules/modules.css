@@ -519,4 +519,11 @@ html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient
 :root .app-shell .primary-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;padding-inline:5px}
 :root .app-shell .primary-nav button{font-size:clamp(9px,2.65vw,11px);min-width:0;padding-inline:1px}
 :root .app-shell .app-header{justify-content:space-between}
+:root .app-shell .brand-button{min-width:44px;min-height:44px}
 :root .app-shell .context-nav button{white-space:normal}
+
+/* User palettes are a small, validated overlay on the selected base theme. */
+.custom-theme-settings{display:grid;gap:9px}.custom-theme-settings>label{display:grid;gap:5px}.custom-theme-colors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.custom-theme-colors label{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px}.custom-theme-colors input[type="color"]{width:54px;height:44px;padding:3px;border-radius:9px;cursor:pointer}.custom-theme-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.custom-theme-settings :is(button,input,select){min-height:44px}.custom-theme-settings #customThemeDelete{color:var(--bad)}
+html:root[data-custom-theme] .app-shell :is(.hc-primary,.btn.main,.guide-cta,.hc-info-main,.hc-timer-ctrl button.hot){background:var(--user-button)!important;color:var(--user-button-text)!important;border-color:var(--user-button)!important}
+html:root[data-custom-theme] .app-shell :is(.primary-nav,.context-nav) button[aria-current="page"]{background:color-mix(in srgb,var(--user-button) 22%,var(--surface))!important;color:var(--accent)!important;border-color:color-mix(in srgb,var(--user-button) 55%,var(--line))!important}
+@media(max-width:350px){.custom-theme-colors{grid-template-columns:1fr}}
