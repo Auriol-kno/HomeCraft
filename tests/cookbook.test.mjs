@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { RECIPES, schedule, totalMinutes, handsMinutes, PANKO_DINNER } from '../app/src/modules/kitchen-data.ts';
 import { bookInfo, recipeKcal, filterRecipes, EMPTY_FILTERS, parseFavourites, normalizeBook } from '../app/src/modules/cookbook-data.ts';
-assert.equal(RECIPES.length,350);
-assert.equal(new Set(RECIPES.map(r=>r.id)).size,350);
-assert.equal(new Set(RECIPES.map(r=>r.name)).size,350);
+assert.equal(RECIPES.length,600);
+assert.equal(new Set(RECIPES.map(r=>r.id)).size,600);
+assert.equal(new Set(RECIPES.map(r=>r.name)).size,600);
 assert(RECIPES.filter(r=>bookInfo(r).cuisine==='Polska').length>=20);
 assert(RECIPES.filter(r=>bookInfo(r).cuisine==='Azjatycka').length>=20);
 assert(RECIPES.filter(r=>bookInfo(r).category==='Napoje').length>=10);
@@ -55,7 +55,7 @@ assert.equal(filterRecipes(EMPTY_FILTERS,[],fiveHundred).length,500);
 // Multi-resource step: a cook stirring on the hob excludes both another hands task and the same hob.
 const multi={...PANKO_DINNER,tasks:[{id:'a',title:'a',detail:'',lane:'hands',resources:['stove'],min:5,after:[]},{id:'b',title:'b',detail:'',lane:'stove',min:5,after:[]},{id:'c',title:'c',detail:'',lane:'hands',min:2,after:['a','b']}]};
 const mp=schedule(multi,0);assert.equal(totalMinutes(multi),12);assert.equal(mp.length,3);
-console.log('PASS: 350 recipes, diet/device filters, kcal sums, stable ids, search/sort/favourites validation and resource-safe schedules');
+console.log('PASS: 600 recipes, diet/device filters, kcal sums, stable ids, search/sort/favourites validation and resource-safe schedules');
 
 const get=id=>RECIPES.find(r=>r.id===id);
 assert(handsMinutes(get('book-007'))>=44,'active frying belongs to hands-on work');
@@ -66,7 +66,7 @@ assert.deepEqual(get('book-045').tasks.find(t=>t.fryer?.mode==='AIR FRY').timer.
 assert(get('book-024').equipment.some(i=>/Termometr/.test(i.n)));
 
 for(const [c,n] of Object.entries({'Włoska':15,'Francuska':10,'Meksykańska':10,'Japońska':10,'Tajska':10,'Indyjska':10,'Grecka':10,'Koreańska':10,'Turecka':5,'Hiszpańska':5,'Amerykańska':5}))assert.equal(RECIPES.filter(r=>Number(r.id.slice(5))>=200&&Number(r.id.slice(5))<300&&bookInfo(r).cuisine===c).length,n,c);
-for(const [c,n] of Object.entries({'Ciasta':20,'Chleby':10,'Bułki':10,'Wypieki':10}))assert.equal(RECIPES.filter(r=>Number(r.id.slice(5))>=300&&bookInfo(r).category===c).length,n,c);
+for(const [c,n] of Object.entries({'Ciasta':20,'Chleby':10,'Bułki':10,'Wypieki':10}))assert.equal(RECIPES.filter(r=>Number(r.id.slice(5))>=300&&Number(r.id.slice(5))<350&&bookInfo(r).category===c).length,n,c);
 const feedback={'book-200':{rating:5,count:3,last:100},'book-201':{rating:2,count:1,last:200}};
 assert.equal(filterRecipes({...EMPTY_FILTERS,sort:'rating'},[],RECIPES,feedback)[0].id,'book-200');
 assert.equal(filterRecipes({...EMPTY_FILTERS,sort:'recent'},[],RECIPES,feedback)[0].id,'book-201');

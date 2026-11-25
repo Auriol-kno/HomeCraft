@@ -21,7 +21,7 @@ const seeds:Seed[]=[
  ['Twarożek proteinowy z ogórkiem',P,S,[H,L,V,F],'Bez urządzenia','Twaróg chudy',500,99,'Ogórek',300,15,6],
  ['Tofu teriyaki bez glutenu',A,O,[H,V,G,F],'Air Fryer','Tofu naturalne',500,130,'Brokuł',500,34,18],
  ['Tempeh z pak choi',A,O,[H,L,V,G,F],'Bez urządzenia','Tempeh',400,193,'Pak choi',500,13,15],
- ['Sałatka z tuńczykiem i jajkiem',M,O,[H,L,M,F],'Bez urządzenia','Tuńczyk w sosie własnym',400,116,'Sałata rzymska',300,17,10],
+ ['Sałatka z tuńczykiem i sałatą rzymską',M,O,[H,L,M,F],'Bez urządzenia','Tuńczyk w sosie własnym',400,116,'Sałata rzymska',300,17,10],
  ['Kurczak caprese',M,O,[H,L,M,F],'Air Fryer','Pierś z kurczaka',500,120,'Pomidor',400,18,17],
  ['Frittata z łososiem i koperkiem',I,S,[H,L,F],'Air Fryer','Jajka',440,143,'Łosoś wędzony',180,117,16],
  ['Chili z indykiem i fasolą',I,O,[H,F],'Thermomix','Mięso mielone z indyka',500,150,'Fasola czerwona ugotowana',500,127,28],

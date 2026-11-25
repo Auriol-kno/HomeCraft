@@ -75,7 +75,7 @@ Czasy gotowania, ilości wody i gramatury są **orientacyjne**: zależą od wiel
 
 ## Książka kucharska (demo)
 
-Książka (`#dom/recipes`) zawiera 350 receptur, w tym dania polskie, azjatyckie i śródziemnomorskie,
+Książka (`#dom/recipes`) zawiera 600 receptur, w tym dania polskie, azjatyckie i śródziemnomorskie,
 polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adres
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
