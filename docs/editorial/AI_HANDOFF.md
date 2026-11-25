@@ -1,0 +1,17 @@
+# HomeCraft — Editorial: przekazanie do AI / Work
+Status: zatwierdzono kierunek Editorial (wariant 04). Osiem zdjęć wygenerowano w rozmowie; pakiet ZIP zawiera gotowe WebP i makiety. Zdjęcia nie są jeszcze zapisane w GitHubie. Nie zamieniać ich na SVG ani nie generować zastępczych obrazów bez zgody.
+
+## Cel
+Odtworzyć zatwierdzony projekt z docs/editorial/concept-editorial.png, zachowując wszystkie funkcje i motywy. Pracować na aktualnym main, nie nadpisywać równoległych zmian Claude/Codex.
+## Pliki
+Rozpakuj HomeCraft-Editorial.zip do katalogu głównego repozytorium (zachowaj ścieżki).
+app/src/editorial/{cookbook,coffee,tea,ferment,fryer,tm6,tools,shop}.webp — osiem zdjęć 16:9, kompozycja z wolną przestrzenią po lewej. docs/editorial/concept-editorial.png — zaakceptowana makieta. docs/editorial/concept-five-variants.png — porównanie, wariant 04 jest wiążący.
+## Wdrożenie
+1. Sprawdź git status, aktualny main, istniejące editorial.css, preferences.ts, App.tsx, Cookbook.tsx i style modułów. Nie resetuj cudzych zmian.
+2. W editorial.css zamień odwołania do ośmiu SVG na lokalne WebP (Vite: względne url('./editorial/cookbook.webp') itd.). Użyj cover, object/background-position dopasowanego do każdego zdjęcia, ciemnego gradientu pod tekstem. Nie używaj zewnętrznych URL. Zachowaj rzeczywiste nagłówki HTML; nie wypalaj tekstu w grafice.
+3. Zrealizuj wygląd makiety: grafitowy fotograficzny hero, ciepłe kremowe karty, terakotowy akcent, elegancka szeryfowa typografia nagłówków (lokalny font lub Georgia), czytelny systemowy sans w kontrolkach. Płaskie powierzchnie, subtelne obramowania, bez ciężkich cieni i fal. Dostosuj wszystkie ekrany, także szczegóły przepisu, kawa/parzenie/sprzęt/historia, herbata, fermentacja, Fryer, TM6, Użyteczne, zakupy, ustawienia.
+4. Książka: wyszukiwarka na wierzchu, zwijane filtry z liczbą aktywnych i resetem, kategorie dostępne bez obcinania. Karty 2 kolumny gdy mieszczą się czytelnie. Nie przypisuj przypadkowych zdjęć do konkretnych dań: osiem obrazów to nagłówki tematyczne, nie 600 fotografii przepisów. Dodatkowe zdjęcia kart wymagają odrębnej biblioteki właściwie przypisanych obrazów. Nie twierdź że przepisy przetestowano fizycznie.
+5. Editorial domyślny, pozostałe motywy Pastel, Palarnia, Kawiarnia, Soft i Linia dostępne. Zachowaj wybór motywu, tryb kolorów, język i ustawienia. Nie kasuj localStorage, ocen, ulubionych, 600 przepisów, timerów ani dziennika fermentacji.
+6. Nawigacja: Książka, Napoje, Fryer, TM6, Użyteczne, Zakupy; podmenu kawy i Ferment. Min. 44 px dotyku; bez poziomego overflow przy 320/375/390/430 px, zachowaj safe area i kontrast WCAG AA. Zwijane filtry tylko w Editorial, bez regresji pozostałych motywów.
+7. Sprawdź package.json i uruchom rzeczywiste dostępne skrypty testowe, tsc, build Vite oraz testy nawigacji. Zweryfikuj każdy moduł na szerokościach mobilnych i desktop, dark/light, brak 404 obrazów, działanie 600 przepisów, filtrów, ulubionych, timerów, kalendarza .ics. Zaktualizuj nieaktualne oczekiwania testów 350→600 po sprawdzeniu rzeczywistej bazy. Zrób screenshoty. Nie przedstawiaj nieuruchomionych testów jako zaliczonych.
+8. Zaktualizuj wersję cache SW jeśli potrzebne; nie usuwaj danych użytkownika. Commit obejmujący obrazy, makiety, kod, testy. Scal do main bez force push, po sprawdzeniu konfliktów i testów. Nie wdrażaj ręcznie Vercel: automatyczny deploy z GitHub. Zweryfikuj status i publiczny https://home-craft-omega.vercel.app/; podaj SHA i rzeczywisty URL. Jeśli testy nie przechodzą, napraw przed scaleniem lub zgłoś blokadę.
