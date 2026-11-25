@@ -139,14 +139,14 @@ zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia sy
 
 ## Kuchnia i rozkład czasu (demo)
 
-Górne menu: Kawa / Kuchnia / Zakupy. Dawny dział Dom nosi nazwę **Kuchnia**;
-Air Fryer otwiera się z dolnego paska Kuchni, bezpośrednio obok Timerów (krótki
-podpis „Fryer”, pełna etykieta „Air Fryer”). Dolny pasek Air Fryera ma przycisk
-powrotu do Kuchni. Zachowane są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
+Stałe dolne menu: Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy. Dawny dział
+Dom nosi nazwę **Kuchnia** i ma własny ekran startowy. Air Fryer oraz TM6 otwierają
+się bezpośrednio z dolnego paska; ich menu kontekstowe pojawia się nad nim. Zachowane
+są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
 klucze localStorage; zmiana nazwy nie wymaga migracji. W EN sekcja to „Kitchen”,
 a filtr kuchni pochodzenia przepisów pozostaje „Cuisine”.
 
-Każda ze 100 kart książki ma widoczny rozkład czasu z tego samego harmonogramu co
+Każda z 600 kart książki ma widoczny rozkład czasu z tego samego harmonogramu co
 Plan: pasy osoby i używanego sprzętu, czas całkowity oraz rozwijane „Etapy i czasy”.
 Oś w karcie liczy minuty od rozpoczęcia; w Planie pokazuje rzeczywiste godziny.
 Pasy uwzględniają także współdzielone zasoby (np. osoba mieszająca na kuchence).
@@ -168,4 +168,4 @@ fokus po zamknięciu i zatrzymuje Tab wewnątrz modala. Żeberka pokazują równ
 istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładność sekund.
 
 ### Rozbudowana książka kucharska
-100 wariantów kuchni świata, 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Książka, Kawa, Fryer, TM6, Użyteczne, Zakupy.
+600 przepisów obejmuje kuchnie świata, polskie klasyki, popularne diety oraz 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Kuchnia, Napoje, Fryer, TM6, Użyteczne, Zakupy.
