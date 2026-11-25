@@ -25,7 +25,7 @@ let browser;
  const noOverflow=async label=>assert(!(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1||[...document.querySelectorAll('main:not([hidden])')].some(m=>m.scrollWidth>m.clientWidth+1))),'horizontal overflow: '+label);
  const nav=()=>p.getByRole('navigation',{name:'Nawigacja Kitchen OS'});
  const current=async()=>(await p.locator('.hc-k-now .hc-k-title').allInnerTexts());
- await p.goto(url);await p.waitForSelector('.module-bar');
+ await p.goto(url);await p.waitForSelector('.primary-nav');
  await p.clock.pauseAt(new Date('2026-11-24T16:00:30+01:00'));
 
  // 1. Entry from Air Fryer; the global menu remains available.
