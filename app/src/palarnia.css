@@ -69,7 +69,7 @@
 .theme-option{min-height:64px}
 @media(max-width:360px){.recipe .tabs button{min-height:80px;font-size:13px}.screen[aria-label="Parzenie"] .b-time b{font-size:76px;letter-spacing:-4px}.screen[aria-label="Parzenie"] .b-time small{font-size:20px}.screen[aria-label="Parzenie"] .b-ph{font-size:17px}.screen[aria-label="Parzenie"] .b-target{font-size:12px}:root .screen-heading h1{font-size:24px}}
 
-.app-shell[data-screen="home"] .screen-heading{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:root:not([data-theme="editorial"]) .app-shell[data-screen="home"] .screen-heading{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* One control language across screens and every guide step. */
 :root .app-shell button,
 :root .app-shell input:not([type="range"]),
