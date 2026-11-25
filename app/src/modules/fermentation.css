@@ -24,7 +24,7 @@ html:root .app-shell .hc-ferment .hc-primary,html:root .app-shell .hc-ferment bu
 html:root .app-shell .hc-ferment .hc-ferment-categories button{padding:5px 2px;font-size:clamp(10px,2.8vw,13px);min-width:0;white-space:nowrap;border-radius:12px}
 .hc-ferment-products{display:grid;gap:6px;min-width:0}
 html:root .app-shell .hc-ferment .hc-ferment-product{display:grid;grid-template-columns:44px minmax(0,1fr) 20px;align-items:center;gap:10px;text-align:left;width:100%;min-width:0;padding:9px;min-height:76px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px}
-html:root .app-shell .hc-ferment .hc-ferment-product[aria-pressed=true]{background:var(--surface-2);color:var(--ink);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+html:root .app-shell .hc-ferment button.hc-ferment-product[aria-pressed=true]{background:var(--surface-2);color:var(--ink);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .hc-ferment-product-icon{width:44px;height:44px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--accent)}
 .hc-ferment-product-icon svg{width:27px;height:27px}
 .hc-ferment-product-copy{display:grid;gap:2px;min-width:0}
@@ -34,3 +34,12 @@ html:root .app-shell .hc-ferment .hc-ferment-product[aria-pressed=true]{backgrou
 .hc-ferment-product-arrow{font-size:19px;text-align:center;color:var(--accent)}
 .hc-ferment-selection{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 @media(max-width:350px){html:root .app-shell .hc-ferment .hc-ferment-product{grid-template-columns:36px minmax(0,1fr) 16px;gap:6px;padding:7px}.hc-ferment-product-icon{width:36px;height:36px}}
+
+/* Product cards are not accent-filled toggle buttons: keep text and surface paired. */
+html:root .app-shell .hc-ferment button.hc-ferment-product{background:var(--surface);color:var(--ink)}
+html:root .app-shell .hc-ferment button.hc-ferment-product[aria-pressed=true]{background:var(--surface-2);color:var(--ink);border-color:var(--accent)}
+html:root .app-shell .hc-ferment .hc-ferment-product-copy b{color:var(--ink)}
+html:root .app-shell .hc-ferment .hc-ferment-product-copy small{color:var(--soft);opacity:1}
+html:root .app-shell .hc-ferment .hc-ferment-duration{color:var(--ink);opacity:1}
+html:root .app-shell .hc-ferment :is(.hc-card,.hc-field,.hc-ferment-ingredients,.hc-ferment-log,summary){color:var(--ink)}
+html:root .app-shell .hc-ferment :is(.hc-ferment-hint,.hc-ferment-selection){color:var(--soft)}
