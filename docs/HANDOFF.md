@@ -27,6 +27,19 @@ HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19
 - Kitchen OS: Plan → Przygotuj → Gotuj, harmonogram wstecz od godziny podania, checklisty, wspólne zasoby i timery.
 - Fermentacja: kombucha, zakwasy i kiszonki, kalendarz oraz dziennik.
 
+## Zasada zoptymalizowanego wykorzystania zasobów AI
+
+Obowiązuje wszystkich agentów i asystentów pracujących nad projektem (ChatGPT, Codex, Claude i inne AI). Celem jest zachowanie wysokiej jakości wersji końcowej bez zużywania pełnego zestawu zasobów po każdej drobnej czynności.
+
+1. **Domyślnie pracuj adaptacyjnie.** Proste odczyty, małe korekty tekstu, pojedyncze style i bezpieczne zmiany dokumentacji wykonuj w trybie oszczędnym, bez uruchamiania kompletu agentów i całego zestawu testów po każdej zmianie.
+2. **Najpierw zbieraj materiał, potem zmieniaj kod.** Łącz powiązane drobne poprawki w jeden logiczny pakiet, aby nie powtarzać tych samych analiz, instalacji, buildów i testów.
+3. **W trakcie pracy uruchamiaj testy celowane.** Po logicznym pakiecie zmian sprawdź bezpośrednio dotknięty moduł, typy lub odpowiedni scenariusz. Pełny `npm run build`, `npm test`, testy obu baz URL i przeglądy agentów wykonuj przed PR, przed scaleniem albo wcześniej, gdy zmiana jest ryzykowna.
+4. **Od razu używaj wysokiej dokładności dla zmian wysokiego ryzyka:** danych użytkownika i `localStorage`, migracji, routingu i nawigacji globalnej, service workera, wdrożeń, timerów, harmonogramów, dostępności, bezpieczeństwa żywności oraz czasów i temperatur przepisów.
+5. **Osobnych agentów uruchamiaj celowo.** Korzystaj z nich, gdy wymaga tego zadanie lub kontrola końcowa i gdy mogą niezależnie ocenić kod, QA, dostępność, dane/wdrożenie albo bezpieczeństwo żywności. Nie powielaj nimi prostego odczytu ani tej samej drobnej kontroli.
+6. **Pełna bramka jakości pozostaje obowiązkowa.** Optymalizacja nie zwalnia z końcowych testów, przeglądu w przeglądarce i wymaganych recenzji przed wydaniem. Uwagi krytyczne i ważne trzeba poprawić, a kontrole powtórzyć.
+7. **Raportuj uczciwie zakres weryfikacji.** Zawsze rozdziel to, co faktycznie uruchomiono, od tego, czego jeszcze nie sprawdzono. Brak zasobów lub niedostępne środowisko nie może być przedstawiane jako zaliczony test.
+8. **Wyraźne polecenie właściciela ma pierwszeństwo.** Jeśli właściciel prosi o pełną weryfikację, dodatkowych agentów albo maksymalną dokładność na wcześniejszym etapie, wykonaj ją wtedy.
+
 ## Wygląd
 
 **Editorial jest motywem domyślnym.** Ma wersję jasną i ciemną oraz osiem lokalnych fotografii WebP:

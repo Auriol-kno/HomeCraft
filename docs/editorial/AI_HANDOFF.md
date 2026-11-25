@@ -3,6 +3,10 @@ Status 26.11.2026: wariant 04 został wdrożony i jest domyślnym motywem. Osiem
 
 ## Cel
 Utrzymywać zatwierdzony projekt z `docs/editorial/concept-editorial.png`, zachowując wszystkie funkcje i motywy. Pracować zgodnie z `docs/AGENT_PROMPT.md` i nie nadpisywać równoległych zmian.
+
+## Tryb pracy AI — dokładność adaptacyjna
+Stosuj wspólną zasadę z `docs/HANDOFF.md`: w trakcie implementacji grupuj powiązane poprawki i używaj testów celowanych, zamiast uruchamiać pełny build, komplet testów przeglądarkowych i wszystkich recenzentów po każdej małej zmianie. Pełną bramkę jakości wykonaj obowiązkowo przed PR lub scaleniem. Dla danych użytkownika, `localStorage`, migracji, nawigacji, service workera, wdrożeń, dostępności, timerów oraz treści dotyczących czasu, temperatury i bezpieczeństwa żywności od razu stosuj wysoką dokładność. Osobnych agentów angażuj do niezależnych, wymaganych przeglądów, nie do powielania prostych kontroli. Zawsze podawaj, które testy rzeczywiście uruchomiono i czego nie sprawdzono.
+
 ## Pliki
 app/src/editorial/{cookbook,coffee,tea,ferment,fryer,tm6,tools,shop}.webp — osiem zdjęć 16:9, kompozycja z wolną przestrzenią po lewej. docs/editorial/concept-editorial.png — zaakceptowana makieta. docs/editorial/concept-five-variants.png — porównanie, wariant 04 jest wiążący.
 ## Zasady utrzymania
