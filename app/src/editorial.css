@@ -1,0 +1,63 @@
+/* HomeCraft Editorial — isolated theme, no remote resources. */
+:root[data-theme="editorial"]{
+ color-scheme:light;--bg:#f4f0e9;--surface:#fffdf9;--surface-2:#ede7de;--track:#e0d8cc;--line:#d9d0c3;--ink:#242522;--soft:#494842;--muted:#69665e;--dim:#777269;--accent:#994b28;--on-accent:#fff;--good:#3c7151;--bad:#a53c32;--cool:#416c77;--wash:#994b2814;--stop:#994b28;--on-stop:#fff;--tint-near:#f6e8c4;--tint-stop:#e0eddc;--tint-over:#f8dfd8;--tint-step:#eee6da;--body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--timer:var(--body);--r-card:14px;--r-ctl:10px;--ed-serif:Georgia,'Times New Roman',serif;--ed-hero:#242522;--ed-hero-text:#fff9ef;
+}
+:root[data-theme="editorial"][data-mode="dark"]{color-scheme:dark;--bg:#20211f;--surface:#2b2c29;--surface-2:#343530;--track:#41423c;--line:#505149;--ink:#f6eee2;--soft:#ddd5c8;--muted:#bcb4a7;--dim:#aaa194;--accent:#e29a71;--on-accent:#24160f;--good:#9ec49c;--bad:#f29588;--cool:#9ac7d0;--wash:#e29a711a;--stop:#e29a71;--on-stop:#24160f;--tint-near:#423923;--tint-stop:#26392e;--tint-over:#462b26;--tint-step:#35332c;}
+@media(prefers-color-scheme:dark){:root[data-theme="editorial"][data-mode="system"]{color-scheme:dark;--bg:#20211f;--surface:#2b2c29;--surface-2:#343530;--track:#41423c;--line:#505149;--ink:#f6eee2;--soft:#ddd5c8;--muted:#bcb4a7;--dim:#aaa194;--accent:#e29a71;--on-accent:#24160f;--good:#9ec49c;--bad:#f29588;--cool:#9ac7d0;--wash:#e29a711a;--stop:#e29a71;--on-stop:#24160f;--tint-near:#423923;--tint-stop:#26392e;--tint-over:#462b26;--tint-step:#35332c;}}
+.hc-editorial-filter-toggle{display:none}.hc-editorial-advanced{display:grid;gap:inherit}
+html:root[data-theme="editorial"] .app-shell{background:var(--bg);grid-template-rows:auto minmax(0,1fr) auto;min-width:0}
+html:root[data-theme="editorial"] .app-shell[data-dock="on"]{grid-template-rows:auto minmax(0,1fr) auto auto}
+html:root[data-theme="editorial"] .app-header{margin:0;padding:calc(8px + env(safe-area-inset-top)) 17px 8px;background:#242522;color:#fff9ef;border:0;min-height:56px}
+html:root[data-theme="editorial"] .brand-button{color:#fff9ef;font-size:21px;letter-spacing:-.65px}
+html:root[data-theme="editorial"] .brand-button b{color:#e5a17a}
+html:root[data-theme="editorial"] .brand-mark{border-radius:9px;background:#994b28;color:#fff}
+html:root[data-theme="editorial"] .settings-trigger{background:#333531;border:1px solid #5c5d54;color:#fff9ef;border-radius:10px;box-shadow:none}
+html:root[data-theme="editorial"] .app-content{padding:0 14px 20px;min-width:0;overflow-x:hidden}
+html:root[data-theme="editorial"] .screen-heading{position:relative;isolation:isolate;min-height:126px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;margin:0 -14px 15px;padding:16px 42% 18px 18px;background:var(--ed-hero);color:var(--ed-hero-text);border:0;overflow:hidden}
+html:root[data-theme="editorial"] .screen-heading::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#242522 0%,#242522e8 32%,#24252200 100%),var(--ed-art,none);background-position:center,right center;background-repeat:no-repeat;background-size:cover,auto 100%;pointer-events:none}
+html:root[data-theme="editorial"] .screen-heading h1{font:500 clamp(25px,6.5vw,35px)/1.08 var(--ed-serif);letter-spacing:-.6px;color:var(--ed-hero-text);margin:0;overflow-wrap:normal}
+html:root[data-theme="editorial"] .screen-heading .overline{color:#e7aa85;font-size:9px;letter-spacing:2px;margin:0 0 8px}
+html:root[data-theme="editorial"] .screen-heading::after{content:var(--ed-subtitle,'');font:400 11px/1.45 var(--body);color:#e1d9cb;margin-top:8px}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="recipes"]{--ed-art:url('./editorial/cookbook.svg');--ed-subtitle:'Przepisy · inspiracje · gotowanie'}
+html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="home"],[data-editorial-section="timer"],[data-editorial-section="equipment"],[data-editorial-section="history"],[data-editorial-section="rating"]){--ed-art:url('./editorial/coffee.svg');--ed-subtitle:'Kawa · technika · smak'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="tea"]{--ed-art:url('./editorial/tea.svg');--ed-subtitle:'Liście · temperatura · czas'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="fermentation"]{--ed-art:url('./editorial/ferment.svg');--ed-subtitle:'Kultury · nastawy · dziennik'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="fryer"]{--ed-art:url('./editorial/fryer.svg');--ed-subtitle:'Chrupiące dania i precyzyjne czasy'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="thermomix"]{--ed-art:url('./editorial/tm6.svg');--ed-subtitle:'Przepisy i techniki TM6'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="shop"]{--ed-art:url('./editorial/shop.svg');--ed-subtitle:'Lista produktów i plan zakupów'}
+html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="timers"],[data-editorial-section="eggs"],[data-editorial-section="cook"],[data-editorial-section="measures"],[data-editorial-section="plan"]){--ed-art:url('./editorial/tools.svg');--ed-subtitle:'Codzienna organizacja kuchni'}
+html:root[data-theme="editorial"][lang="en"] .screen-heading::after{content:none}
+html:root[data-theme="editorial"] .screen{gap:10px;animation:none}
+html:root[data-theme="editorial"] .app-shell :is(.hc-card,.screen .card,.details-card,.recipe,.brew,.settings){background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:none;color:var(--ink)}
+html:root[data-theme="editorial"] .app-shell :is(.hc-h3,.hc-k-title,.hc-book h2,.hc-ferment h2,.settings h2){font-family:var(--ed-serif);font-weight:500;letter-spacing:-.25px}
+html:root[data-theme="editorial"] .app-shell :is(button,select,input){box-shadow:none}
+html:root[data-theme="editorial"] .app-shell :is(.hc-input,.appearance-settings select,input[type="search"]){background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:10px;font-size:16px}
+html:root[data-theme="editorial"] .app-shell :is(.hc-primary,.btn.main,.guide-cta){background:var(--accent);color:var(--on-accent);border-color:var(--accent);border-radius:10px;box-shadow:none}
+html:root[data-theme="editorial"] .app-shell :is(.hc-ghost,.wide-link,.btn.ghost){background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:none}
+html:root[data-theme="editorial"] .app-shell :is(.hc-ghost,.hc-primary,.hc-seg button,.segment button,.hc-chips button,.hc-toggle,.hc-chip-btn){min-height:44px}
+html:root[data-theme="editorial"] .app-shell :is(.hc-ghost,.hc-seg button,.segment button,.hc-chips button)[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+html:root[data-theme="editorial"] .nav-stack{background:var(--surface);border-top:1px solid var(--line);box-shadow:none}
+html:root[data-theme="editorial"] .app-shell :is(.bottom-nav,.context-nav){background:var(--surface);box-shadow:none;gap:1px;padding-inline:4px}
+html:root[data-theme="editorial"] .app-shell :is(.bottom-nav,.context-nav) button{background:transparent;border:0;box-shadow:none;min-width:0;min-height:48px;border-radius:8px;font-size:clamp(9px,2.6vw,12px);color:var(--muted);padding:4px 1px}
+html:root[data-theme="editorial"] .app-shell :is(.bottom-nav,.context-nav) button[aria-current="page"]{color:var(--accent);background:var(--wash)}
+html:root[data-theme="editorial"] .app-shell .nav-icon{width:32px;height:25px;background:transparent}
+html:root[data-theme="editorial"] .app-shell .nav-icon svg{width:21px;height:21px}
+html:root[data-theme="editorial"] .hc-book-intro{font-size:13px;color:var(--muted)}
+html:root[data-theme="editorial"] .hc-book .hc-book-sections .hc-ghost{border-radius:8px;font-size:12px;min-height:44px;padding:5px 10px}
+html:root[data-theme="editorial"] .hc-book-filters{padding:10px;background:var(--surface)}
+html:root[data-theme="editorial"] .hc-editorial-filter-toggle{display:flex;align-items:center;justify-content:space-between}
+html:root[data-theme="editorial"] .hc-editorial-advanced:not(.is-open){display:none}
+html:root[data-theme="editorial"] .hc-editorial-advanced.is-open{display:grid;gap:8px}
+html:root[data-theme="editorial"] .hc-book-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+html:root[data-theme="editorial"] .hc-book-card{padding:10px;gap:6px;min-width:0;align-content:start}
+html:root[data-theme="editorial"] .hc-book-card h2{font-size:17px;line-height:1.18;overflow-wrap:anywhere}
+html:root[data-theme="editorial"] .hc-book-card .hc-tag{font-size:9px;letter-spacing:.04em;line-height:1.3;color:var(--accent)}
+html:root[data-theme="editorial"] .hc-book-card .hc-book-star{min-width:44px;width:44px;padding:0;border:0;background:transparent;color:var(--accent)}
+html:root[data-theme="editorial"] .hc-book-card .hc-book-facts{display:grid;gap:3px}
+html:root[data-theme="editorial"] .hc-book-card .hc-book-labels span{background:var(--surface-2);border:0;border-radius:5px}
+html:root[data-theme="editorial"] .hc-book-card>button{margin-top:auto;font-size:11px;line-height:1.2}
+html:root[data-theme="editorial"] .hc-book-detail .hc-k-title{font-size:26px}
+html:root[data-theme="editorial"] .hc-ferment-product-icon{background:var(--wash);border-radius:9px}
+html:root[data-theme="editorial"] .app-shell .settings{padding:16px}
+html:root[data-theme="editorial"] .app-shell .settings fieldset{border-color:var(--line)}
+@media(max-width:350px){html:root[data-theme="editorial"] .hc-book-grid{grid-template-columns:minmax(0,1fr)}html:root[data-theme="editorial"] .screen-heading{padding-right:34%}}
