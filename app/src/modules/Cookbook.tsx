@@ -20,6 +20,7 @@ function HealthDot({recipe}:{recipe:Recipe}){
 export function Cookbook({onPlan}:{onPlan:()=>void}){
  const favourites=useBookFavourites(), feedback=useBookFeedback(), timers=useTimers();
  const [filters,setFilters]=useState({...rememberedFilters}),[limit,setLimit]=useState(rememberedLimit),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
+ const [advanced,setAdvanced]=useState(false);
  const heading=useRef<HTMLHeadingElement>(null), lastRecipe=useRef<string|undefined>('');
  useEffect(()=>{const sync=()=>{setSelected(chosen());setConfirm(false);};window.addEventListener('hashchange',sync);return()=>window.removeEventListener('hashchange',sync);},[]);
  useEffect(()=>{if(selected?.id!==lastRecipe.current){heading.current?.focus();lastRecipe.current=selected?.id;heading.current?.closest('main')?.scrollTo(0,0);}},[selected]);
@@ -74,9 +75,11 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
  return <section className="screen hc-book" aria-label={t('Książka kucharska')}>
   <h2 ref={heading} tabIndex={-1}>{t('Wybierz przepis')}</h2>
   <p className="hc-book-intro">{RECIPES.length} {t('przepisów do codziennego gotowania. Wybierz danie, przygotuj składniki i gotuj z timerami.')}</p>
-  <div className="hc-book-sections" role="group" aria-label={t('Dział książki')}><button className="hc-ghost" aria-pressed={!filters.category} onClick={()=>change({category:''})}>{t('Wszystkie')}</button>{['Obiady','Ciasta','Chleby','Bułki','Wypieki','Sałatki','Sosy','Dipy'].map(c=><button key={c} className="hc-ghost" aria-pressed={filters.category===c} onClick={()=>change({category:filters.category===c?'':c})}>{t(c)}</button>)}</div>
+  <div className="hc-book-sections" role="group" aria-label={t('Dział książki')}><button className="hc-ghost" aria-pressed={!filters.category} onClick={()=>change({category:''})}>{t('Wszystkie')}</button>{BOOK_CATEGORIES.map(c=><button key={c} className="hc-ghost" aria-pressed={filters.category===c} onClick={()=>change({category:filters.category===c?'':c})}>{t(c)}</button>)}</div>
   <div className="hc-card hc-book-filters">
    <label className="hc-field"><span>{t('Szukaj przepisu lub składnika')}</span><input className="hc-input" type="search" aria-label={t('Szukaj przepisu lub składnika')} value={filters.query} onChange={e=>change({query:e.target.value})} placeholder={t('Np. kurczak, pierogi, tofu…')}/></label>
+   <button type="button" className="hc-ghost hc-editorial-filter-toggle" aria-expanded={advanced} aria-controls="book-advanced-filters" onClick={()=>setAdvanced(v=>!v)}><span aria-hidden="true">☷</span> {t('Filtry i sortowanie')} {advanced?'−':'+'}</button>
+   <div id="book-advanced-filters" className={'hc-editorial-advanced'+(advanced?' is-open':'')}>
    <div className="hc-book-filter-row">
     <label className="hc-field"><span>{t('Kuchnia')}</span><select className="hc-input" aria-label={t('Kuchnia')} value={filters.cuisine} onChange={e=>change({cuisine:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CUISINES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
     <label className="hc-field"><span>{t('Rodzaj posiłku')}</span><select className="hc-input" aria-label={t('Rodzaj posiłku')} value={filters.category} onChange={e=>change({category:e.target.value})}><option value="">{t('Wszystkie')}</option>{BOOK_CATEGORIES.map(c=><option key={c} value={c}>{t(c)}</option>)}</select></label>
@@ -89,6 +92,7 @@ export function Cookbook({onPlan}:{onPlan:()=>void}){
     <option value="name">{t('Nazwa A–Z')}</option><option value="time">{t('Najkrótszy czas')}</option><option value="kcal">{t('Najmniej kcal na porcję')}</option><option value="kcal-desc">{t('Najwięcej kcal na porcję')}</option><option value="rating">{t('Najwyżej ocenione')}</option><option value="health">{t('Więcej składników roślinnych')}</option><option value="difficulty">{t('Najłatwiejsze')}</option><option value="cooked">{t('Najczęściej przygotowywane')}</option><option value="recent">{t('Ostatnio przygotowywane')}</option>
    </select></label>
    <div className="hc-book-filter-row"><label className="hc-field"><span>{t('Trudność')}</span><select className="hc-input" value={filters.difficulty||''} onChange={e=>change({difficulty:e.target.value})}><option value="">{t('Wszystkie')}</option>{['Łatwy','Średni','Zaawansowany'].map((x,i)=><option key={x} value={i+1}>{t(x)}</option>)}</select></label><label className="hc-field"><span>{t('Wskaźnik składników')}</span><select className="hc-input" value={filters.health||''} onChange={e=>change({health:e.target.value})}><option value="">{t('Wszystkie')}</option><option value="green">{t('Więcej roślin')}</option><option value="moderate">{t('Umiarkowanie')}</option><option value="occasional">{t('Okazjonalnie')}</option></select></label></div>
+   </div>
    <div className="hc-book-switches"><button className="hc-ghost" aria-pressed={!!filters.ratedOnly} onClick={()=>change({ratedOnly:!filters.ratedOnly})}>{t('Ocenione')}</button><button className="hc-ghost" aria-pressed={filters.quick} onClick={()=>change({quick:!filters.quick})}>{t('Do 30 min')}</button><button className="hc-ghost" aria-pressed={filters.favouritesOnly} onClick={()=>change({favouritesOnly:!filters.favouritesOnly})}>★ {t('Ulubione')} ({favourites.length})</button></div>
   </div>
   <p role="status">{t('Wyniki')}: {list.length} / {RECIPES.length}</p>
