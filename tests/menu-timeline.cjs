@@ -66,7 +66,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
   }
  }
  await p.evaluate(()=>localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'pastel',mode:'dark',language:'en',density:'standard'})));
- await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:'Cookbook',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
+ await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:'Kitchen',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
  assert(await p.getByLabel('Cuisine',{exact:true}).count()===0); // Recipe card, no filter; context translation stays separate.
  await go('dom/recipes');assert(await p.getByLabel('Cuisine',{exact:true}).isVisible());
  await openModule(p,'Air Fryer');assert.equal(await p.locator('.hc-dish').count(),37);

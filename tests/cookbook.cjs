@@ -44,7 +44,7 @@ let browser,pageForFailure;
  await p.getByLabel('Dieta').selectOption('Wegańska');assert((await p.locator('.hc-book-card').count())>0,'vegan filter');
  await p.getByLabel('Urządzenie').selectOption('Thermomix');assert((await p.locator('.hc-book-card').count())>0,'diet + appliance filter');
  await p.getByLabel('Dieta').selectOption('');await p.getByLabel('Urządzenie').selectOption('');
- await p.getByLabel('Kuchnia',{exact:true}).selectOption('Azjatycka');await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');
+ await p.getByRole('combobox',{name:'Kuchnia',exact:true}).selectOption('Azjatycka');await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');
  await p.getByRole('button',{name:'Dodaj do ulubionych: Kurczak teriyaki z ryżem',exact:true}).click();
  await p.getByRole('button',{name:'Otwórz przepis: Kurczak teriyaki z ryżem',exact:true}).click();
  assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Kurczak teriyaki z ryżem');

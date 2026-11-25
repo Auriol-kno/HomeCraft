@@ -24,7 +24,7 @@ const kitchenCards = [
   {id:'expenses',title:'Kontrola wydatków',note:'Koszt posiłków — funkcja w przygotowaniu',icon:ICONS.modes},
 ] as const;
 function KitchenLanding({onTab,onPlan,onShop}:{onTab:(tab:HomeTab)=>void;onPlan?:()=>void;onShop?:()=>void}){
- const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes'||id==='smart')onTab('recipes');else if(id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
+ const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes')onTab('recipes');else if(id==='smart'){onTab('recipes');requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelector<HTMLInputElement>('.hc-book input[type="search"]')?.focus()));}else if(id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
  return <section className="screen hc-kitchen-home" aria-label={t('Kuchnia','module')}>
   <div className="hc-kitchen-intro"><p className="hc-tag">HOMECRAFT</p><h2>{t('Co dziś ugotujemy?')}</h2><p>{t('Od produktów, które masz, do gotowego posiłku.')}</p></div>
   <div className="hc-kitchen-menu">{kitchenCards.map(card=><button key={card.id} type="button" onClick={()=>open(card.id)} disabled={card.id==='fridge'||card.id==='expenses'}><span className="hc-kitchen-menu-icon"><Icon d={card.icon}/></span><span><b>{t(card.title)}</b><small>{t(card.note)}</small></span><span aria-hidden="true">→</span></button>)}</div>

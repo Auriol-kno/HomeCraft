@@ -27,7 +27,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 

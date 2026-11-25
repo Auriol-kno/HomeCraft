@@ -519,4 +519,5 @@ html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient
 :root .app-shell .primary-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;padding-inline:5px}
 :root .app-shell .primary-nav button{font-size:clamp(9px,2.65vw,11px);min-width:0;padding-inline:1px}
 :root .app-shell .app-header{justify-content:space-between}
+:root .app-shell .brand-button{min-width:44px;min-height:44px}
 :root .app-shell .context-nav button{white-space:normal}
