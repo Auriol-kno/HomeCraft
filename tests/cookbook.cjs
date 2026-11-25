@@ -27,7 +27,7 @@ let browser,pageForFailure;
  for(const tab of ['Air Fryer','Kuchnia','Zakupy','Kawa']){await openModule(p,tab);await shot('02-module-'+tab.replace(' ','-'));}
  await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Książka kucharska'}).click();
  await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/600 \/ 600/);
- assert.match(await p.locator('.screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/cookbook[^)]*\.webp/);
+ assert.match(await p.locator('main:not([hidden]) .screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/cookbook[^)]*\.webp/);
  for(const [route,image] of [['home','coffee'],['tea','tea'],['fermentation','ferment'],['fryer/dishes','fryer'],['dom/thermomix/recipes','tm6'],['dom/timers','tools'],['shop/list','shop'],['dom/recipes','cookbook']]){
   await go(route);const bg=await p.locator('main:not([hidden]) .screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage);assert.match(bg,new RegExp(image+'[^)]*\\.webp'),`Editorial photo ${image}`);
   const src=bg.match(/url\(["']?([^"')]+)/)?.[1];assert(src&&await p.request.get(src).then(r=>r.ok()),`Editorial photo response ${image}`);
