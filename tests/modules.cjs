@@ -11,7 +11,7 @@ let browser;
  p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await p.goto(url);await p.locator('.primary-nav').waitFor();
  const global=p.getByRole('navigation',{name:'Nawigacja główna'});
  assert.deepEqual(await global.getByRole('button').allInnerTexts(),['Książka','Napoje','Fryer','TM6','Użyteczne','Zakupy']);
- const persistent=async()=>{assert(await global.isVisible());assert.equal(await global.getByRole('button').count(),5);};
+ const persistent=async()=>{assert(await global.isVisible());assert.equal(await global.getByRole('button').count(),6);};
  await global.getByRole('button',{name:'Książka kucharska'}).click();await p.locator('.hc-book').waitFor();await persistent();
  assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/600 \/ 600/);
  await global.getByRole('button',{name:'Air Fryer'}).click();await p.locator('.hc-dish').first().waitFor();await persistent();
