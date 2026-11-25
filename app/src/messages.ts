@@ -56,6 +56,26 @@ Sterowanie parzeniem|Brew controls
 parzenie trwa|brewing
 Wygląd i język|Appearance and language
 Motyw aplikacji|App theme
+Własne kolory|Custom colours
+Dopasuj osobno kolor głównych przycisków i akcentów. Kolory zapisują się tylko na tym urządzeniu.|Choose separate colours for primary buttons and accents. Colours are stored only on this device.
+Nazwa motywu|Theme name
+Np. Mój karmel|E.g. My caramel
+Przyciski|Buttons
+Akcenty|Accents
+Zapisz nowy motyw|Save new theme
+Zapisane motywy|Saved themes
+Kolory motywu bazowego|Base theme colours
+Zastosuj|Apply
+Usuń wybrany|Delete selected
+Motyw zapisany i zastosowany.|Theme saved and applied.
+Podaj nazwę i poprawne kolory.|Enter a name and valid colours.
+Motyw zastosowany.|Theme applied.
+Przywrócono kolory motywu bazowego.|Base theme colours restored.
+Wybierz motyw użytkownika do usunięcia.|Choose a custom theme to delete.
+Motyw usunięty.|Theme deleted.
+Nie udało się zapisać motywu.|Could not save the theme.
+Nie udało się zastosować motywu.|Could not apply the theme.
+Nie udało się usunąć motywu.|Could not delete the theme.
 Pastel · szałwia i terakota|Pastel · sage and terracotta
 Palarnia · krem i bordo|Roastery · cream and burgundy
 Kawiarnia · szkło i karmel|Café · glass and caramel

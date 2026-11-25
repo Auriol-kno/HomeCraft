@@ -84,6 +84,8 @@ Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i 
 
 Editorial ma osobną jasną i ciemną paletę. Zdjęcia nagłówków są wyświetlane w całości (`contain`) i łagodnie przechodzą w rzeczywisty kolor tła, dzięki czemu nie mają twardych odcięć. Dolne menu Editorial i Kawiarni używa szklano-karmelowych przycisków z zagłębionym stanem aktywnym.
 
+W Ustawieniach można zapisać własne palety: osobny kolor głównych przycisków i osobny kolor akcentów. Palety użytkownika są walidowane i zapisywane w niezależnym kluczu `homecraft.customThemes.v1` jako `{v:1,active,themes}`; można je zastosować, wyłączyć albo usunąć. Nie zmieniają definicji motywów bazowych ani innych danych aplikacji.
+
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
 potwierdzenia, jeżeli istnieje postęp; usuwa wyłącznie timery przypisane do zastępowanej

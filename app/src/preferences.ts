@@ -13,7 +13,7 @@ export const readPreferences=():Preferences=>{try{const p=JSON.parse(localStorag
 const darkQuery=typeof matchMedia==='function'?matchMedia('(prefers-color-scheme: dark)'):null;
 export const isDark=(p:Preferences)=>p.mode==='dark'||(p.mode==='system'&&!!darkQuery?.matches);
 const bars:Record<Theme,[string,string]>={editorial:['#FFFDF9','#242522'],pastel:['#B9C9C4','#18211F'],palarnia:['#F5EEE2','#1B1512'],bar:['#F3F1EC','#120F0D'],soft:['#E7E7E5','#1F2125'],line:['#ECEEE6','#151714']};
-export function applyPreferences(p:Preferences){const root=document.documentElement;root.dataset.theme=p.theme;root.dataset.density=p.density;root.dataset.mode=p.mode;root.lang=p.language;document.querySelector('meta[name="theme-color"]')?.setAttribute('content',bars[p.theme][isDark(p)?1:0]);}
+export function applyPreferences(p:Preferences){const root=document.documentElement;root.dataset.theme=p.theme;root.dataset.density=p.density;root.dataset.mode=p.mode;root.lang=p.language;document.querySelector('meta[name="theme-color"]')?.setAttribute('content',bars[p.theme][isDark(p)?1:0]);applyActiveCustomTheme();}
 export function savePreferences(p:Preferences){applyPreferences(p);try{localStorage.setItem(key,JSON.stringify(p));}catch{}window.dispatchEvent(new CustomEvent('crema:preferences',{detail:p}));}
 // Historical one-time migration retained for devices that skipped the Pastel release.
 const pastelKey='homecraft.pastelDefault.v1';
@@ -24,3 +24,4 @@ try{if(!localStorage.getItem('homecraft.editorialDefault.v1')){const raw=JSON.pa
 applyPreferences(readPreferences());
 // Follow the phone when the mode is "system" (e.g. iOS switches to dark at sunset).
 darkQuery?.addEventListener?.('change',()=>applyPreferences(readPreferences()));
+import { applyActiveCustomTheme } from './custom-theme';
