@@ -116,7 +116,7 @@ let browser;
  await shot('06-done');
 
  // 8. Existing modules still switch, keep their data, and the coffee history is untouched.
- for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Kuchnia','.hc-book'],['Zakupy','.hc-iname']]){await openModule(p,tab);await p.locator(sel).first().waitFor({state:'attached'});}
+ for(const [tab,sel] of [['Kawa','#tabs button'],['Air Fryer','.hc-dish'],['Kuchnia','.hc-kitchen-home'],['Zakupy','.hc-iname']]){await openModule(p,tab);await p.locator(sel).first().waitFor({state:'attached'});}
  assert.deepEqual((await p.evaluate(()=>JSON.parse(localStorage.getItem('cremalab.iphone.v3')))).hist,coffee.hist,'coffee history untouched');
  await ctx.close();
 

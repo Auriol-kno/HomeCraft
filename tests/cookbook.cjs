@@ -25,7 +25,8 @@ let browser,pageForFailure;
  };
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));await shot('01-start');
  for(const tab of ['Air Fryer','Kuchnia','Zakupy','Kawa']){await openModule(p,tab);await shot('02-module-'+tab.replace(' ','-'));}
- await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Książka kucharska'}).click();
+ await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Kuchnia'}).click();
+ await p.getByRole('button',{name:/Książka kucharska/}).click();
  await p.locator('.hc-book').waitFor();assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Wybierz przepis');assert.match(await p.getByRole('status').filter({hasText:'Wyniki'}).innerText(),/600 \/ 600/);
  assert.match(await p.locator('main:not([hidden]) .screen-heading').evaluate(e=>getComputedStyle(e,'::before').backgroundImage),/cookbook[^)]*\.webp/);
  for(const [route,image] of [['home','coffee'],['tea','tea'],['fermentation','ferment'],['fryer/dishes','fryer'],['dom/thermomix/recipes','tm6'],['dom/timers','tools'],['shop/list','shop'],['dom/recipes','cookbook']]){
@@ -35,15 +36,15 @@ let browser,pageForFailure;
  assert.equal(await p.locator('.hc-book-card').count(),20);
  await p.getByRole('button',{name:'Pokaż kolejne 20'}).click();assert.equal(await p.locator('.hc-book-card').count(),40);
  await p.getByRole('button',{name:/Filtry i sortowanie/}).click();
- await p.getByLabel('Kuchnia',{exact:true}).selectOption('Azjatycka');assert((await p.locator('.hc-book-card').count())>=20);
+ await p.getByRole('combobox',{name:'Kuchnia',exact:true}).selectOption('Azjatycka');assert((await p.locator('.hc-book-card').count())>=20);
  await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');assert((await p.locator('.hc-book-card').count())>=2);
  await p.getByLabel('Sortowanie').selectOption('kcal');
  const calories=(await p.locator('.hc-book-card .hc-book-facts b').allInnerTexts()).map(x=>Number(x.match(/\d+/)[0]));assert(calories.every((x,i)=>i===0||calories[i-1]<=x));
- await p.getByLabel('Kuchnia',{exact:true}).selectOption('');await p.getByLabel('Szukaj przepisu lub składnika').fill('');
+ await p.getByRole('combobox',{name:'Kuchnia',exact:true}).selectOption('');await p.getByLabel('Szukaj przepisu lub składnika').fill('');
  await p.getByLabel('Dieta').selectOption('Wegańska');assert((await p.locator('.hc-book-card').count())>0,'vegan filter');
  await p.getByLabel('Urządzenie').selectOption('Thermomix');assert((await p.locator('.hc-book-card').count())>0,'diet + appliance filter');
  await p.getByLabel('Dieta').selectOption('');await p.getByLabel('Urządzenie').selectOption('');
- await p.getByLabel('Kuchnia',{exact:true}).selectOption('Azjatycka');await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');
+ await p.getByRole('combobox',{name:'Kuchnia',exact:true}).selectOption('Azjatycka');await p.getByLabel('Szukaj przepisu lub składnika').fill('teriyaki');
  await p.getByRole('button',{name:'Dodaj do ulubionych: Kurczak teriyaki z ryżem',exact:true}).click();
  await p.getByRole('button',{name:'Otwórz przepis: Kurczak teriyaki z ryżem',exact:true}).click();
  assert.equal(await p.evaluate(()=>document.activeElement.textContent),'Kurczak teriyaki z ryżem');

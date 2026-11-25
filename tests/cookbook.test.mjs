@@ -47,6 +47,8 @@ for(const diet of ['Wysokobiałkowa','Niskowęglowodanowa','Śródziemnomorska',
 for(const device of ['Air Fryer','Thermomix','Bez urządzenia'])assert(filterRecipes({...EMPTY_FILTERS,device},[]).every(r=>bookInfo(r).devices.includes(device)));
 assert.deepEqual(filterRecipes({...EMPTY_FILTERS,favouritesOnly:true},[]),[]);
 assert.deepEqual(filterRecipes({...EMPTY_FILTERS,favouritesOnly:true},[PANKO_DINNER.id]).map(r=>r.id),[PANKO_DINNER.id]);
+const favouriteFirst=filterRecipes({...EMPTY_FILTERS,sort:'name'},['book-599']);
+assert.equal(favouriteFirst[0].id,'book-599','favourites always precede the selected sort order');
 for(const raw of [null,'{','null','[]','42','{"v":2,"ids":[]}','{"v":1,"ids":"oops"}'])assert.deepEqual(parseFavourites(raw),[]);
 assert.deepEqual(parseFavourites(JSON.stringify({v:1,ids:['book-001','book-001',null,4,'unknown']})),['book-001']);
 // A future 500-recipe catalogue must use exactly the same query logic.

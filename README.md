@@ -27,7 +27,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 
@@ -80,7 +80,9 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Stałe dolne menu prowadzi do Książki, Kawy, Air Fryera, TM6 i Użytecznych. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia ma własny ekran startowy z wejściem do książki, wyszukiwania według składników, zakupów i planowania pojedynczego gotowania; „Moja lodówka” i kontrola wydatków są jawnie oznaczone jako funkcje w przygotowaniu. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+
+Editorial ma osobną jasną i ciemną paletę. Zdjęcia nagłówków są wyświetlane w całości (`contain`) i łagodnie przechodzą w rzeczywisty kolor tła, dzięki czemu nie mają twardych odcięć. Dolne menu Editorial i Kawiarni używa szklano-karmelowych przycisków z zagłębionym stanem aktywnym.
 
 Każdy przepis przechodzi przez istniejące `#plan/plan`, `#plan/mise` i `#plan/cook`:
 zakupy, checklisty, harmonogram i wspólne timery. Wybór innego przepisu wymaga
@@ -137,14 +139,14 @@ zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia sy
 
 ## Kuchnia i rozkład czasu (demo)
 
-Górne menu: Kawa / Kuchnia / Zakupy. Dawny dział Dom nosi nazwę **Kuchnia**;
-Air Fryer otwiera się z dolnego paska Kuchni, bezpośrednio obok Timerów (krótki
-podpis „Fryer”, pełna etykieta „Air Fryer”). Dolny pasek Air Fryera ma przycisk
-powrotu do Kuchni. Zachowane są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
+Stałe dolne menu: Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy. Dawny dział
+Dom nosi nazwę **Kuchnia** i ma własny ekran startowy. Air Fryer oraz TM6 otwierają
+się bezpośrednio z dolnego paska; ich menu kontekstowe pojawia się nad nim. Zachowane
+są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
 klucze localStorage; zmiana nazwy nie wymaga migracji. W EN sekcja to „Kitchen”,
 a filtr kuchni pochodzenia przepisów pozostaje „Cuisine”.
 
-Każda ze 100 kart książki ma widoczny rozkład czasu z tego samego harmonogramu co
+Każda z 600 kart książki ma widoczny rozkład czasu z tego samego harmonogramu co
 Plan: pasy osoby i używanego sprzętu, czas całkowity oraz rozwijane „Etapy i czasy”.
 Oś w karcie liczy minuty od rozpoczęcia; w Planie pokazuje rzeczywiste godziny.
 Pasy uwzględniają także współdzielone zasoby (np. osoba mieszająca na kuchence).
@@ -166,4 +168,4 @@ fokus po zamknięciu i zatrzymuje Tab wewnątrz modala. Żeberka pokazują równ
 istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładność sekund.
 
 ### Rozbudowana książka kucharska
-100 wariantów kuchni świata, 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Książka, Kawa, Fryer, TM6, Użyteczne, Zakupy.
+600 przepisów obejmuje kuchnie świata, polskie klasyki, popularne diety oraz 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Kuchnia, Napoje, Fryer, TM6, Użyteczne, Zakupy.

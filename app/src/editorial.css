@@ -1,24 +1,25 @@
 /* HomeCraft Editorial — isolated theme, no remote resources. */
 :root[data-theme="editorial"]{
- color-scheme:light;--bg:#f4f0e9;--surface:#fffdf9;--surface-2:#ede7de;--track:#e0d8cc;--line:#d9d0c3;--ink:#242522;--soft:#494842;--muted:#69665e;--dim:#777269;--accent:#994b28;--on-accent:#fff;--good:#3c7151;--bad:#a53c32;--cool:#416c77;--wash:#994b2814;--stop:#994b28;--on-stop:#fff;--tint-near:#f6e8c4;--tint-stop:#e0eddc;--tint-over:#f8dfd8;--tint-step:#eee6da;--body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--timer:var(--body);--r-card:14px;--r-ctl:10px;--ed-serif:Georgia,'Times New Roman',serif;--ed-hero:#242522;--ed-hero-text:#fff9ef;
+ color-scheme:light;--bg:#f4f0e9;--surface:#fffdf9;--surface-2:#ede7de;--track:#e0d8cc;--line:#d9d0c3;--ink:#242522;--soft:#494842;--muted:#69665e;--dim:#777269;--accent:#994b28;--on-accent:#fff;--good:#3c7151;--bad:#a53c32;--cool:#416c77;--wash:#994b2814;--stop:#994b28;--on-stop:#fff;--tint-near:#f6e8c4;--tint-stop:#e0eddc;--tint-over:#f8dfd8;--tint-step:#eee6da;--body:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--timer:var(--body);--r-card:14px;--r-ctl:10px;--ed-serif:Georgia,'Times New Roman',serif;--ed-hero:#f4f0e9;--ed-hero-text:#242522;--ed-hero-sub:#5e5a52;--ed-hero-over:#994b28;--ed-header:#fffdf9;--ed-header-text:#242522;--ed-fade-mid:#f4f0e9eb;--ed-fade-tail:#f4f0e92e;
 }
-:root[data-theme="editorial"][data-mode="dark"]{color-scheme:dark;--bg:#20211f;--surface:#2b2c29;--surface-2:#343530;--track:#41423c;--line:#505149;--ink:#f6eee2;--soft:#ddd5c8;--muted:#bcb4a7;--dim:#aaa194;--accent:#e29a71;--on-accent:#24160f;--good:#9ec49c;--bad:#f29588;--cool:#9ac7d0;--wash:#e29a711a;--stop:#e29a71;--on-stop:#24160f;--tint-near:#423923;--tint-stop:#26392e;--tint-over:#462b26;--tint-step:#35332c;}
+:root[data-theme="editorial"][data-mode="dark"]{color-scheme:dark;--bg:#20211f;--surface:#2b2c29;--surface-2:#343530;--track:#41423c;--line:#505149;--ink:#f6eee2;--soft:#ddd5c8;--muted:#bcb4a7;--dim:#aaa194;--accent:#e29a71;--on-accent:#24160f;--good:#9ec49c;--bad:#f29588;--cool:#9ac7d0;--wash:#e29a711a;--stop:#e29a71;--on-stop:#24160f;--tint-near:#423923;--tint-stop:#26392e;--tint-over:#462b26;--tint-step:#35332c;--ed-hero:#20211f;--ed-hero-text:#fff9ef;--ed-hero-sub:#e1d9cb;--ed-hero-over:#e7aa85;--ed-header:#242522;--ed-header-text:#fff9ef;--ed-fade-mid:#20211feb;--ed-fade-tail:#20211f2e;}
 @media(prefers-color-scheme:dark){:root[data-theme="editorial"][data-mode="system"]{color-scheme:dark;--bg:#20211f;--surface:#2b2c29;--surface-2:#343530;--track:#41423c;--line:#505149;--ink:#f6eee2;--soft:#ddd5c8;--muted:#bcb4a7;--dim:#aaa194;--accent:#e29a71;--on-accent:#24160f;--good:#9ec49c;--bad:#f29588;--cool:#9ac7d0;--wash:#e29a711a;--stop:#e29a71;--on-stop:#24160f;--tint-near:#423923;--tint-stop:#26392e;--tint-over:#462b26;--tint-step:#35332c;}}
 .hc-editorial-filter-toggle{display:none}.hc-editorial-advanced{display:grid;gap:inherit}
 html:root[data-theme="editorial"] .app-shell{background:var(--bg);grid-template-rows:auto minmax(0,1fr) auto;min-width:0}
 html:root[data-theme="editorial"] .app-shell[data-dock="on"]{grid-template-rows:auto minmax(0,1fr) auto auto}
-html:root[data-theme="editorial"] .app-header{margin:0;padding:calc(8px + env(safe-area-inset-top)) 17px 8px;background:#242522;color:#fff9ef;border:0;min-height:56px}
-html:root[data-theme="editorial"] .brand-button{color:#fff9ef;font-size:21px;letter-spacing:-.65px}
-html:root[data-theme="editorial"] .brand-button b{color:#e5a17a}
+html:root[data-theme="editorial"] .app-header{margin:0;padding:calc(8px + env(safe-area-inset-top)) 17px 8px;background:var(--ed-header);color:var(--ed-header-text);border:0;min-height:56px}
+html:root[data-theme="editorial"] .brand-button{color:var(--ed-header-text);font-size:21px;letter-spacing:-.65px}
+html:root[data-theme="editorial"] .brand-button b{color:var(--accent)}
 html:root[data-theme="editorial"] .brand-mark{border-radius:9px;background:#994b28;color:#fff}
-html:root[data-theme="editorial"] .settings-trigger{background:#333531;border:1px solid #5c5d54;color:#fff9ef;border-radius:10px;box-shadow:none}
+html:root[data-theme="editorial"] .settings-trigger{background:var(--surface-2);border:1px solid var(--line);color:var(--ed-header-text);border-radius:10px;box-shadow:none}
 html:root[data-theme="editorial"] .app-content{padding:0 14px 20px;min-width:0;overflow-x:hidden}
 html:root[data-theme="editorial"] .screen-heading{position:relative;isolation:isolate;min-height:126px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;margin:0 -14px 15px;padding:16px 42% 18px 18px;background:var(--ed-hero);color:var(--ed-hero-text);border:0;overflow:hidden}
-html:root[data-theme="editorial"] .screen-heading::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#242522 0%,#242522e8 32%,#24252200 100%),var(--ed-art,none);background-position:center,right center;background-repeat:no-repeat;background-size:cover,auto 100%;pointer-events:none}
+html:root[data-theme="editorial"] .screen-heading::before{content:'';position:absolute;inset:0;z-index:-1;background-image:linear-gradient(90deg,var(--ed-hero) 0%,var(--ed-hero) 31%,var(--ed-fade-mid) 43%,var(--ed-fade-tail) 70%),var(--ed-art,none);background-color:var(--ed-hero);background-position:center,right center;background-repeat:no-repeat;background-size:100% 100%,contain;pointer-events:none}
 html:root[data-theme="editorial"] .screen-heading h1{font:500 clamp(25px,6.5vw,35px)/1.08 var(--ed-serif);letter-spacing:-.6px;color:var(--ed-hero-text);margin:0;overflow-wrap:normal}
-html:root[data-theme="editorial"] .screen-heading .overline{color:#e7aa85;font-size:9px;letter-spacing:2px;margin:0 0 8px}
-html:root[data-theme="editorial"] .screen-heading::after{content:var(--ed-subtitle,'');font:400 11px/1.45 var(--body);color:#e1d9cb;margin-top:8px}
+html:root[data-theme="editorial"] .screen-heading .overline{color:var(--ed-hero-over);font-size:9px;letter-spacing:2px;margin:0 0 8px}
+html:root[data-theme="editorial"] .screen-heading::after{content:var(--ed-subtitle,'');font:400 11px/1.45 var(--body);color:var(--ed-hero-sub);margin-top:8px}
 html:root[data-theme="editorial"] .app-shell[data-editorial-section="recipes"]{--ed-art:url('./editorial/cookbook.webp');--ed-subtitle:'Przepisy · inspiracje · gotowanie'}
+html:root[data-theme="editorial"] .app-shell[data-editorial-section="kitchen"]{--ed-art:url('./editorial/cookbook.webp');--ed-subtitle:'Od składników do gotowego posiłku'}
 html:root[data-theme="editorial"] .app-shell:is([data-editorial-section="home"],[data-editorial-section="timer"],[data-editorial-section="equipment"],[data-editorial-section="history"],[data-editorial-section="rating"]){--ed-art:url('./editorial/coffee.webp');--ed-subtitle:'Kawa · technika · smak'}
 html:root[data-theme="editorial"] .app-shell[data-editorial-section="tea"]{--ed-art:url('./editorial/tea.webp');--ed-subtitle:'Liście · temperatura · czas'}
 html:root[data-theme="editorial"] .app-shell[data-editorial-section="fermentation"]{--ed-art:url('./editorial/ferment.webp');--ed-subtitle:'Kultury · nastawy · dziennik'}
@@ -70,7 +71,7 @@ html:root[data-theme="editorial"] .brand-button{min-height:44px;padding:2px 0;fo
 html:root[data-theme="editorial"] .brand-mark{width:34px;height:34px;box-shadow:inset 0 1px #ffffff38}
 html:root[data-theme="editorial"] .settings-trigger{min-width:44px;min-height:44px}
 html:root[data-theme="editorial"] .screen-heading{min-height:154px;padding:20px 47% 22px 18px}
-html:root[data-theme="editorial"] .screen-heading::before{background-image:linear-gradient(90deg,#20211fff 0%,#20211ff2 34%,#20211f9e 55%,#20211f12 100%),var(--ed-art,none);background-position:center,right center;background-size:cover,auto 100%}
+html:root[data-theme="editorial"] .screen-heading::before{background-position:center,right center;background-size:100% 100%,contain}
 html:root[data-theme="editorial"] .screen-heading h1{font-size:clamp(29px,8vw,42px);line-height:.98;text-wrap:balance}
 html:root[data-theme="editorial"] .screen-heading .overline{font-size:10px;font-weight:750;letter-spacing:.18em}
 html:root[data-theme="editorial"] .screen-heading::after{font-size:12px;line-height:1.35;max-width:24ch}
@@ -126,3 +127,15 @@ html:root[data-theme="editorial"] .appearance-settings select{min-height:48px}
  html:root[data-theme="editorial"] .hc-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(prefers-reduced-motion:reduce){html:root[data-theme="editorial"] *{scroll-behavior:auto!important}}
+
+/* Kitchen hub, based on the approved light Smart Kitchen card. */
+.hc-kitchen-home{gap:14px}.hc-kitchen-intro{padding:4px 2px}.hc-kitchen-intro h2{font-size:clamp(27px,7vw,36px);margin:3px 0 5px}.hc-kitchen-intro p{margin:0;color:var(--muted)}
+.hc-kitchen-menu{display:grid;gap:8px}.hc-kitchen-menu>button{display:grid;grid-template-columns:52px minmax(0,1fr) 18px;align-items:center;gap:12px;min-height:72px;padding:8px 10px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);text-align:left;box-shadow:none}.hc-kitchen-menu>button:not(:disabled):active{transform:translateY(1px)}.hc-kitchen-menu>button:disabled{opacity:.66}.hc-kitchen-menu-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--surface-2)}.hc-kitchen-menu-icon svg{width:27px;height:27px}.hc-kitchen-menu b,.hc-kitchen-menu small{display:block}.hc-kitchen-menu b{font-size:17px;line-height:1.2}.hc-kitchen-menu small{margin-top:3px;color:var(--muted);font-size:12px;line-height:1.3}
+
+/* Glass-and-caramel recessed navigation: Editorial and Kawiarnia share the tactile treatment. */
+html:root:is([data-theme="editorial"],[data-theme="bar"]) .app-shell .primary-nav button{border:1px solid color-mix(in srgb,var(--line) 78%,transparent);background:linear-gradient(145deg,color-mix(in srgb,var(--surface) 84%,#fff 16%),color-mix(in srgb,var(--surface-2) 88%,transparent));box-shadow:3px 3px 8px color-mix(in srgb,#352014 24%,transparent),-2px -2px 7px color-mix(in srgb,#fff 52%,transparent);backdrop-filter:blur(10px)}
+html:root:is([data-theme="editorial"],[data-theme="bar"]) .app-shell .primary-nav button[aria-current="page"]{color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,var(--surface));box-shadow:inset 3px 3px 7px color-mix(in srgb,#5b2d18 30%,transparent),inset -3px -3px 7px color-mix(in srgb,#fff 42%,transparent)}
+html:root:is([data-theme="editorial"],[data-theme="bar"]) .app-shell .primary-nav button[aria-current="page"]::after{display:none}
+@media(prefers-color-scheme:dark){
+ :root[data-theme="editorial"][data-mode="system"]{--ed-hero:#20211f;--ed-hero-text:#fff9ef;--ed-hero-sub:#e1d9cb;--ed-hero-over:#e7aa85;--ed-header:#242522;--ed-header-text:#fff9ef;--ed-fade-mid:#20211feb;--ed-fade-tail:#20211f2e}
+}

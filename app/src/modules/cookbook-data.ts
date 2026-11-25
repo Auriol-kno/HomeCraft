@@ -34,8 +34,9 @@ export function filterRecipes(filters: BookFilters, favourites: readonly string[
   const meta=bookInfo(r), hay=normalizeBook([r.name,meta.cuisine,meta.category,...r.ingredients.map(i=>i.n)].join(' '));
   return words.every(w=>hay.includes(w)) && (!filters.category||meta.category===filters.category) && (!filters.cuisine||meta.cuisine===filters.cuisine) && (!filters.diet||meta.diets.includes(filters.diet as never)) && (!filters.device||meta.devices.includes(filters.device as never)) && (!filters.quick||totalMinutes(r)<=30) && (!filters.favouritesOnly||fav.has(r.id)) && (!filters.ratedOnly||(feedback[r.id]?.rating||0)>0) && (!filters.difficulty||String(difficulty(r))===filters.difficulty) && (!filters.health||healthLevel(r)===filters.health);
  }).sort((a,b)=>{
+  const favouriteDiff=Number(fav.has(b.id))-Number(fav.has(a.id));
   const diff=filters.sort==='rating'?(feedback[b.id]?.rating||0)-(feedback[a.id]?.rating||0):filters.sort==='health'?healthRank(b)-healthRank(a):filters.sort==='difficulty'?difficulty(a)-difficulty(b):filters.sort==='cooked'?(feedback[b.id]?.count||0)-(feedback[a.id]?.count||0):filters.sort==='recent'?(feedback[b.id]?.last||0)-(feedback[a.id]?.last||0):filters.sort==='time'?totalMinutes(a)-totalMinutes(b):filters.sort==='kcal'?recipeKcal(a)-recipeKcal(b):filters.sort==='kcal-desc'?recipeKcal(b)-recipeKcal(a):0;
-  return diff||a.name.localeCompare(b.name,'pl')||a.id.localeCompare(b.id);
+  return favouriteDiff||diff||a.name.localeCompare(b.name,'pl')||a.id.localeCompare(b.id);
  });
 }
 export function parseFavourites(raw: string | null, known = new Set(RECIPES.map(r=>r.id))): string[] {

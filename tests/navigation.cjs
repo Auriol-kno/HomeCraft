@@ -1,6 +1,6 @@
 async function openModule(page,name){
  const nav=page.getByRole('navigation',{name:/^(Nawigacja główna|Main navigation)$/});
- const labels={Kuchnia:/^(Książka kucharska|Cookbook)$/,Kitchen:/^(Książka kucharska|Cookbook)$/,Zakupy:/^(Zakupy|Shopping)$/,Shopping:/^(Zakupy|Shopping)$/,Kawa:/^(Napoje|Beverages)$/,Napoje:/^(Napoje|Beverages)$/,'Air Fryer':/^Air Fryer$/};
+ const labels={Kuchnia:/^(Kuchnia|Kitchen)$/,Kitchen:/^(Kuchnia|Kitchen)$/,Zakupy:/^(Zakupy|Shopping)$/,Shopping:/^(Zakupy|Shopping)$/,Kawa:/^(Napoje|Beverages)$/,Napoje:/^(Napoje|Beverages)$/,'Air Fryer':/^Air Fryer$/};
  await nav.getByRole('button',{name:labels[name]||name,exact:true}).click();
 }
 module.exports={openModule};

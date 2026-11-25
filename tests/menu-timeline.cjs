@@ -14,7 +14,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  const go=async hash=>{await p.goto(url+'#'+hash);await p.reload();await p.locator('.primary-nav').waitFor();};
  await go('home');await p.clock.pauseAt(new Date('2026-11-24T10:00:30+01:00'));
  const nav=p.getByRole('navigation',{name:'Nawigacja główna'});
- assert.deepEqual(await nav.getByRole('button').allInnerTexts(),['Książka','Napoje','Fryer','TM6','Użyteczne','Zakupy']);
+ assert.deepEqual(await nav.getByRole('button').allInnerTexts(),['Kuchnia','Napoje','Fryer','TM6','Użyteczne','Zakupy']);
  await nav.getByRole('button',{name:'Air Fryer',exact:true}).click();
  const fryerMenu=p.getByRole('navigation',{name:'Menu Air Fryer'});
  assert(await nav.isVisible(),'Global bottom navigation is persistent in Air Fryer');
@@ -43,7 +43,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
  await nav.getByRole('button',{name:'Użyteczne',exact:true}).click();
  await p.goBack();assert.equal(await p.locator('.hc-dish').count(),37);await p.goForward();await nav.waitFor();
  await nav.getByRole('button',{name:/Thermomix TM6/}).click();const tmMenu=p.getByRole('navigation',{name:'Menu Thermomix'});assert.deepEqual(await tmMenu.getByRole('button').allInnerTexts(),['Przepisy','Timery','Zasady używania']);assert(await nav.isVisible());await tmMenu.getByRole('button',{name:'Zasady używania'}).click();assert.equal(new URL(p.url()).hash,'#dom/thermomix/rules');await p.reload();assert.equal(await tmMenu.getByRole('button',{name:'Zasady używania'}).getAttribute('aria-current'),'page');await p.goBack();assert.equal(await tmMenu.getByRole('button',{name:'Przepisy'}).getAttribute('aria-current'),'page');await p.screenshot({path:shots+'/thermomix-menu-390.png'});
- await nav.getByRole('button',{name:/Książka kucharska/}).click();
+ await nav.getByRole('button',{name:/Kuchnia/}).click();await p.getByRole('button',{name:/Książka kucharska/}).click();
  await p.evaluate(()=>{const now=Date.now();localStorage.setItem('homecraft.kitchen.v1',JSON.stringify({v:1,recipe:'book-021',serveAt:now+3600000,cooking:true,started:{s2:now},done:{s1:now},timers:{s2:'preview-keep'},mise:['i0']}));localStorage.setItem('homecraft.timers.v1',JSON.stringify([{id:'preview-keep',name:'Zachowaj timer',total:3600,endAt:now+3600000,paused:false,remain:3600,marks:[],fired:[],act:'Sprawdź',meta:'',done:false,ack:false}]));});
  const before=await p.evaluate(()=>({k:localStorage.getItem('homecraft.kitchen.v1'),t:localStorage.getItem('homecraft.timers.v1')}));
  await go('dom/recipes/panko-frytki-salatka');
@@ -66,7 +66,7 @@ const shots='test-results/menu-timeline';fs.mkdirSync(shots,{recursive:true});le
   }
  }
  await p.evaluate(()=>localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'pastel',mode:'dark',language:'en',density:'standard'})));
- await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:'Cookbook',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
+ await go('dom/recipes/book-021');assert(await p.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:'Kitchen',exact:true}).isVisible());assert(await p.getByRole('region',{name:'Cooking timeline',exact:true}).isVisible());
  assert(await p.getByLabel('Cuisine',{exact:true}).count()===0); // Recipe card, no filter; context translation stays separate.
  await go('dom/recipes');assert(await p.getByLabel('Cuisine',{exact:true}).isVisible());
  await openModule(p,'Air Fryer');assert.equal(await p.locator('.hc-dish').count(),37);
