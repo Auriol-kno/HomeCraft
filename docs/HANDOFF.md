@@ -1,90 +1,126 @@
 # HomeCraft — przekazanie projektu
 
-Ten plik jest dla kolejnego asystenta lub osoby, która przejmuje pracę nad HomeCraft (np. ChatGPT, Codex, Claude). Zanim zaczniesz, przeczytaj go razem z `README.md`.
+Dokument dla osoby lub agenta przejmującego rozwój HomeCraft. Przed pracą przeczytaj również `README.md` i `docs/AGENT_PROMPT.md`.
 
-Stan na 24.11.2026: `main` = `a9c126a`.
+Stan zweryfikowany 26.11.2026: `main` = `fc77f8b` (commit publikacyjny zbudowany ze źródła `64588c8`). Zawsze wykonaj `git fetch` i sprawdź aktualny HEAD — numer w tym dokumencie jest punktem odniesienia, nie blokadą aktualizacji.
 
 ## Czym jest HomeCraft
 
-Kuchenna aplikacja PWA w React 19, TypeScript i Vite, po polsku. Ma działać wygodnie na iPhonie i offline.
+HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19, TypeScript i Vite. Działa offline i łączy pomoc w gotowaniu, kawę, urządzenia, timery, fermentację oraz zakupy.
 
 - Repozytorium: https://github.com/Auriol-kno/HomeCraft
-- Wersja publiczna: https://auriol-kno.github.io/HomeCraft/ oraz Vercel produkcyjny, oba z gałęzi `main`.
-- Wersja testowa: https://home-craft-git-demo-homecraft-kno-flow.vercel.app/ z gałęzi `demo-homecraft`. Odświeża się po scaleniu PR do tej gałęzi.
+- Produkcja GitHub Pages: https://auriol-kno.github.io/HomeCraft/
+- Produkcja Vercel: https://home-craft-omega.vercel.app/
+- Podgląd gałęzi `demo-homecraft`: https://home-craft-git-demo-homecraft-kno-flow.vercel.app/
 
-## Zasady pracy
+## Aktualny produkt
 
-1. **`main` to produkcja.** Nie scalaj do `main` i nie wdrażaj na produkcję bez wyraźnej zgody właściciela.
-2. **Każda zmiana idzie tą samą drogą:** osobna gałąź od aktualnego `demo-homecraft`, potem PR do `demo-homecraft`. Scalenie dopiero po akceptacji właściciela.
-3. **Przed nową pracą zsynchronizuj `demo-homecraft` z `main`.** Teraz `demo-homecraft` jest za `main`: brakuje mu commita scalenia i commita z buildem strony.
-4. **Nie zmieniaj ustawień Vercel.**
-5. **Nie psuj zapisanych danych użytkowników** w `localStorage`. Nowe funkcje dostają własne klucze, a odczyt danych jest walidowany.
-6. **Przed otwarciem PR** uruchom `npm run build` (`tsc --noEmit` + Vite) oraz `npm test` (testy jednostkowe i Playwright). CI „App checks” robi to samo na każdym PR. Vercel tworzy podgląd PR chroniony logowaniem.
-7. **Wymagania interfejsu:**
-   - Teksty po polsku, tłumaczenia EN dla elementów interfejsu w `app/src/modules/en.ts`. Treści przepisów tylko po polsku.
-   - Czytelność na iPhonie przy 320 i 390 px.
-   - Przyciski co najmniej 44 px.
-   - Brak przewijania w poziomie.
-   - Kontrast tekstu zgodny z WCAG AA.
-8. **Opis PR** podaje, co działa, co faktycznie sprawdzono, co wymaga decyzji, oraz krótki scenariusz testu do przejścia w przeglądarce.
+- Stałe dolne menu: **Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy**. Nie może znikać na ekranach modułów.
+- Kuchnia: ekran startowy, książka 600 przepisów, wyszukiwanie według składników, wejście do zakupów i planowania.
+- Książka: polskie i światowe kuchnie, popularne diety, Air Fryer/TM6, kcal na porcję, oceny, historia, ulubione i rozkład czasu. Cały kafel otwiera przepis; ulubione są grupowane na początku wyników.
+- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja.
+- Air Fryer: 37 dań dla COSORI TurboBlaze 6 l, oś czasu, ulubione, timery i zasady używania.
+- TM6: przepisy, timery i zasady używania; aplikacja nie steruje urządzeniem.
+- Użyteczne: timery, stoper, jajka, czasy gotowania i miarki.
+- Zakupy: lista z działami sklepu, ilościami, szybkim dodawaniem i zapisem lokalnym.
+- Kitchen OS: Plan → Przygotuj → Gotuj, harmonogram wstecz od godziny podania, checklisty, wspólne zasoby i timery.
+- Fermentacja: kombucha, zakwasy i kiszonki, kalendarz oraz dziennik.
 
-## Build i wdrożenia
+## Wygląd
 
-- `vite.config.ts` ma `base: '/HomeCraft/'` dla GitHub Pages.
-- `vercel.json` buduje z `--base=/`, bo Vercel serwuje od korzenia domeny. Oba warianty muszą działać.
-- Workflow `publish` po każdej zmianie w `main` buduje stronę i zapisuje commit „Zbuduj stronę z …”. Pliki w katalogu głównym (`index.html`, `assets/`) to wynik builda. Nie edytuj ich ręcznie.
-- Service worker (`app/public/sw.js`) zapisuje aplikację do pracy offline. Po wdrożeniu użytkownik może przez chwilę widzieć starą wersję.
+**Editorial jest motywem domyślnym.** Ma wersję jasną i ciemną oraz osiem lokalnych fotografii WebP:
 
-## Moduły i ważne pliki
+`app/src/editorial/{cookbook,coffee,tea,ferment,fryer,tm6,tools,shop}.webp`
 
-| Dział | Co robi | Pliki |
-| --- | --- | --- |
-| Kawa (Crema Lab) | Parzenie, sprzęt, historia, herbata. Starszy silnik. | `app/src/brewing.js`, `app/src/screens/*.html` |
-| Air Fryer | 37 dań dla COSORI TurboBlaze 6 l, ulubione, timery z przypomnieniami | `app/src/modules/fryer-data.ts`, `FryerModule.tsx` |
-| Dom | Timery, stoper, jajka, czasy gotowania, miary | `HomeModule.tsx`, `TimersScreen.tsx`, `home-data.ts` |
-| Zakupy | Lista zakupów z działami sklepu | `ShoppingModule.tsx`, `shopping-data.ts` |
-| Zaplanuj gotowanie (Kitchen OS) | Plan → Przygotuj → Gotuj | `kitchen-data.ts`, `kitchen-store.ts`, `KitchenModule.tsx` |
+Zdjęcia nagłówków są pokazywane bez twardego kadrowania i przechodzą w kolor tła. Tekst musi pozostać czytelny w obu trybach. Motywy Pastel, Palarnia, Kawiarnia, Soft i Linia nadal są dostępne w ustawieniach.
 
-Elementy wspólne:
+Zatwierdzona makieta: `docs/editorial/concept-editorial.png`. Dokument historyczno-projektowy: `docs/editorial/AI_HANDOFF.md`.
 
-- **Timery:** `app/src/modules/timers.ts`. Odpowiada za alarm, przypomnienia „potrząśnij / obróć”, podtrzymanie ekranu i zapis w `homecraft.timers.v1`.
-- **Dodawanie do Zakupów z innych modułów:** zdarzenie `window` o nazwie `homecraft:shop-add`, w `detail` lista `[{ name, qty }]`.
-- **Routing przez hash:** `#home`, `#fryer/...`, `#dom/...`, `#shop/...`, `#plan/plan|mise|cook`. Obsługuje go `app/src/App.tsx`.
-- **Motywy:** `app/src/preferences.ts`. Dostępne są Pastel (domyślny), Palarnia, Kawiarnia (`bar`), Soft i Linia, każdy w trybie dzień / noc / systemowy.
+## Zasady pracy i gałęzie
 
-Klucze w `localStorage`:
+1. `main` jest produkcją. Nie scalaj do `main`, nie publikuj ręcznie i nie zmieniaj Vercel bez wyraźnego polecenia **„scal do main”**.
+2. Przed nową funkcją zsynchronizuj `demo-homecraft` z `main`.
+3. Utwórz `feature/<krótka-nazwa>` od aktualnego `demo-homecraft` i otwórz PR do `demo-homecraft`.
+4. Polecenie **„scal”** oznacza scalenie zaakceptowanego PR do `demo-homecraft`. Nie oznacza produkcji.
+5. Polecenie **„scal do main”** oznacza PR `demo-homecraft → main`, sprawdzenie konfliktów i CI, scalenie oraz kontrolę automatycznego wdrożenia.
+6. Nie nadpisuj cudzych zmian ani plików wygenerowanych. Główne `index.html`, `assets/` i `sw.js` tworzy workflow publikacyjny.
 
-- `cremalab.*`: kawa i preferencje.
-- `homecraft.timers.v1`, `homecraft.fryer.favs.v1`, `homecraft.shopping.v1`, `homecraft.stopwatch.v1`.
-- `homecraft.kitchen.v1`: sesja „Zaplanuj gotowanie”.
-- `homecraft.pastelDefault.v1`: znacznik jednorazowego przełączenia motywu.
+## Dane użytkownika
 
-## Ostatnio zrobione (PR #1, #4 i #5, wszystko jest w `main`)
+Nie kasuj ani nie zmieniaj znaczenia istniejących danych. Nowa funkcja dostaje własny wersjonowany klucz, walidowany przy odczycie. Migracja musi być jednorazowa i opisana w README.
 
-1. **„Zaplanuj gotowanie”.** Przycisk jest w Air Fryer → Dania i w Dom → Timery. Jest jeden scenariusz: kurczak w panko, frytki i sałatka na 2 porcje.
-   - **Plan:** godzina podania i harmonogram liczony od niej wstecz. Uwzględnia, że gotuje jedna osoba i że Air Fryer ma jeden kosz.
-   - **Przygotuj:** składniki, sprzęt i czynności do odhaczenia. Nieodhaczone składniki można dodać do Zakupów.
-   - **Gotuj:** pokazuje, co teraz, co następne i o której koniec. Obsługuje kroki równoległe, timery z alarmem, opóźnienie i przeliczenie planu (działające timery się nie resetują).
-   - Testy: `tests/kitchen.test.mjs` i `tests/kitchen.cjs`.
-2. **Stoper.** Cyfry są niżej i na podkładzie, więc wskazówka ich nie zasłania. Przycisk Pauza wypełnia się w rytm minuty.
-3. **Motyw Pastel jako główny wygląd.** Szałwiowe tło z falami, jasne karty z miękkim cieniem, terakota i teal, wersja nocna.
-   - Pliki: `app/src/pastel.css` (paleta i tło) oraz układ wspólny z Kawiarnią: selektory `bar` obejmują też `pastel`.
-   - Zapisany dawny domyślny motyw Palarnia przełącza się raz na Pastel.
+Najważniejsze klucze:
 
-## Otwarte decyzje i pomysły
+- `cremalab.iphone.v3`, `cremalab.preferences.v1` — kawa i preferencje;
+- `homecraft.timers.v1`, `homecraft.stopwatch.v1`;
+- `homecraft.fryer.favs.v1`;
+- `homecraft.shopping.v1`;
+- `homecraft.kitchen.v1`;
+- `homecraft.cookbook.favourites.v1`, `homecraft.cookbook.feedback.v1`;
+- `homecraft.fermentation.v1`;
+- `homecraft.pastelDefault.v1`, `homecraft.editorialDefault.v1` — jednorazowe znaczniki migracji motywu.
 
-- Czy „Zaplanuj gotowanie” ma mieć własną zakładkę w pasku działów? Teraz to karta w Air Fryer i Dom.
-- Namaczanie frytek przez 30 min wydłuża plan do 1 h 22 min. Skrócić je albo dać jako opcję?
-- Kolejne scenariusze gotowania: nowy obiekt `Recipe` w `kitchen-data.ts`, ewentualnie wybór spośród dań Air Fryera.
-- Czasy dla kurczaka w panko (200 °C, 12 min, obrócić w połowie) trzeba sprawdzić na prawdziwym COSORI.
-- Test na fizycznym iPhonie: dźwięk alarmu, wibracje i podtrzymanie ekranu w Safari i w PWA. Do tej pory testowano tylko w Chrome i przez Playwright.
-- Otwarte PR do decyzji:
-  - **#2** (`concept/homecraft-kitchen-os-2026`): koncepcje i dokumentacja Kitchen OS.
-  - **#3** (`ops/vercel-quality-2026`): nagłówki bezpieczeństwa Vercel dla `main`.
+Nie istnieje i nie należy dodawać klucza do własnych palet kolorystycznych — funkcja definiowania kolorów została odrzucona.
 
-## Jak zacząć
+## Architektura i ważne pliki
 
-1. Przeczytaj `README.md` i ten plik. Przejrzyj `git log` na `main`.
-2. Zsynchronizuj `demo-homecraft` z `main`, potem utwórz gałąź roboczą.
-3. `npm ci`, potem `npm run dev` do pracy, a `npm run build` i `npm test` przed PR.
-4. Zaproponuj plan, zanim zaczniesz większą zmianę.
+| Obszar | Pliki |
+| --- | --- |
+| Powłoka, routing i nawigacja | `app/src/App.tsx` |
+| Preferencje i motywy | `app/src/preferences.ts`, `app/src/editorial.css` |
+| Kawa | `app/src/brewing.js`, `app/src/screens/*.html` |
+| Książka | `Cookbook.tsx`, `cookbook-data.ts`, `cookbook-store.ts`, `cookbook-recipes*.ts` |
+| Air Fryer | `FryerModule.tsx`, `fryer-data.ts` |
+| Kuchnia i Użyteczne | `HomeModule.tsx`, `TimersScreen.tsx`, `home-data.ts` |
+| Timery | `app/src/modules/timers.ts` |
+| Kitchen OS | `KitchenModule.tsx`, `kitchen-data.ts`, `kitchen-store.ts` |
+| Fermentacja | `FermentationScreen.tsx`, `fermentation.css` |
+| Zakupy | `ShoppingModule.tsx`, `shopping-data.ts` |
+| Tłumaczenia nowych modułów | `app/src/modules/en.ts` |
+
+Routing używa hashy, m.in. `#home`, `#timer`, `#fermentation`, `#fryer/...`, `#dom/kitchen|recipes|timers|eggs|cook|thermomix/...|measures`, `#shop/...` i `#plan/plan|mise|cook`.
+
+Wspólne dodawanie do zakupów używa zdarzenia `homecraft:shop-add` z `detail: [{name, qty}]`.
+
+## Testy i jakość
+
+Przed PR uruchom faktycznie:
+
+```sh
+npm ci
+npm run build
+npm test
+```
+
+Playwright wymaga Chromium: `npx playwright install --with-deps chromium` albo `CHROMIUM_PATH=/usr/bin/chromium npm test`.
+
+Sprawdź oba warianty bazowej ścieżki:
+
+- GitHub Pages: `/HomeCraft/`;
+- Vercel: `/` (`npx vite build --base=/`).
+
+Minimalna kontrola przeglądarkowa: start, wszystkie sześć pozycji dolnego menu, pełny zmieniany scenariusz, 320/390 px i desktop, dzień/noc, odświeżenie w trakcie oraz brak poziomego przewijania. Cele dotyku mają co najmniej 44 px, a kontrast ma spełniać WCAG AA.
+
+Przy przepisach i temperaturach sprawdź bezpieczeństwo żywności. COSORI ma zakres 30–230 °C. Czasy i kcal są orientacyjne; nie wolno twierdzić, że 600 przepisów przetestowano fizycznie.
+
+## Publikacja
+
+- `vite.config.ts` używa `base: '/HomeCraft/'`.
+- `vercel.json` buduje z `--base=/`.
+- Workflow po zmianie źródła w `main` tworzy commit `Zbuduj stronę z …` z plikami strony w katalogu głównym.
+- Vercel wdraża automatycznie; nie uruchamiaj ręcznego deployu.
+- Service worker może chwilowo pokazywać poprzednią wersję. Przy zmianie cache sprawdź aktualizację i przeładowanie bez utraty danych.
+
+## Znane ograniczenia
+
+- Alarm, wibracje i wake lock wymagają osobnego testu na fizycznym iPhonie/Safari/PWA.
+- Czasy, temperatury oraz kcal są redakcyjnymi wartościami orientacyjnymi.
+- „Moja lodówka” i kontrola wydatków są oznaczone jako funkcje w przygotowaniu.
+- Kitchen OS nadal zapisuje jedną aktywną sesję.
+
+## Start kolejnej sesji
+
+1. Przeczytaj `README.md`, ten plik i `docs/AGENT_PROMPT.md`.
+2. Sprawdź `git status`, `git fetch`, logi `main` i `demo-homecraft` oraz otwarte PR-y.
+3. Zsynchronizuj demo, utwórz gałąź funkcji i dopiero wtedy zmieniaj kod.
+4. Zakończ testami, kontrolą w przeglądarce i niezależnymi przeglądami opisanymi w `AGENT_PROMPT.md`.
