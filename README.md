@@ -1,20 +1,20 @@
 # HomeCraft
 
-Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w trzech działach, w jednym wyglądzie:
+Polskojęzyczny pomocnik kuchenny na iPhone'a (PWA, React + TypeScript + Vite), działający również offline.
 
 - **Kawa:** dawne Crema Lab. Sześć metod parzenia, prowadzenie krok po kroku, timer, sprzęt (młynki, Lelit Anna), historia i baza kaw. Cały kod i dane są bez zmian.
 - **Air Fryer:** dawna „Ściąga Air Fryer” pod COSORI TurboBlaze 6 l. 37 dań z trybem, temperaturą i czasem w układzie wyświetlacza urządzenia, kroki, ulubione, niezależne timery z przypomnieniem „potrząśnij / obróć”.
-- **Dom (pomoc w domu):** nowy dział, który będzie rósł. Pierwsza zakładka to **Timery**: okrągły minutnik z pokrętłem, szybkimi czasami i opcjami zaawansowanymi (alert przed końcem, rundy, dźwięk, wibracje, przypomnienie w połowie) oraz stoper z okrążeniami.
-- **Thermomix TM6 (w Kuchni):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
-- **Herbata (przy kawie):** piąta zakładka menu kawy. 24 herbaty i napary w kategoriach (białe, zielone, żółte, oolong, czarne, pu-erh, ziołowe, owocowe, rooibos i mate): temperatura wody, ilość liści przeliczana na wybraną ilość wody, czasy kolejnych zalań ustawiane jednym dotknięciem w minutniku, przycisk „Info i ciekawostki” (czym jest, jak powstaje, dlaczego tak smakuje, pochodzenie, ciekawostki) oraz ogólny przewodnik. Kod jest odseparowany (`modules/TeaScreen.tsx`, `modules/tea-data.ts`), więc zakładkę łatwo usunąć.
-- **Zaplanuj gotowanie (Kitchen OS, demo):** przycisk w Air Fryerze (Dania) i w Domu (Timery). Jeden scenariusz: kurczak w panko z Air Fryera, frytki i sałatka na 2 porcje. **Plan** (wybór dania i godziny podania, plan liczony wstecz, pasy „Ty / Air Fryer / Czeka”), **Przygotuj** (składniki, sprzęt i czynności do odhaczenia, brakujące składniki trafiają do Zakupów), **Gotuj** (co teraz, co następne, o której koniec, równoległe kroki, timery ze wspólnego silnika, opóźnienie i przeliczenie planu). Ustawienia Air Fryera są do wpisania ręcznie; aplikacja nie steruje urządzeniem.
+- **Kuchnia i książka kucharska:** ekran startowy Kuchni, 600 przepisów, wyszukiwanie, diety, urządzenia, kcal na porcję, oceny, ulubione i rozkład czasu. Cały kafel otwiera przepis, a ulubione są zawsze grupowane na początku wyników.
+- **Użyteczne:** wspólne timery, stoper, jajka, czasy gotowania i miarki. Timery przetrwają odświeżenie i mogą być uruchamiane z innych działów.
+  - **Jajka:** czasy na miękko, półtwardo i twardo, korekta na wielkość i temperaturę, jajko w koszulce, sadzone, jajecznica i test świeżości.
+  - **Czasy:** ponad 30 produktów z czasami w garnku, na parze, w piekarniku i Air Fryerze oraz jednym przyciskiem do timera.
+  - **Miarki:** przelicznik objętości i masy dla 30 produktów, tabela miarek, °C ↔ °F i bezpieczne temperatury mięs.
+- **Thermomix TM6:** przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
+- **Napoje:** Kawa, Parzenie, Sprzęt, Historia, 24 herbaty i napary oraz Fermentacja z przepisami, kalendarzem nastawów i dziennikiem.
+- **Zaplanuj gotowanie (Kitchen OS, demo):** dostępne z Air Fryera i Kuchni. Plan liczy harmonogram wstecz od godziny podania, a widoki Przygotuj i Gotuj obsługują checklisty, zakupy, równoległe kroki i wspólne timery. Ustawienia urządzeń są do wpisania ręcznie; aplikacja nie steruje sprzętem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
-  - **Jajka:** czasy na miękko, półtwardo i na twardo (we wrzątku i na parze) z korektą na wielkość i temperaturę jajka, jajko w koszulce, sadzone, jajecznica, test świeżości.
-  - **Gotowanie:** ponad 30 produktów (ziemniaki, warzywa, kasze, ryż, makaron, strączkowe, mięso i ryby) z czasami w garnku, na parze, w piekarniku i w Air Fryerze, proporcjami wody i jednym przyciskiem do timera.
-  - **Miarki:** przelicznik szklanka / łyżka / łyżeczka / ml / g / dag / kg dla 30 produktów (np. szklanka cukru = 220 g = 22 dag), tabela miarek, °C ↔ °F, bezpieczne temperatury mięs.
-  - **Timery:** wspólne dla wszystkich działów. Przetrwają odświeżenie, trzymają ekran włączony, dzwonią i wibrują, a pływający znacznik czasu jest widoczny też w dziale Kawa.
 
-Motywy (**Pastel** jako główny wygląd: szałwiowe tło z miękkimi falami, jasne karty z miękkim cieniem, terakota i teal; oraz Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
+Motyw **Editorial** jest domyślny. Korzysta z ośmiu lokalnych fotografii WebP, terakotowego akcentu i osobnych palet jasnej oraz ciemnej. Pastel, Palarnia, Kawiarnia, Soft i Linia pozostają dostępne. Tryb dzień / noc / systemowy, gęstość i język PL / EN działają we wszystkich działach.
 
 ## Uruchomienie i rozwój
 
@@ -39,7 +39,7 @@ Aplikacja działa offline (service worker) i da się ją dodać do ekranu począ
 
 ## Dane i migracja
 
-Pastel jest motywem domyślnym. Jeśli na urządzeniu był zapisany dawny domyślny motyw Palarnia, aplikacja raz przełącza go na Pastel (znacznik `homecraft.pastelDefault.v1`); inne wybrane motywy zostają, a Palarnię można wybrać ponownie w Ustawieniach. Pastel korzysta z układu Kawiarni (`bar.css`), a `pastel.css` ustawia tylko paletę i tło.
+Editorial jest motywem domyślnym. Jednorazowa migracja `homecraft.editorialDefault.v1` przenosi wyłącznie poprzedni domyślny Pastel na Editorial. Jawnie wybrane Palarnia, Kawiarnia, Soft i Linia pozostają bez zmian. Historyczny znacznik `homecraft.pastelDefault.v1` nadal istnieje dla urządzeń, które pominęły wcześniejsze wydanie.
 
 
 Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania) i `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”: godzina podania, odhaczone kroki i składniki; nie dotyka pozostałych kluczy). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
@@ -48,7 +48,7 @@ Ulubione i timery z dawnej Ściągi Air Fryer (artefakt Claude) są w innym adre
 
 ## Struktura
 
-- `app/src/App.tsx`: powłoka, pasek działów (Kawa / Air Fryer / Dom / Zakupy), routing przez hash. Ekrany kawy pozostają zamontowane, żeby timer kawy działał podczas pracy w innym dziale.
+- `app/src/App.tsx`: powłoka, stały dolny pasek Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy oraz routing przez hash. Ekrany kawy pozostają zamontowane, żeby timer kawy działał podczas pracy w innym dziale.
 - `app/src/modules/fryer-data.ts`, `FryerModule.tsx`: dane i ekran Air Fryera.
 - `app/src/modules/TimersScreen.tsx`, `timers.ts`: okrągły minutnik, stoper i wspólny magazyn timerów.
 - `app/src/modules/shopping-data.ts`, `ShoppingModule.tsx`: lista zakupów.
@@ -99,7 +99,7 @@ panko zachowuje identyfikatory. Pozostałe dane nie są migrowane ani kasowane.
 
 Baza jest lokalna w `cookbook-recipes.ts`; każdy rekord ma trwałe jawne ID (nie zmieniaj
 ich przy edycji ani sortowaniu). Nowe rekordy dodaje się bez zmiany algorytmu katalogu;
-test sprawdza wyszukiwanie i sortowanie także dla 500 rekordów. Logika jest w czystych
+test sprawdza wyszukiwanie i sortowanie całej bazy 600 rekordów. Logika jest w czystych
 plikach `.ts`; interfejs w `Cookbook.tsx`. Planer uwzględnia wyłączne zasoby osoby,
 kosza, kuchenki, piekarnika i blendera, także dodatkowe zasoby aktywnego kroku.
 Nowe scenariusze są celowo sekwencyjne: jedna osoba i bez konfliktów sprzętu.
