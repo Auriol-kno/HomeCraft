@@ -1,0 +1,28 @@
+const {chromium}=require('@playwright/test');
+const {spawn}=require('node:child_process');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const base=process.env.HOUSE_BASE||'/HomeCraft/',url='http://127.0.0.1:4178'+base;
+const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4178','--base',base],{stdio:'pipe'});
+const shots='test-results/household';fs.mkdirSync(shots,{recursive:true});let browser;
+(async()=>{for(let i=0;i<60;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,250));if(i===59)throw Error('Preview unavailable');}
+ browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH,args:['--no-sandbox']}:{})});
+ const ctx=await browser.newContext({viewport:{width:390,height:844},timezoneId:'Europe/Warsaw',colorScheme:'light',serviceWorkers:'block'});
+ await ctx.clock.install({time:new Date('2026-11-27T12:00:00+01:00')});
+ await ctx.addInitScript(()=>{if(localStorage.getItem('household-seeded'))return;localStorage.setItem('household-seeded','1');localStorage.setItem('homecraft.pantry.v1','{damaged');localStorage.setItem('homecraft.expenses.v1','{damaged');localStorage.setItem('homecraft.shopping.v1','[]');});
+ const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const go=async hash=>{await p.goto(url+'#'+hash);await p.locator('.primary-nav').waitFor();};
+ const layout=async label=>assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1||document.querySelector('main:not([hidden])').scrollWidth>document.querySelector('main:not([hidden])').clientWidth+1),false,'overflow '+label);
+ await go('dom/thermomix/recipes');assert.equal(await p.locator('.hc-tm').count(),65);await p.getByLabel('Szukaj przepisu').fill('hummus');assert.equal(await p.locator('.hc-tm').count(),1);await p.screenshot({path:`${shots}/01-tm6-390.png`});
+ await go('dom/kitchen');await p.getByRole('button',{name:/Moja lodówka/}).click();assert.equal(await p.evaluate(()=>location.hash),'#dom/fridge');
+ assert.equal(await p.evaluate(()=>localStorage.getItem('homecraft.pantry.v1')),'{damaged','corrupted value not overwritten by read');
+ await p.getByLabel('Nazwa produktu').fill('Mleko');await p.getByLabel('Ilość',{exact:true}).fill('1');await p.getByLabel('Jednostka').selectOption('l');await p.getByLabel('Kategoria').selectOption('Nabiał i jajka');await p.getByLabel('Termin przydatności').fill('2026-11-29');await p.getByLabel('Minimum zapasu').fill('1');await p.getByLabel('Cena jednostkowa (zł)').fill('4,99');await p.getByRole('button',{name:'Dodaj do zapasów'}).click();
+ assert(await p.getByText('Produkt zapisany.',{exact:true}).isVisible());assert.equal(JSON.parse(await p.evaluate(()=>localStorage.getItem('homecraft.pantry.v1'))).items[0].name,'Mleko');
+ await p.reload();await p.locator('.primary-nav').waitFor();assert.match(await p.locator('.hc-stock').innerText(),/Mleko/,'pantry survives reload');
+ await p.getByRole('button',{name:/Dodaj braki do zakupów/}).click();await p.getByRole('navigation',{name:'Nawigacja główna'}).getByRole('button',{name:'Zakupy'}).click();assert.match(await p.locator('.hc-iname').first().innerText(),/Mleko/);await p.screenshot({path:`${shots}/02-pantry-390.png`});await layout('pantry 390');
+ await go('dom/expenses');assert.equal(await p.evaluate(()=>localStorage.getItem('homecraft.expenses.v1')),'{damaged','corrupted expense not overwritten by read');await p.getByLabel('Budżet miesięczny (zł)').fill('1200');await p.getByRole('button',{name:'Zapisz',exact:true}).click();await p.getByLabel('Miesiąc').fill('2026-12');assert.equal(await p.getByLabel('Budżet miesięczny (zł)').inputValue(),'','separate monthly budget');await p.getByLabel('Budżet miesięczny (zł)').fill('900');await p.getByRole('button',{name:'Zapisz',exact:true}).click();await p.getByLabel('Miesiąc').fill('2026-11');assert.equal(await p.getByLabel('Budżet miesięczny (zł)').inputValue(),'1200');await p.getByLabel('Kwota (zł)').fill('123,45');await p.getByLabel('Sklep').fill('Sklep osiedlowy');await p.getByRole('button',{name:'Zapisz wydatek'}).click();assert.match(await p.locator('.hc-budget-metrics').innerText(),/123,45/);await p.reload();await p.locator('.primary-nav').waitFor();assert.match(await p.locator('.hc-expense').innerText(),/Sklep osiedlowy/);await p.screenshot({path:`${shots}/03-expenses-390.png`});
+ await p.evaluate(()=>localStorage.setItem('cremalab.preferences.v1',JSON.stringify({theme:'editorial',mode:'dark',density:'standard',language:'pl'})));await p.reload();await p.locator('.primary-nav').waitFor();assert.equal(await p.evaluate(()=>document.documentElement.dataset.mode),'dark');await layout('expenses 390 dark');await p.screenshot({path:`${shots}/04-expenses-390-dark.png`});
+ await p.setViewportSize({width:320,height:740});await layout('expenses 320');await p.screenshot({path:`${shots}/05-expenses-320.png`});await p.setViewportSize({width:1280,height:900});await layout('expenses desktop');
+ assert.equal(await p.locator('.primary-nav button').count(),6,'bottom menu always visible');assert.deepEqual(errors,[]);
+ console.log('PASS: TM6, pantry and expenses browser flow');
+})().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();server.kill();});
