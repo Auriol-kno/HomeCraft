@@ -4,12 +4,12 @@ Polskojęzyczny pomocnik kuchenny na iPhone'a (PWA, React + TypeScript + Vite), 
 
 - **Kawa:** dawne Crema Lab. Sześć metod parzenia, prowadzenie krok po kroku, timer, sprzęt (młynki, Lelit Anna), historia i baza kaw. Cały kod i dane są bez zmian.
 - **Air Fryer:** dawna „Ściąga Air Fryer” pod COSORI TurboBlaze 6 l. 37 dań z trybem, temperaturą i czasem w układzie wyświetlacza urządzenia, kroki, ulubione, niezależne timery z przypomnieniem „potrząśnij / obróć”.
-- **Kuchnia i książka kucharska:** ekran startowy Kuchni, 600 przepisów, wyszukiwanie, diety, urządzenia, kcal na porcję, oceny, ulubione i rozkład czasu. Cały kafel otwiera przepis, a ulubione są zawsze grupowane na początku wyników.
+- **Kuchnia i książka kucharska:** ekran startowy Kuchni, 600 przepisów, wyszukiwanie, diety, urządzenia, kcal na porcję, oceny, ulubione i rozkład czasu. Cały kafel otwiera przepis, a ulubione są zawsze grupowane na początku wyników. „Moja lodówka” kontroluje zapasy, terminy, minima i wartość produktów; braki przekazuje do Zakupów. Kontrola wydatków zapisuje miesięczny budżet, transakcje i strukturę kategorii.
 - **Użyteczne:** wspólne timery, stoper, jajka, czasy gotowania i miarki. Timery przetrwają odświeżenie i mogą być uruchamiane z innych działów.
   - **Jajka:** czasy na miękko, półtwardo i twardo, korekta na wielkość i temperaturę, jajko w koszulce, sadzone, jajecznica i test świeżości.
   - **Czasy:** ponad 30 produktów z czasami w garnku, na parze, w piekarniku i Air Fryerze oraz jednym przyciskiem do timera.
   - **Miarki:** przelicznik objętości i masy dla 30 produktów, tabela miarek, °C ↔ °F i bezpieczne temperatury mięs.
-- **Thermomix TM6:** przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
+- **Thermomix TM6:** 65 przepisów (15 dotychczasowych i 50 nowych popularnych receptur) z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
 - **Napoje:** Kawa, Parzenie, Sprzęt, Historia, 24 herbaty i napary oraz Fermentacja z przepisami, kalendarzem nastawów i dziennikiem.
 - **Zaplanuj gotowanie (Kitchen OS, demo):** dostępne z Air Fryera i Kuchni. Plan liczy harmonogram wstecz od godziny podania, a widoki Przygotuj i Gotuj obsługują checklisty, zakupy, równoległe kroki i wspólne timery. Ustawienia urządzeń są do wpisania ręcznie; aplikacja nie steruje sprzętem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
@@ -27,7 +27,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|fridge|expenses|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 
@@ -42,7 +42,7 @@ Aplikacja działa offline (service worker) i da się ją dodać do ekranu począ
 Editorial jest motywem domyślnym. Jednorazowa migracja `homecraft.editorialDefault.v1` przenosi wyłącznie poprzedni domyślny Pastel na Editorial. Jawnie wybrane Palarnia, Kawiarnia, Soft i Linia pozostają bez zmian. Historyczny znacznik `homecraft.pastelDefault.v1` nadal istnieje dla urządzeń, które pominęły wcześniejsze wydanie.
 
 
-Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania) i `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”: godzina podania, odhaczone kroki i składniki; nie dotyka pozostałych kluczy). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
+Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania), `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”), `homecraft.pantry.v1` (wersjonowane zapasy) i `homecraft.expenses.v1` (wersjonowany budżet oraz wydatki). Odczyt dwóch ostatnich kluczy waliduje wersję, typy, limity i daty; uszkodzony zapis daje pusty stan i nie jest nadpisywany podczas samego odczytu. Nie ma migracji ani zmian istniejących kluczy. Eksport / import kopii JSON w Historii obejmuje dane kawy; pozostałe moduły nie są jeszcze w kopii.
 
 Ulubione i timery z dawnej Ściągi Air Fryer (artefakt Claude) są w innym adresie, więc trzeba je oznaczyć gwiazdką od nowa.
 
@@ -80,7 +80,7 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia ma własny ekran startowy z wejściem do książki, wyszukiwania według składników, zakupów i planowania pojedynczego gotowania; „Moja lodówka” i kontrola wydatków są jawnie oznaczone jako funkcje w przygotowaniu. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia ma własny ekran startowy z wejściem do książki, wyszukiwania według składników, zakupów, planowania, Lodówki i Wydatków. Lodówka sortuje produkty według terminu, pokazuje niskie stany i przekazuje braki do istniejącej listy zakupów. Wydatki mają miesięczny budżet, historię i podział kategorii. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
 
 Editorial ma osobną jasną i ciemną paletę. Zdjęcia nagłówków są wyświetlane w całości (`contain`) i łagodnie przechodzą w rzeczywisty kolor tła, dzięki czemu nie mają twardych odcięć. Dolne menu Editorial i Kawiarni używa szklano-karmelowych przycisków z zagłębionym stanem aktywnym.
 

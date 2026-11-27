@@ -24,6 +24,7 @@ jobs:
           npx vite build --base=/
           BOOK_BASE=/ node tests/cookbook.cjs
           BOOK_BASE=/ node tests/menu-timeline.cjs
+          HOUSE_BASE=/ node tests/household.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -49,7 +49,7 @@ Jesteś głównym agentem prowadzącym rozwój aplikacji HomeCraft.
 - Nie duplikuj logiki. Obliczenia, dane i harmonogramy trzymaj w czystych plikach `.ts`; UI osobno.
 - Interfejs jest po polsku. Nowe teksty UI dodaj również po angielsku w `app/src/modules/en.ts` lub właściwej warstwie i18n. Treści receptur pozostają po polsku.
 - Editorial jest domyślny, ale Pastel, Palarnia, Kawiarnia, Soft i Linia muszą pozostać sprawne.
-- Zachowaj 600 przepisów, oceny, ulubione, historię, timery, zakupy, fermentację i Kitchen OS.
+- Zachowaj 600 przepisów książki, 65 receptur TM6, oceny, ulubione, historię, timery, zakupy, Lodówkę, wydatki, fermentację i Kitchen OS.
 - Nie przedstawiaj funkcji planowanych jako działających. Nie twierdź, że receptury przetestowano fizycznie.
 
 ### iPhone first

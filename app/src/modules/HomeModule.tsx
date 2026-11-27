@@ -8,8 +8,9 @@ import { ICONS, Icon } from './ui';
 import { TimersScreen } from './TimersScreen';
 import { Cookbook } from './Cookbook';
 import { PlanCta } from './KitchenModule';
+import { ExpensesScreen, PantryScreen } from './HouseholdScreens';
 
-export type HomeTab = 'kitchen' | 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix' | 'recipes';
+export type HomeTab = 'kitchen' | 'eggs' | 'cook' | 'measures' | 'timers' | 'thermomix' | 'recipes' | 'fridge' | 'expenses';
 export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
   { id: 'timers', label: 'Timery', icon: ICONS.timer }, { id: 'eggs', label: 'Jajka', icon: ICONS.egg },
   { id: 'cook', label: 'Gotowanie', icon: ICONS.pot }, { id: 'thermomix', label: 'Thermomix', icon: ICONS.mixer }, { id: 'measures', label: 'Miarki', icon: ICONS.scale },
@@ -17,17 +18,17 @@ export const homeTabs: { id: HomeTab; label: string; icon: string }[] = [
 export const usefulTabs = homeTabs.filter(x=>x.id!=='thermomix');
 const kitchenCards = [
   {id:'recipes',title:'Książka kucharska',note:'600 przepisów, diety, ulubione i kcal',icon:ICONS.dishes},
-  {id:'fridge',title:'Moja lodówka',note:'Funkcja w przygotowaniu',icon:ICONS.egg},
+  {id:'fridge',title:'Moja lodówka',note:'Zapasy, terminy przydatności i braki',icon:ICONS.egg},
   {id:'smart',title:'Szukaj według składników',note:'Wyszukiwanie przepisów i filtrowanie urządzeń',icon:ICONS.pot},
   {id:'shopping',title:'Lista zakupów',note:'Produkty pogrupowane według działów sklepu',icon:ICONS.scale},
   {id:'plan',title:'Zaplanuj gotowanie',note:'Planowanie jednego dania krok po kroku',icon:ICONS.timer},
-  {id:'expenses',title:'Kontrola wydatków',note:'Koszt posiłków — funkcja w przygotowaniu',icon:ICONS.modes},
+  {id:'expenses',title:'Kontrola wydatków',note:'Budżet, kategorie i historia zakupów',icon:ICONS.modes},
 ] as const;
 function KitchenLanding({onTab,onPlan,onShop}:{onTab:(tab:HomeTab)=>void;onPlan?:()=>void;onShop?:()=>void}){
- const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes')onTab('recipes');else if(id==='smart'){onTab('recipes');requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelector<HTMLInputElement>('.hc-book input[type="search"]')?.focus()));}else if(id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
+ const open=(id:typeof kitchenCards[number]['id'])=>{if(id==='recipes'||id==='fridge'||id==='expenses')onTab(id);else if(id==='smart'){onTab('recipes');requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelector<HTMLInputElement>('.hc-book input[type="search"]')?.focus()));}else if(id==='shopping')onShop?.();else if(id==='plan')onPlan?.();};
  return <section className="screen hc-kitchen-home" aria-label={t('Kuchnia','module')}>
   <div className="hc-kitchen-intro"><p className="hc-tag">HOMECRAFT</p><h2>{t('Co dziś ugotujemy?')}</h2><p>{t('Od produktów, które masz, do gotowego posiłku.')}</p></div>
-  <div className="hc-kitchen-menu">{kitchenCards.map(card=><button key={card.id} type="button" onClick={()=>open(card.id)} disabled={card.id==='fridge'||card.id==='expenses'}><span className="hc-kitchen-menu-icon"><Icon d={card.icon}/></span><span><b>{t(card.title)}</b><small>{t(card.note)}</small></span><span aria-hidden="true">→</span></button>)}</div>
+  <div className="hc-kitchen-menu">{kitchenCards.map(card=><button key={card.id} type="button" onClick={()=>open(card.id)}><span className="hc-kitchen-menu-icon"><Icon d={card.icon}/></span><span><b>{t(card.title)}</b><small>{t(card.note)}</small></span><span aria-hidden="true">→</span></button>)}</div>
  </section>;
 }
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
@@ -72,7 +73,7 @@ function Cooking({ onTimer }: { onTimer: () => void }) {
     </div>
     <div className="hc-chips" role="group" aria-label={t('Kategorie')}>{FOOD_CATEGORIES.map(c => <button key={c} aria-pressed={cat === c} onClick={() => setCat(c)}>{t(c)}</button>)}</div>
     {hint && <p className="subtle">{t(hint)}</p>}
-    {list.length === 0 && <p className="hc-empty">{t('Nic nie pasuje.')}</p>}
+    {list.length === 0 && <p className="hc-empty" role="status">{t('Nic nie pasuje.')}</p>}
     {list.map(f => <div key={f.id} className="hc-card">
       <p className="hc-tag">{t(f.c)}</p><h3 className="hc-h3">{t(f.n)}</h3>
       <div className="hc-list">{METHODS.filter(m => f.ways[m.id] && (method === 'all' || method === m.id)).map(m => { const w = f.ways[m.id]!; return <div key={m.id} className="hc-item">
@@ -99,7 +100,7 @@ function Thermomix({ onTimer, view, onView }: { onTimer: () => void; view: Therm
     <p className="subtle">{t('Podstawowe ustawienia Thermomix TM6, które ustawisz ręcznie na urządzeniu: czas, temperatura i obroty. Działają bez Cookidoo i bez internetu.')}</p>
     <input className="hc-input" type="search" value={q} onChange={e => setQ(e.target.value)} placeholder={t('Szukaj: ryż, zupa, pizza…')} aria-label={t('Szukaj przepisu')} autoComplete="off" />
     <div className="hc-chips" role="group" aria-label={t('Kategorie')}>{TM_CATEGORIES.map(c => <button key={c} aria-pressed={cat === c} onClick={() => setCat(c)}>{t(c)}</button>)}</div>
-    {list.length === 0 && <p className="hc-empty">{t('Nic nie pasuje.')}</p>}
+    {list.length === 0 && <p className="hc-empty" role="status">{t('Nic nie pasuje.')}</p>}
     {list.map(r => <details key={r.id} className="details-card hc-tm"><summary><span><small className="hc-tag">{t(r.c)}</small> <b>{t(r.n)}</b></span> <span>+</span></summary>
       <p className="subtle">{t('Porcje')}: {r.yield}</p>
       <h3 className="hc-h3">{t('Składniki')}</h3>
@@ -167,12 +168,14 @@ export function HomeModule({ active, tab, thermomixView, onThermomixView, onTab,
   useEffect(() => { if (active) { main.current?.scrollTo(0, 0); if (tab !== 'recipes') main.current?.querySelector('h1')?.focus({preventScroll:true}); } }, [tab,active]);
   const toTimers = useMemo(() => () => onTab('timers'), [onTab]);
   const thermomixHeading: Record<ThermomixView, [string, string]> = { recipes: ['THERMOMIX TM6', 'Przepisy bez Cookidoo'], timers: ['THERMOMIX TM6', 'Timery Thermomix'], rules: ['THERMOMIX TM6', 'Zasady używania'] };
-  const heading: Record<HomeTab, [string, string]> = { kitchen: ['SMART KITCHEN ASSISTANT', 'Kuchnia'], recipes: ['HOMECRAFT', 'Książka kucharska'], eggs: ['KUCHNIA', 'Idealne jajko'], cook: ['KUCHNIA', 'Czasy gotowania'], measures: ['KUCHNIA', 'Miarki i temperatury'], thermomix: thermomixHeading[thermomixView], timers: ['TIMERY', 'Timery kuchenne'] };
+  const heading: Record<HomeTab, [string, string]> = { kitchen: ['SMART KITCHEN ASSISTANT', 'Kuchnia'], recipes: ['HOMECRAFT', 'Książka kucharska'], fridge: ['ZAPASY', 'Moja lodówka'], expenses: ['DOMOWY BUDŻET', 'Kontrola wydatków'], eggs: ['KUCHNIA', 'Idealne jajko'], cook: ['KUCHNIA', 'Czasy gotowania'], measures: ['KUCHNIA', 'Miarki i temperatury'], thermomix: thermomixHeading[thermomixView], timers: ['TIMERY', 'Timery kuchenne'] };
   return <>
     <main ref={main} hidden={!active} className="app-content" aria-label={t('Moduł Kuchnia')}>
       <div className="screen-heading"><p className="overline">{t(heading[tab][0])}</p><h1 tabIndex={-1}>{t(heading[tab][1],tab==='kitchen'?'module':undefined)}</h1></div>
       {tab === 'kitchen' && <KitchenLanding onTab={onTab} onPlan={onPlan} onShop={onShop}/>}
       {tab === 'recipes' && active && <Cookbook onPlan={onPlan || (() => {})} />}
+      {tab === 'fridge' && active && <PantryScreen />}
+      {tab === 'expenses' && active && <ExpensesScreen />}
       {tab === 'eggs' && <Eggs onTimer={toTimers} />}
       {tab === 'cook' && <Cooking onTimer={toTimers} />}
       {tab === 'thermomix' && <Thermomix onTimer={() => onThermomixView('timers')} view={thermomixView} onView={onThermomixView} />}
