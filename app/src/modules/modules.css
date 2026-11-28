@@ -73,9 +73,9 @@ select.hc-input{appearance:auto}
 .hc-dish-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .hc-dish-top small{display:block;font:750 10px var(--body);letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
 .hc-dish-top b{display:block;font:650 16px/1.25 var(--body);letter-spacing:-.2px;margin-top:2px}
-.hc-mini{display:flex;align-items:center;gap:10px;background:#1d1715;color:#e8dccb;border-radius:10px;padding:8px 10px;font-variant-numeric:tabular-nums}
-.hc-mini i{font:600 11px var(--mono);letter-spacing:.08em;font-style:normal;opacity:.85}
-.hc-mini b{margin-left:auto;color:#f0b36a;font:700 16px var(--mono)}
+.hc-mini{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--ink) 4%,transparent);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 7%,transparent);border-radius:10px;padding:8px 10px;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 3px color-mix(in srgb,var(--ink) 9%,transparent)}
+.hc-mini i{font:600 11px var(--mono);letter-spacing:.08em;font-style:normal;color:var(--muted)}
+.hc-mini b{margin-left:auto;color:var(--accent);font:700 15px var(--mono)}
 .hc-flags{display:flex;gap:6px;flex-wrap:wrap}.hc-flags em{font-style:normal;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
 .hc-range{font:600 13px var(--mono);color:var(--accent)}
 
@@ -452,7 +452,7 @@ select.hc-input{appearance:auto}
 :root[data-theme="line"] .guide,:root[data-theme="line"] .guide-in{background:var(--bg);color:var(--ink)}
 }
 @layer overrides{
-.hc-mini{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.hc-mini{background:color-mix(in srgb,var(--ink) 4%,transparent);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 7%,transparent)}
 .hc-mini b{color:var(--accent)}
 :root[data-theme="line"] .hc-mini{background:transparent;border:1.5px solid var(--ink)}
 :root[data-theme="line"] .hc-mini b{color:var(--ink)}
@@ -531,7 +531,7 @@ html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient
 /* One bottom bar: the section menu (Napoje, Fryer, TM6, Użyteczne, Zakupy, Kitchen OS) is a scrollable
    row of tabs under the header. The six-item bottom bar stays as the only fixed menu. */
 .top-stack{min-width:0;position:relative;z-index:30}
-html:root .app-shell .section-nav{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;padding:6px 12px;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--bg)}
+html:root .app-shell .section-nav{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;padding:6px 12px;scrollbar-width:none;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
 html:root .app-shell .section-nav::-webkit-scrollbar{display:none}
 html:root .app-shell .section-nav button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:650 14px/1 var(--body);white-space:nowrap;box-shadow:none;text-transform:none;letter-spacing:0}
 html:root .app-shell .section-nav button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
@@ -594,3 +594,23 @@ html:root .app-shell .hc-photo-btn.has-photo{border-color:var(--accent)}
 .hc-photo-new .hc-ghost{min-height:44px}
 }
 @layer overrides{.hc-photo-pick:focus-within{outline:2px solid var(--on-accent);outline-offset:-4px}}
+
+/* Workshop: chosen gear on tabs, folded legacy panels, grouped grinder picker */
+@layer overrides{
+html:root .app-shell .hc-legacy>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;padding:0 4px;font-weight:600;color:var(--muted)}
+html:root .app-shell .hc-legacy.is-folded{margin-top:12px}
+.hc-gear-group+.hc-gear-group{margin-top:10px}
+.hc-gear-group-h{margin:4px 0 6px;font:700 11px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+html:root .profile-settings{display:grid;gap:8px}
+html:root .profile-settings label{font-size:13px;font-weight:650;color:var(--soft)}
+html:root .hc-profile-new{display:flex;gap:8px}
+html:root .hc-profile-new input{flex:1;min-width:0;min-height:46px;padding:8px 12px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-ctl,12px);font:500 15px var(--body)}
+html:root .hc-profile-new .hc-primary,html:root .hc-profile-list .hc-ghost,html:root .hc-profile-update{min-height:46px}
+html:root .hc-profile-active{margin:0;font-size:14px}
+html:root .hc-profile-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+html:root .hc-profile-list li{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+html:root .hc-profile-list li.on{border-color:var(--accent)}
+html:root .hc-profile-list li>span{flex:1;min-width:0;display:grid}
+html:root .hc-profile-list small{color:var(--muted);font-size:12px}
+html:root .hc-profile-list .hc-ghost{padding:6px 12px;font-size:14px}
+}
