@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { RECIPES, schedule, totalMinutes, PANKO_DINNER } from '../app/src/modules/kitchen-data.ts';
 import { DISH_FINISH_STAGES, DISHES } from '../app/src/modules/fryer-data.ts';
 import { dishTimeline, timelineBounds, timelineEvents, taskUses } from '../app/src/modules/timeline-data.ts';
+import '../app/src/modules/cookbook-all.ts'; // registers the 600 lazily loaded cookbook recipes
 for(const r of RECIPES){
  const before=JSON.stringify(r),plan=schedule(r,0),bounds=timelineBounds(plan);
  assert.equal(bounds.minutes,totalMinutes(r));

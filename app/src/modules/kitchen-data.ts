@@ -9,11 +9,6 @@ export const LANES: { id: Lane; label: string }[] = [{ id: 'hands', label: 'Ty' 
 
 export type { Recipe, KitchenTask, Ingredient, Lane } from './kitchen-types.ts';
 import type { Recipe, KitchenTask, Lane } from './kitchen-types.ts';
-import { COOKBOOK_RECIPES } from './cookbook-recipes.ts';
-import { WORLD_COOKBOOK_RECIPES } from './cookbook-world.ts';
-import { ADDITIONAL_COOKBOOK_RECIPES } from './cookbook-additional.ts';
-import { BAKERY_COOKBOOK_RECIPES } from './cookbook-bakery.ts';
-import { EXTRA_COOKBOOK_RECIPES } from './cookbook-recipes-extra.ts';
 export const PANKO_DINNER: Recipe = {
   id: 'panko-frytki-salatka',
   name: 'Kurczak w panko, frytki i sałatka',
@@ -63,7 +58,21 @@ export const PANKO_DINNER: Recipe = {
     { id: 'serve', title: 'Polej sałatkę i podawaj', detail: 'Dressing dodaj tuż przed podaniem. Posól frytki.', lane: 'hands', min: 2, after: ['rest', 'recrisp', 'salad'] },
   ],
 };
-export const RECIPES: Recipe[] = [PANKO_DINNER, ...COOKBOOK_RECIPES, ...EXTRA_COOKBOOK_RECIPES, ...WORLD_COOKBOOK_RECIPES, ...BAKERY_COOKBOOK_RECIPES, ...ADDITIONAL_COOKBOOK_RECIPES];
+// Recipe registry. Kitchen OS starts with the sample dinner; the 600 cookbook recipes (~250 KB) live in
+// cookbook-all.ts, loaded after the first screen or when the book opens (see cookbook-load.ts).
+// The array is filled in place, so every importer sees the same list once it is registered.
+export const RECIPES: Recipe[] = [PANKO_DINNER];
+let cookbookReady = false;
+const registryListeners = new Set<() => void>();
+export const isCookbookLoaded = () => cookbookReady;
+export const onCookbookLoaded = (l: () => void) => { registryListeners.add(l); return () => { registryListeners.delete(l); }; };
+export function registerCookbook(list: readonly Recipe[]) {
+  if (cookbookReady) return;
+  const known = new Set(RECIPES.map(r => r.id));
+  RECIPES.push(...list.filter(r => !known.has(r.id)));
+  cookbookReady = true;
+  registryListeners.forEach(l => l());
+}
 export const recipeById = (id: string) => RECIPES.find(r => r.id === id);
 
 export interface Planned extends KitchenTask { start: number; end: number }

@@ -15,6 +15,16 @@ self.addEventListener('message', e => {
   const same = e.data.urls.filter(u => typeof u === 'string' && u.startsWith(self.location.origin));
   e.waitUntil?.(caches.open(VERSION).then(c => Promise.all(same.map(u => c.add(u).catch(() => {})))));
 });
+// Hashed scripts and styles from older deploys pile up in the same cache; the page sends the list
+// of files it uses (online, after the cookbook loaded) and older .js/.css under assets/ are removed.
+// Images are kept: section photos load only when a section is opened.
+self.addEventListener('message', e => {
+  if (e.data?.type !== 'prune' || !Array.isArray(e.data.keep)) return;
+  const keep = new Set(e.data.keep.filter(u => typeof u === 'string').map(u => u.split('#')[0]));
+  e.waitUntil?.(caches.open(VERSION).then(c => c.keys().then(reqs => Promise.all(reqs
+    .filter(r => /\/assets\/[^/]+\.(js|css)$/.test(new URL(r.url).pathname) && !keep.has(r.url))
+    .map(r => c.delete(r, MATCH))))));
+});
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) return;

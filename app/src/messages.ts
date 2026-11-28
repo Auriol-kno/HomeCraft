@@ -109,6 +109,7 @@ Sprzęt|Equipment
 Kawa|Coffee
 Młynek|Grinder
 Serwis|Maintenance
+Mój sprzęt|My gear
 Prowadź mnie|Guide me
 krok po kroku: od młynka do filiżanki|step by step: from grinder to cup
 Przepis|Recipe

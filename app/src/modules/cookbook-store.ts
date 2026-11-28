@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { BOOK_KEY, parseFavourites, type FeedbackMap } from './cookbook-data';
+import { onCookbookLoaded } from './kitchen-data';
 import { TOAST_EVENT } from './timers';
 import { t } from './en';
 let cached: string[] | null = null;
@@ -17,6 +18,8 @@ export function toggleBookFavourite(id: string){
  listeners.forEach(l=>l());
 }
 if(typeof window!=='undefined')window.addEventListener('storage',e=>{if(e.key===BOOK_KEY||e.key===null){cached=read();listeners.forEach(l=>l());}});
+// Re-validate against the real recipe list once the cookbook chunk has loaded.
+onCookbookLoaded(()=>{if(cached){cached=read();listeners.forEach(l=>l());}});
 
 export const FEEDBACK_KEY='homecraft.cookbook.feedback.v1';
 const empty={rating:0,count:0,last:0};

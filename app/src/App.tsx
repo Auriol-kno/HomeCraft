@@ -21,17 +21,18 @@ import { ShoppingModule, SHOP_ICON, shopTabs, type ShopTab } from './modules/Sho
 import { TeaScreen } from './modules/TeaScreen';
 import { FermentationScreen } from './modules/FermentationScreen';
 import { KitchenModule, kitchenTabs, type KitchenTab } from './modules/KitchenModule';
+import { CoffeeGearScreen } from './modules/CoffeeGear';
 import { ICONS, Icon as ModIcon, KitchenAlarm, Toaster } from './modules/ui';
 import { useTimers } from './modules/timers';
 
 type Screen = 'home' | 'timer' | 'equipment' | 'history' | 'rating' | 'tea' | 'fermentation';
-type Equipment = 'grinder' | 'anna' | 'service';
+type Equipment = 'grinder' | 'anna' | 'service' | 'gear';
 // 'plan' (Kitchen OS) has no tab in the module bar: it opens from "Zaplanuj gotowanie" in Air Fryer and Dom.
 type Module = 'coffee' | 'fryer' | 'dom' | 'shop' | 'plan';
 // Hash routes: coffee keeps its own (#timer, #history ...); the new modules use #fryer/<tab> and #dom/<tab>.
 function parseHash(): {module: Module; fryer: FryerTab; dom: HomeTab; thermomix: ThermomixView; shop: ShopTab; plan: KitchenTab} {
  const [a,b,c]=location.hash.slice(1).split('/');
- return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:(b==='recipes'||homeTabs.some(x=>x.id===b))?b as HomeTab:'kitchen',thermomix:['recipes','timers','rules'].includes(c)?c as ThermomixView:'recipes',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
+ return {module:a==='fryer'?'fryer':a==='dom'?'dom':a==='shop'?'shop':a==='plan'?'plan':'coffee',plan:kitchenTabs.some(x=>x.id===b)?b as KitchenTab:'plan',fryer:fryerTabs.some(x=>x.id===b)?b as FryerTab:'dishes',dom:(['recipes','fridge','expenses'].includes(b)||homeTabs.some(x=>x.id===b))?b as HomeTab:'kitchen',thermomix:['recipes','timers','rules'].includes(c)?c as ThermomixView:'recipes',shop:shopTabs.some(x=>x.id===b)?b as ShopTab:'list'};
 }
 interface BrewStatus { running: boolean; method: string; seconds: number }
 const titles: Record<Screen,string> = {home:'Twoja codzienna kawa',timer:'Czas na dobry napar',equipment:'Twój warsztat',history:'Ostatnie filiżanki',rating:'Jak smakuje?',tea:'Herbata i napary',fermentation:'Fermentacja domowa'};
@@ -98,15 +99,26 @@ export function App() {
   else if(m==='plan'){const x=(tab as KitchenTab)||planTab;setPlanTab(x);setModule('plan');location.hash=`plan/${x}`;}
   else {setModule('coffee');location.hash=screen;}
  };
+ // Keep the selected section tab visible in the scrollable row under the header.
+ useEffect(()=>{document.querySelector('.section-nav [aria-current="page"]')?.scrollIntoView?.({inline:'nearest',block:'nearest'});},[module,screen,fryerTab,homeTab,thermomixView,shopTab,planTab]);
  const viewingTimers=(module==='fryer'&&fryerTab==='timers')||(module==='dom'&&(homeTab==='timers'||(homeTab==='thermomix'&&thermomixView==='timers')));
  const openBackup=()=>{navigate('history');requestAnimationFrame(()=>{const d=document.getElementById('backupCard') as HTMLDetailsElement|null;if(d){d.open=true;d.scrollIntoView({block:'center'});}});};
  const dismissHint=()=>{try{localStorage.setItem(hintKey,'1');}catch{}setInstallHint(false);};
  return <div className="app-shell" data-screen={module==='coffee'?screen:module} data-editorial-section={module==='dom'?homeTab:module==='coffee'?screen:module} data-editorial-view={module==='dom'&&homeTab==='thermomix'?thermomixView:module==='fryer'?fryerTab:module==='shop'?shopTab:module==='plan'?planTab:''} data-dock={dock&&module==='coffee'?'on':undefined}>
+  {/* One bottom bar: the section menu sits under the header as a scrollable row of tabs. */}
+  <div className="top-stack">
   <header className="app-header">
    <button className="brand-button" onClick={()=>go('dom','kitchen')} aria-label={tm('HomeCraft — Kuchnia')}><span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M5 20 20 6l15 14h-3v12a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V20Z" fill="currentColor"/><path d="M27 11V7h4v8Z" fill="currentColor" opacity=".7"/><circle cx="20" cy="24" r="7" fill="var(--accent)"/><path d="M20 20v4.5l3 1.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg></span><span>Home<b>Craft</b></span></button>
    <span id="chip" hidden/>
    <button id="settingsBtn" className="settings-trigger" aria-label={t('Ustawienia')} aria-haspopup="dialog"><Icon name="settings"/></button>
   </header>
+   {module==='coffee'&&<nav className="section-nav" aria-label={tm('Menu Napojów')}>{destinations.map(d=><button key={d.id} aria-label={d.id==='timer'&&status.running?`${t(d.label)} — ${t('Parzenie trwa')}`:(d.id==='home'?tm('Kawa'):t(d.label))} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i aria-hidden="true"/>}</span><span>{(d.id==='home'?tm('Kawa'):t(d.label))}</span></button>)}</nav>}
+   {module==='fryer'&&<nav className="section-nav" aria-label={tm('Menu Air Fryer')}>{fryerTabs.map(x=><button key={x.id} aria-label={x.id==='timers'&&kitchenTimers.some(t=>!t.ack)?`${tm(x.label)} — ${tm('Aktywny timer')}`:tm(x.label)} aria-current={fryerTab===x.id?'page':undefined} onClick={()=>go('fryer',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/>{x.id==='timers'&&kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{tm(x.label)}</span></button>)}</nav>}
+   {module==='dom'&&homeTab==='thermomix'&&<nav className="section-nav" aria-label={tm('Menu Thermomix')}>{thermomixViews.map(x=><button key={x.id} aria-current={thermomixView===x.id?'page':undefined} onClick={()=>{setThermomixView(x.id);location.hash=`dom/thermomix/${x.id}`;}}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
+   {module==='dom'&&!['thermomix','recipes','kitchen','fridge','expenses'].includes(homeTab)&&<nav className="section-nav" aria-label={tm('Użyteczne')}>{usefulTabs.map(x=><button key={x.id} aria-label={x.id==='timers'&&kitchenTimers.some(t=>!t.ack)?`${tm(x.label)} — ${tm('Aktywny timer')}`:x.id==='cook'?tm('Czasy'):tm(x.label)} aria-current={homeTab===x.id?'page':undefined} onClick={()=>go('dom',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/>{x.id==='timers'&&kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{x.id==='cook'?tm('Czasy'):tm(x.label)}</span></button>)}</nav>}
+   {module==='shop'&&<nav className="section-nav" aria-label={tm('Nawigacja Zakupy')}>{shopTabs.map(x=><button key={x.id} aria-current={shopTab===x.id?'page':undefined} onClick={()=>go('shop',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
+   {module==='plan'&&<nav className="section-nav" aria-label={tm('Nawigacja Kitchen OS')}>{kitchenTabs.map(x=><button key={x.id} aria-current={planTab===x.id?'page':undefined} onClick={()=>go('plan',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
+  </div>
   <main ref={main} hidden={module!=='coffee'} className="app-content" id="app-content">
    <div className="screen-heading">{(screen==='home'||screen==='timer')&&<p className="overline">{screen==='home'?t('ZACZNIJ OD FILIŻANKI'):t('PARZENIE')}</p>}<h1 id="screen-title" tabIndex={-1}>{t(screen==='timer'?status.method:titles[screen])}</h1>{status.running&&screen!=='timer'&&<button className="live-pill" onClick={()=>navigate('timer')}><span/>{t('Parzenie trwa')} · {clock(status.seconds)} →</button>}</div>
    <section hidden={screen!=='home'} aria-label={t('Wybór kawy')} className="screen">
@@ -122,10 +134,11 @@ export function App() {
     <details className="details-card"><summary>{t('Etapy parzenia')} <span>+</span></summary><BrewingPanel html={steps}/></details>
    </section>
    <section hidden={screen!=='equipment'} aria-label={t('Sprzęt i parametry')} className="screen">
-    <div className="segment" role="group" aria-label={t('Wybór sprzętu')}>{([{id:'grinder',label:'Młynek'},{id:'anna',label:'Lelit Anna'},{id:'service',label:'Serwis'}] as const).map(e=><button key={e.id} aria-pressed={equipment===e.id} onClick={()=>setEquipment(e.id)}>{t(e.label)}</button>)}</div>
+    <div className="segment" role="group" aria-label={t('Wybór sprzętu')}>{([{id:'grinder',label:'Młynek'},{id:'anna',label:'Lelit Anna'},{id:'service',label:'Serwis'},{id:'gear',label:'Mój sprzęt'}] as const).map(e=><button key={e.id} aria-pressed={equipment===e.id} onClick={()=>setEquipment(e.id)}>{t(e.label)}</button>)}</div>
     <div hidden={equipment!=='grinder'}><BrewingPanel html={grinder}/></div>
     <div hidden={equipment!=='anna'}><BrewingPanel html={anna}/>{status.method!=='Espresso'&&<p className="notice">{t('Lelit Anna jest dostępna dla espresso. Wybierz espresso na ekranie Kawa.')}</p>}</div>
     <div hidden={equipment!=='service'}><BrewingPanel html={service}/></div>
+    {equipment==='gear'&&<CoffeeGearScreen/>}
     <button className="wide-link" onClick={()=>navigate('timer')}>{t('Wróć do parzenia')} <span>→</span></button>
    </section>
    <section hidden={screen!=='history'} aria-label={t('Historia kaw')} className="screen">{backupDue&&<p className="notice">{t('Ostatnia kopia danych była dawno albo nigdy. Zapisz ją poniżej.')}</p>}<BrewingPanel html={history}/><Backup/></section>
@@ -143,18 +156,12 @@ export function App() {
   <KitchenModule active={module==='plan'} tab={planTab} onTab={x=>go('plan',x)}/>
   <ShoppingModule active={module==='shop'} tab={shopTab} onTab={x=>go('shop',x)}/>
   <div className="nav-stack">
-   {module==='coffee'&&<nav className="context-nav" aria-label={tm('Menu Napojów')}>{destinations.map(d=><button key={d.id} aria-label={d.id==='timer'&&status.running?`${t(d.label)} — ${t('Parzenie trwa')}`:(d.id==='home'?tm('Kawa'):t(d.label))} aria-current={screen===d.id?'page':undefined} onClick={()=>navigate(d.id)}><span className="nav-icon"><Icon name={d.icon}/>{d.id==='timer'&&status.running&&<i aria-hidden="true"/>}</span><span>{(d.id==='home'?tm('Kawa'):t(d.label))}</span></button>)}</nav>}
-   {module==='fryer'&&<nav className="context-nav" aria-label={tm('Menu Air Fryer')}>{fryerTabs.map(x=><button key={x.id} aria-label={x.id==='timers'&&kitchenTimers.some(t=>!t.ack)?`${tm(x.label)} — ${tm('Aktywny timer')}`:tm(x.label)} aria-current={fryerTab===x.id?'page':undefined} onClick={()=>go('fryer',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/>{x.id==='timers'&&kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{tm(x.label)}</span></button>)}</nav>}
-   {module==='dom'&&homeTab==='thermomix'&&<nav className="context-nav" aria-label={tm('Menu Thermomix')}>{thermomixViews.map(x=><button key={x.id} aria-current={thermomixView===x.id?'page':undefined} onClick={()=>{setThermomixView(x.id);location.hash=`dom/thermomix/${x.id}`;}}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
-   {module==='dom'&&!['thermomix','recipes','kitchen'].includes(homeTab)&&<nav className="context-nav" aria-label={tm('Użyteczne')}>{usefulTabs.map(x=><button key={x.id} aria-label={x.id==='timers'&&kitchenTimers.some(t=>!t.ack)?`${tm(x.label)} — ${tm('Aktywny timer')}`:x.id==='cook'?tm('Czasy'):tm(x.label)} aria-current={homeTab===x.id?'page':undefined} onClick={()=>go('dom',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/>{x.id==='timers'&&kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{x.id==='cook'?tm('Czasy'):tm(x.label)}</span></button>)}</nav>}
-   {module==='shop'&&<nav className="context-nav" aria-label={tm('Nawigacja Zakupy')}>{shopTabs.map(x=><button key={x.id} aria-current={shopTab===x.id?'page':undefined} onClick={()=>go('shop',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
-   {module==='plan'&&<nav className="context-nav" aria-label={tm('Nawigacja Kitchen OS')}>{kitchenTabs.map(x=><button key={x.id} aria-current={planTab===x.id?'page':undefined} onClick={()=>go('plan',x.id)}><span className="nav-icon"><ModIcon d={x.icon}/></span><span>{tm(x.label)}</span></button>)}</nav>}
    <nav className="bottom-nav primary-nav" aria-label={tm('Nawigacja główna')}>
-    <button aria-label={tm('Kuchnia','module')} aria-current={module==='dom'&&['kitchen','recipes'].includes(homeTab)?'page':undefined} onClick={()=>go('dom','kitchen')}><span className="nav-icon"><ModIcon d={ICONS.dishes}/></span><span>{tm('Kuchnia','module')}</span></button>
+    <button aria-label={tm('Kuchnia','module')} aria-current={module==='dom'&&['kitchen','recipes','fridge','expenses'].includes(homeTab)?'page':undefined} onClick={()=>go('dom','kitchen')}><span className="nav-icon"><ModIcon d={ICONS.dishes}/></span><span>{tm('Kuchnia','module')}</span></button>
     <button aria-label={status.running?`${tm('Napoje')} — ${t('Parzenie trwa')}`:tm('Napoje')} aria-current={module==='coffee'?'page':undefined} onClick={()=>go('coffee')}><span className="nav-icon"><ModIcon d={ICONS.coffee}/>{status.running&&<i aria-hidden="true"/>}</span><span>{tm('Napoje')}</span></button>
     <button aria-label="Air Fryer" aria-current={module==='fryer'?'page':undefined} onClick={()=>go('fryer','dishes')}><span className="nav-icon"><ModIcon d={ICONS.fryer}/></span><span>Fryer</span></button>
     <button aria-label="Thermomix TM6" aria-current={module==='dom'&&homeTab==='thermomix'?'page':undefined} onClick={()=>go('dom','thermomix')}><span className="nav-icon"><ModIcon d={ICONS.mixer}/></span><span>TM6</span></button>
-    <button aria-label={kitchenTimers.some(t=>!t.ack)?`${tm('Użyteczne')} — ${tm('Aktywny timer')}`:tm('Użyteczne')} aria-current={module==='dom'&&!['kitchen','recipes','thermomix'].includes(homeTab)?'page':undefined} onClick={()=>go('dom','timers')}><span className="nav-icon"><ModIcon d={ICONS.timer}/>{kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{tm('Użyteczne')}</span></button>
+    <button aria-label={kitchenTimers.some(t=>!t.ack)?`${tm('Użyteczne')} — ${tm('Aktywny timer')}`:tm('Użyteczne')} aria-current={module==='dom'&&!['kitchen','recipes','thermomix','fridge','expenses'].includes(homeTab)?'page':undefined} onClick={()=>go('dom','timers')}><span className="nav-icon"><ModIcon d={ICONS.timer}/>{kitchenTimers.some(t=>!t.ack)&&<i aria-hidden="true"/>}</span><span>{tm('Użyteczne')}</span></button>
     <button aria-label={tm("Zakupy")} aria-current={module==="shop"?"page":undefined} onClick={()=>go("shop","list")}><span className="nav-icon"><ModIcon d={SHOP_ICON}/></span><span>{tm("Zakupy")}</span></button>
    </nav>
   </div>

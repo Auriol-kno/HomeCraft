@@ -1,20 +1,22 @@
 # HomeCraft
 
-Polskojęzyczny pomocnik domowy na iPhone'a (PWA, React + TypeScript + Vite) w trzech działach, w jednym wyglądzie:
+Polskojęzyczny pomocnik kuchenny na iPhone'a (PWA, React + TypeScript + Vite), działający również offline.
 
 - **Kawa:** dawne Crema Lab. Sześć metod parzenia, prowadzenie krok po kroku, timer, sprzęt (młynki, Lelit Anna), historia i baza kaw. Cały kod i dane są bez zmian.
 - **Air Fryer:** dawna „Ściąga Air Fryer” pod COSORI TurboBlaze 6 l. 37 dań z trybem, temperaturą i czasem w układzie wyświetlacza urządzenia, kroki, ulubione, niezależne timery z przypomnieniem „potrząśnij / obróć”.
-- **Dom (pomoc w domu):** nowy dział, który będzie rósł. Pierwsza zakładka to **Timery**: okrągły minutnik z pokrętłem, szybkimi czasami i opcjami zaawansowanymi (alert przed końcem, rundy, dźwięk, wibracje, przypomnienie w połowie) oraz stoper z okrążeniami.
-- **Thermomix TM6 (w Kuchni):** podstawowe przepisy z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
-- **Herbata (przy kawie):** piąta zakładka menu kawy. 24 herbaty i napary w kategoriach (białe, zielone, żółte, oolong, czarne, pu-erh, ziołowe, owocowe, rooibos i mate): temperatura wody, ilość liści przeliczana na wybraną ilość wody, czasy kolejnych zalań ustawiane jednym dotknięciem w minutniku, przycisk „Info i ciekawostki” (czym jest, jak powstaje, dlaczego tak smakuje, pochodzenie, ciekawostki) oraz ogólny przewodnik. Kod jest odseparowany (`modules/TeaScreen.tsx`, `modules/tea-data.ts`), więc zakładkę łatwo usunąć.
-- **Zaplanuj gotowanie (Kitchen OS, demo):** przycisk w Air Fryerze (Dania) i w Domu (Timery). Jeden scenariusz: kurczak w panko z Air Fryera, frytki i sałatka na 2 porcje. **Plan** (wybór dania i godziny podania, plan liczony wstecz, pasy „Ty / Air Fryer / Czeka”), **Przygotuj** (składniki, sprzęt i czynności do odhaczenia, brakujące składniki trafiają do Zakupów), **Gotuj** (co teraz, co następne, o której koniec, równoległe kroki, timery ze wspólnego silnika, opóźnienie i przeliczenie planu). Ustawienia Air Fryera są do wpisania ręcznie; aplikacja nie steruje urządzeniem.
+- **Kuchnia i książka kucharska:** ekran startowy Kuchni, 600 przepisów, wyszukiwanie, diety, urządzenia, kcal na porcję, oceny, ulubione i rozkład czasu. Cały kafel otwiera przepis, a ulubione są zawsze grupowane na początku wyników. „Moja lodówka” kontroluje zapasy, terminy, minima i wartość produktów; braki przekazuje do Zakupów. Kontrola wydatków zapisuje miesięczny budżet, transakcje i strukturę kategorii.
+- **Użyteczne:** wspólne timery, stoper, jajka, czasy gotowania i miarki. Timery przetrwają odświeżenie i mogą być uruchamiane z innych działów.
+  - **Jajka:** czasy na miękko, półtwardo i twardo, korekta na wielkość i temperaturę, jajko w koszulce, sadzone, jajecznica i test świeżości.
+  - **Czasy:** ponad 30 produktów z czasami w garnku, na parze, w piekarniku i Air Fryerze oraz jednym przyciskiem do timera.
+  - **Miarki:** przelicznik objętości i masy dla 30 produktów, tabela miarek, °C ↔ °F i bezpieczne temperatury mięs.
+- **Thermomix TM6:** 65 przepisów (15 dotychczasowych i 50 nowych popularnych receptur) z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
+- **Napoje:** Kawa, Parzenie, Sprzęt, Historia, 24 herbaty i napary oraz Fermentacja z przepisami, kalendarzem nastawów i dziennikiem.
+- **Mój sprzęt** (Napoje → Sprzęt → Mój sprzęt): wybór jednego z 5 młynków (Eureka Mignon Specialità, Niche Zero, DF64 Gen 2, Sage Smart Grinder Pro, 1Zpresso J-Ultra) i 5 ekspresów kolbowych (Gaggia Classic Pro E24, Rancilio Silvia V6, Sage Barista Express, Sage Bambino Plus, De'Longhi Dedica EC685): parametry ze źródłami, start espresso i harmonogram serwisu z „Zrobione dziś” i własnymi interwałami. Klucz `homecraft.coffeegear.v1`. Sprzęt Crema Lab (K-Pro, Lelit William, Lelit Anna) bez zmian.
+- **Zdjęcia produktów w Mojej lodówce:** zdjęcie (aparat lub galeria) staje się okrągłą ikonką produktu. Przycinane do 256 × 256 px JPEG, zapisywane w IndexedDB (`homecraft-photos`) według nazwy produktu, więc wraca przy ponownym dodaniu. Zdjęcia zostają na urządzeniu i nie trafiają do kopii JSON.
+- **Zaplanuj gotowanie (Kitchen OS, demo):** dostępne z Air Fryera i Kuchni. Plan liczy harmonogram wstecz od godziny podania, a widoki Przygotuj i Gotuj obsługują checklisty, zakupy, równoległe kroki i wspólne timery. Ustawienia urządzeń są do wpisania ręcznie; aplikacja nie steruje sprzętem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
-  - **Jajka:** czasy na miękko, półtwardo i na twardo (we wrzątku i na parze) z korektą na wielkość i temperaturę jajka, jajko w koszulce, sadzone, jajecznica, test świeżości.
-  - **Gotowanie:** ponad 30 produktów (ziemniaki, warzywa, kasze, ryż, makaron, strączkowe, mięso i ryby) z czasami w garnku, na parze, w piekarniku i w Air Fryerze, proporcjami wody i jednym przyciskiem do timera.
-  - **Miarki:** przelicznik szklanka / łyżka / łyżeczka / ml / g / dag / kg dla 30 produktów (np. szklanka cukru = 220 g = 22 dag), tabela miarek, °C ↔ °F, bezpieczne temperatury mięs.
-  - **Timery:** wspólne dla wszystkich działów. Przetrwają odświeżenie, trzymają ekran włączony, dzwonią i wibrują, a pływający znacznik czasu jest widoczny też w dziale Kawa.
 
-Motywy (**Pastel** jako główny wygląd: szałwiowe tło z miękkimi falami, jasne karty z miękkim cieniem, terakota i teal; oraz Palarnia, Kawiarnia, Soft, Linia), tryb dzień / noc / systemowy, gęstość i język (PL / EN) działają we wszystkich działach, bo nowe ekrany używają tych samych zmiennych kolorów. Szczegóły: [docs/badanie-aplikacji.md](docs/badanie-aplikacji.md) (porównanie z innymi aplikacjami i plan rozwoju działu Dom).
+Motyw **Editorial** jest domyślny. Korzysta z ośmiu lokalnych fotografii WebP, terakotowego akcentu i osobnych palet jasnej oraz ciemnej. Pastel, Palarnia, Kawiarnia, Soft i Linia pozostają dostępne. Tryb dzień / noc / systemowy, gęstość i język PL / EN działają we wszystkich działach.
 
 ## Uruchomienie i rozwój
 
@@ -27,7 +29,7 @@ npm run build
 npm run preview
 ```
 
-Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
+Otwórz adres Vite ze ścieżką `/HomeCraft/`. Nawigacja używa fragmentu URL: kawa `#timer`, `#history` itd., Air Fryer `#fryer/dishes|timers|modes`, Kuchnia `#dom/kitchen|recipes|fridge|expenses|timers|eggs|cook|thermomix/<recipes|timers|rules>|measures`, Zakupy `#shop/list|staples`, Zaplanuj gotowanie `#plan/plan|mise|cook`.
 
 ## Publikacja
 
@@ -39,16 +41,16 @@ Aplikacja działa offline (service worker) i da się ją dodać do ekranu począ
 
 ## Dane i migracja
 
-Pastel jest motywem domyślnym. Jeśli na urządzeniu był zapisany dawny domyślny motyw Palarnia, aplikacja raz przełącza go na Pastel (znacznik `homecraft.pastelDefault.v1`); inne wybrane motywy zostają, a Palarnię można wybrać ponownie w Ustawieniach. Pastel korzysta z układu Kawiarni (`bar.css`), a `pastel.css` ustawia tylko paletę i tło.
+Editorial jest motywem domyślnym. Jednorazowa migracja `homecraft.editorialDefault.v1` przenosi wyłącznie poprzedni domyślny Pastel na Editorial. Jawnie wybrane Palarnia, Kawiarnia, Soft i Linia pozostają bez zmian. Historyczny znacznik `homecraft.pastelDefault.v1` nadal istnieje dla urządzeń, które pominęły wcześniejsze wydanie.
 
 
-Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania) i `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”: godzina podania, odhaczone kroki i składniki; nie dotyka pozostałych kluczy). Eksport / import kopii JSON w Historii obejmuje dane kawy; ulubione i timery nie są w kopii.
+Wszystko jest w `localStorage` na urządzeniu. Klucze kawy (`cremalab.*`) zostały bez zmian, więc historia, kalibracja i baza kaw z Crema Lab są widoczne w HomeCraft w tej samej przeglądarce (GitHub Pages używa jednego adresu `auriol-kno.github.io` dla obu aplikacji). Nowe klucze: `homecraft.timers.v1` (timery), `homecraft.fryer.favs.v1` (ulubione dania), `homecraft.kitchen.v1` (jedna sesja „Zaplanuj gotowanie”), `homecraft.pantry.v1` (wersjonowane zapasy) i `homecraft.expenses.v1` (wersjonowany budżet oraz wydatki). Odczyt dwóch ostatnich kluczy waliduje wersję, typy, limity i daty; uszkodzony zapis daje pusty stan i nie jest nadpisywany podczas samego odczytu. Nie ma migracji ani zmian istniejących kluczy. Eksport / import kopii JSON w Historii obejmuje dane kawy; pozostałe moduły nie są jeszcze w kopii.
 
 Ulubione i timery z dawnej Ściągi Air Fryer (artefakt Claude) są w innym adresie, więc trzeba je oznaczyć gwiazdką od nowa.
 
 ## Struktura
 
-- `app/src/App.tsx`: powłoka, pasek działów (Kawa / Air Fryer / Dom / Zakupy), routing przez hash. Ekrany kawy pozostają zamontowane, żeby timer kawy działał podczas pracy w innym dziale.
+- `app/src/App.tsx`: powłoka, stały dolny pasek Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy oraz routing przez hash. Ekrany kawy pozostają zamontowane, żeby timer kawy działał podczas pracy w innym dziale.
 - `app/src/modules/fryer-data.ts`, `FryerModule.tsx`: dane i ekran Air Fryera.
 - `app/src/modules/TimersScreen.tsx`, `timers.ts`: okrągły minutnik, stoper i wspólny magazyn timerów.
 - `app/src/modules/shopping-data.ts`, `ShoppingModule.tsx`: lista zakupów.
@@ -80,7 +82,7 @@ polskie klasyki, szybkie dania, przekąski, napoje i soki. Karta przepisu ma adr
 `#dom/recipes/<id>`. Wyszukiwanie obejmuje nazwę i składniki (wiele słów działa łącznie,
 bez polskich znaków); filtry kuchni, posiłku, do 30 min i ulubionych łączą się.
 Sortowanie: polskie A–Z, czas, kcal rosnąco lub malejąco. Lista pokazuje po 20 kart.
-Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia ma własny ekran startowy z wejściem do książki, wyszukiwania według składników, zakupów i planowania pojedynczego gotowania; „Moja lodówka” i kontrola wydatków są jawnie oznaczone jako funkcje w przygotowaniu. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
+Stałe dolne menu prowadzi do Kuchni, Napojów, Air Fryera, TM6, Użytecznych i Zakupów. Kuchnia ma własny ekran startowy z wejściem do książki, wyszukiwania według składników, zakupów, planowania, Lodówki i Wydatków. Lodówka sortuje produkty według terminu, pokazuje niskie stany i przekazuje braki do istniejącej listy zakupów. Wydatki mają miesięczny budżet, historię i podział kategorii. Podmenu bieżącego działu jest zawsze nad nim. Książkę można filtrować według kuchni, posiłku, popularnych diet (wysokobiałkowa, niskowęglowodanowa, śródziemnomorska, wegetariańska, wegańska i bezglutenowa) oraz urządzenia (Air Fryer, Thermomix albo bez urządzenia). Cały kafel otwiera przepis, a oznaczone gwiazdką przepisy zawsze znajdują się przed pozostałymi, z zachowaniem wybranego sortowania w obu grupach. Ulubione pozostają w walidowanym kluczu `homecraft.cookbook.favourites.v1`; ta wersja nie wymaga migracji danych.
 
 Editorial ma osobną jasną i ciemną paletę. Zdjęcia nagłówków są wyświetlane w całości (`contain`) i łagodnie przechodzą w rzeczywisty kolor tła, dzięki czemu nie mają twardych odcięć. Dolne menu Editorial i Kawiarni używa szklano-karmelowych przycisków z zagłębionym stanem aktywnym.
 
@@ -99,7 +101,7 @@ panko zachowuje identyfikatory. Pozostałe dane nie są migrowane ani kasowane.
 
 Baza jest lokalna w `cookbook-recipes.ts`; każdy rekord ma trwałe jawne ID (nie zmieniaj
 ich przy edycji ani sortowaniu). Nowe rekordy dodaje się bez zmiany algorytmu katalogu;
-test sprawdza wyszukiwanie i sortowanie także dla 500 rekordów. Logika jest w czystych
+test sprawdza wyszukiwanie i sortowanie całej bazy 600 rekordów. Logika jest w czystych
 plikach `.ts`; interfejs w `Cookbook.tsx`. Planer uwzględnia wyłączne zasoby osoby,
 kosza, kuchenki, piekarnika i blendera, także dodatkowe zasoby aktywnego kroku.
 Nowe scenariusze są celowo sekwencyjne: jedna osoba i bez konfliktów sprzętu.
@@ -141,7 +143,7 @@ zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia sy
 
 Stałe dolne menu: Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy. Dawny dział
 Dom nosi nazwę **Kuchnia** i ma własny ekran startowy. Air Fryer oraz TM6 otwierają
-się bezpośrednio z dolnego paska; ich menu kontekstowe pojawia się nad nim. Zachowane
+się bezpośrednio z dolnego paska; ich menu kontekstowe to przewijany rząd zakładek pod nagłówkiem (od 28.11.2026 jest tylko jeden dolny pasek). Zachowane
 są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
 klucze localStorage; zmiana nazwy nie wymaga migracji. W EN sekcja to „Kitchen”,
 a filtr kuchni pochodzenia przepisów pozostaje „Cuisine”.
@@ -169,3 +171,7 @@ istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładnoś
 
 ### Rozbudowana książka kucharska
 600 przepisów obejmuje kuchnie świata, polskie klasyki, popularne diety oraz 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Kuchnia, Napoje, Fryer, TM6, Użyteczne, Zakupy.
+
+## Ładowanie i pamięć offline
+
+600 przepisów książki jest w osobnym pliku (`app/src/modules/cookbook-all.ts`, ładowany przez `cookbook-load.ts`). Pobiera się chwilę po pierwszym ekranie albo od razu przy otwarciu książki; do tego czasu ulubione są sprawdzane tylko co do formatu, a zapisana sesja „Zaplanuj gotowanie” z przepisem z książki czeka na wczytanie i nie jest nadpisywana. Główny skrypt zmniejszył się o ok. 29%. Po wczytaniu, gdy urządzenie jest online, strona wysyła do service workera listę plików tej wersji, a ten usuwa starsze skrypty i style z `assets/` (zdjęcia zostają). Testy: `tests/lazy-cookbook.test.mjs`, `tests/coffee-gear.test.mjs`, `tests/gear-pantry-nav.cjs`.
