@@ -6,7 +6,7 @@ import { CookingTimeline } from './CookingTimeline';
 import { recipeKcal } from './cookbook-data';
 import { t } from './en';
 import { earliestServeAt, handsMinutes, hhmm, LANES, minLabel, recipeById, PANKO_DINNER, schedule, status, timeToday, totalMinutes, type Lane, type Planned, type Recipe, type Status } from './kitchen-data';
-import { getKitchen, resetKitchen, setKitchen, useKitchen, type KitchenSession } from './kitchen-store';
+import { getKitchen, isKitchenPending, resetKitchen, setKitchen, useKitchen, type KitchenSession } from './kitchen-store';
 import { SHOP_ADD_EVENT } from './shopping-data';
 import { soundMark, unlockAudio, actOn, addTimer, clock, remaining, TOAST_EVENT, useTick, useTimers, type KTimer } from './timers';
 import { ICONS, Icon } from './ui';
@@ -291,6 +291,7 @@ export function KitchenModule({ active, tab, onTab }: { active: boolean; tab: Ki
     return () => { gone = true; document.removeEventListener('visibilitychange', take); void lock?.release().catch(() => {}); };
   }, [active, tab, c.s.cooking]);
   if (!active) return null;
+  if (isKitchenPending()) return <main className="app-content hc-kitchen" aria-busy="true"><p role="status" className="hc-k-note">{t('Wczytywanie zapisanego gotowania…')}</p></main>;
   const heading = tab === 'plan' ? ['KITCHEN OS', 'Zaplanuj gotowanie'] : tab === 'mise' ? ['MISE EN PLACE', 'Przygotuj wszystko'] : ['GOTOWANIE', c.recipe.short];
   return <>
     <main ref={main} className="app-content hc-kitchen" aria-label={t('Kitchen OS')}>

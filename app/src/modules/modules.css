@@ -527,3 +527,69 @@ html:root .app-shell .hc-sw-ctrl button.hc-fill{background-image:linear-gradient
 :root .app-shell .app-header{justify-content:space-between}
 :root .app-shell .brand-button{min-width:44px;min-height:44px}
 :root .app-shell .context-nav button{white-space:normal}
+@layer overrides{
+/* One bottom bar: the section menu (Napoje, Fryer, TM6, Użyteczne, Zakupy, Kitchen OS) is a scrollable
+   row of tabs under the header. The six-item bottom bar stays as the only fixed menu. */
+.top-stack{min-width:0;position:relative;z-index:30}
+html:root .app-shell .section-nav{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;padding:6px 12px;scrollbar-width:none;border-bottom:1px solid var(--line);background:var(--bg)}
+html:root .app-shell .section-nav::-webkit-scrollbar{display:none}
+html:root .app-shell .section-nav button{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;padding:0 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:650 14px/1 var(--body);white-space:nowrap;box-shadow:none;text-transform:none;letter-spacing:0}
+html:root .app-shell .section-nav button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+html:root .app-shell .section-nav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+html:root .app-shell .section-nav .nav-icon{position:relative;display:inline-flex;width:auto;height:auto}
+html:root .app-shell .section-nav svg{width:18px;height:18px}
+html:root .app-shell .section-nav .nav-icon i{position:absolute;top:-3px;right:-5px;width:8px;height:8px;border-radius:50%;background:var(--bad);border:1.5px solid var(--surface)}
+html:root .app-shell .section-nav button[aria-current="page"] .nav-icon i{border-color:var(--accent)}
+@media(max-width:360px){html:root .app-shell .section-nav{padding-inline:8px;gap:5px}html:root .app-shell .section-nav button{padding:0 11px;font-size:13px}}
+}
+@layer overrides{
+/* Mój sprzęt: grinder and portafilter machine picker, specs and service schedule. */
+.hc-gear{display:grid;gap:14px;margin-top:12px}
+.hc-gear-pick{border:0;margin:0;padding:0;display:grid;gap:8px;min-width:0}
+.hc-gear-pick legend{font:800 12px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.hc-gear-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+html:root .app-shell .hc-gear-options button{display:grid;gap:3px;text-align:left;min-height:64px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:none}
+.hc-gear-options b{font:700 15px/1.2 var(--body)}.hc-gear-options small{font:500 12px/1.3 var(--body);color:var(--muted)}
+html:root .app-shell .hc-gear-options button.on{border:2px solid var(--accent);background:var(--wash,var(--surface))}
+.hc-gear-detail{display:grid;gap:10px}.hc-gear-detail h4{margin:6px 0 0;font:800 13px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hc-gear-specs{margin:0;display:grid;gap:0}
+.hc-gear-specs>div{display:grid;grid-template-columns:minmax(96px,38%) 1fr;gap:10px;padding:7px 0;border-top:1px solid var(--line)}
+.hc-gear-specs dt{font:650 13px var(--body);color:var(--muted)}.hc-gear-specs dd{margin:0;font:500 14px/1.4 var(--body);color:var(--ink)}
+.hc-gear-steps{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px;line-height:1.45}
+.hc-gear-badge{font:750 11px var(--body);letter-spacing:0;text-transform:none;color:#fff;background:var(--bad);border-radius:999px;padding:2px 8px}
+.hc-gear-tasks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hc-gear-task{display:grid;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);border-left:4px solid var(--line)}
+.hc-gear-task.is-overdue{border-left-color:var(--bad)}.hc-gear-task.is-soon{border-left-color:var(--accent)}.hc-gear-task.is-ok{border-left-color:var(--good)}
+.hc-gear-task-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.hc-gear-task-head b{font:700 15px var(--body)}
+.hc-gear-due{font:650 12.5px var(--body);color:var(--muted)}.is-overdue .hc-gear-due{color:var(--bad)}
+.hc-gear-task p{margin:0;font-size:14px;line-height:1.45;color:var(--soft)}
+.hc-gear-task small{color:var(--muted);font-size:12px}
+.hc-gear-task-actions{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.hc-gear-task-actions label{display:flex;align-items:center;gap:6px;font:600 13px var(--body);color:var(--muted)}
+.hc-gear-task-actions select{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0 8px;font:600 14px var(--body)}
+.hc-gear-task-actions button{min-height:44px}
+.hc-gear-sources summary{min-height:44px;display:flex;align-items:center;font:650 14px var(--body);cursor:pointer}
+.hc-gear-sources ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:13.5px}
+.hc-gear-sources a{color:var(--accent)}
+}
+@layer overrides{
+/* The sticky equipment switch must hide the content scrolling under it in every theme. */
+html:root .app-shell .screen>.segment{background:var(--bg);box-shadow:0 6px 10px -8px color-mix(in srgb,var(--ink) 25%,transparent)}
+}
+@layer overrides{
+/* Moja lodówka: product photo as a round icon button. */
+.hc-stock-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start}
+.hc-photo{position:relative}
+html:root .app-shell .hc-photo-btn{position:relative;display:grid;place-items:center;width:56px;height:56px;min-width:56px;padding:0;border-radius:50%;overflow:hidden;border:2px solid var(--line);background:var(--surface-2);color:var(--accent);font:800 22px var(--body);cursor:pointer;box-shadow:none}
+html:root .app-shell .hc-photo-btn.has-photo{border-color:var(--accent)}
+.hc-photo-btn img{width:100%;height:100%;object-fit:cover;display:block}
+.hc-photo-btn input,.hc-photo-pick input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.hc-photo-btn:focus-within,.hc-photo-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hc-photo-menu{position:absolute;z-index:5;top:62px;left:0;display:grid;gap:6px;min-width:220px;padding:10px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 12px 28px #0003}
+.hc-photo-menu>*{min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center}
+.hc-photo-pick{position:relative;cursor:pointer}
+.hc-photo-new{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px}
+.hc-photo-new>span{font-size:13.5px;color:var(--muted);line-height:1.35}
+.hc-photo-new .hc-ghost{min-height:44px}
+}

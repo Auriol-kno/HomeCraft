@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CookingTimeline } from './CookingTimeline';
+import { loadCookbook, useCookbookReady } from './cookbook-load';
 import { RECIPES, schedule, recipeById, totalMinutes, handsMinutes, minLabel } from './kitchen-data';
 import type { Recipe } from './kitchen-types';
 import { bookInfo, BOOK_CATEGORIES, BOOK_CUISINES, BOOK_DIETS, BOOK_DEVICES, EMPTY_FILTERS, filterRecipes, recipeKcal, healthLevel, difficultyLabel, type BookSort } from './cookbook-data';
@@ -17,7 +18,18 @@ function HealthDot({recipe}:{recipe:Recipe}){
  const labels={green:'Więcej składników roślinnych',moderate:'Umiarkowany udział składników roślinnych',occasional:'Raczej okazjonalnie',unknown:'Brak danych'};
  return <span className={'hc-health-dot '+level} role="img" aria-label={t(labels[level])} title={t(labels[level])}/>;
 }
+/** The 600 recipes arrive in their own file (cookbook-load.ts); show a short status until then. */
 export function Cookbook({onPlan}:{onPlan:()=>void}){
+ const ready=useCookbookReady(), [failed,setFailed]=useState(false);
+ const retry=()=>{setFailed(false);loadCookbook().catch(()=>setFailed(true));};
+ useEffect(()=>{if(!ready)retry();},[ready]);
+ if(!ready)return <section className="screen hc-book-loading" aria-label={t('Książka kucharska')} aria-busy={!failed}>
+  <p role="status" className="hc-book-intro">{failed?t('Nie udało się wczytać przepisów. Połącz się z internetem i spróbuj ponownie.'):t('Wczytywanie przepisów…')}</p>
+  {failed&&<button className="hc-primary" onClick={retry}>{t('Spróbuj ponownie')}</button>}
+ </section>;
+ return <CookbookBook onPlan={onPlan}/>;
+}
+function CookbookBook({onPlan}:{onPlan:()=>void}){
  const favourites=useBookFavourites(), feedback=useBookFeedback(), timers=useTimers();
  const [filters,setFilters]=useState({...rememberedFilters}),[limit,setLimit]=useState(rememberedLimit),[selected,setSelected]=useState<Recipe|undefined>(chosen),[confirm,setConfirm]=useState(false);
  const [advanced,setAdvanced]=useState(false);
