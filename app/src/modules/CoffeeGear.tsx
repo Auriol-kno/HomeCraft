@@ -1,4 +1,4 @@
-// "Mój sprzęt": choose one of 5 grinders and one of 5 portafilter machines, see their parameters,
+// "Mój sprzęt": choose one of 10 grinders (5 electric, 5 hand) and one of 5 portafilter machines, see their parameters,
 // how to start espresso, and a service schedule with "done today" and next due dates.
 // Own key (homecraft.coffeegear.v1); the Crema Lab gear (K-Pro, Lelit) is untouched.
 import { useSyncExternalStore } from 'react';
@@ -41,31 +41,49 @@ function ServiceRow({ gear, task, state, now }: { gear: CoffeeGear; task: Servic
   </li>;
 }
 
-function GearDetail({ gear, state, now }: { gear: CoffeeGear; state: GearState; now: number }) {
+type Part = 'all' | 'about' | 'service';
+function GearDetail({ gear, state, now, part = 'all' }: { gear: CoffeeGear; state: GearState; now: number; part?: Part }) {
   const overdue = gear.service.filter(task => taskStatus(state, gear, task, now).state === 'overdue').length;
+  const kindLabel = gear.kind === 'machine' ? t('Twój ekspres') : gear.drive === 'manual' ? t('Twój młynek ręczny') : t('Twój młynek');
   return <div className="hc-card hc-gear-detail">
-    <p className="hc-tag">{gear.kind === 'grinder' ? t('Twój młynek') : t('Twój ekspres')}</p>
+    <p className="hc-tag">{kindLabel}</p>
     <h3 className="hc-h3">{gear.name}</h3>
-    <dl className="hc-gear-specs">{gear.specs.map(s => <div key={s.label}><dt>{t(s.label)}</dt><dd>{s.value}</dd></div>)}</dl>
+    {part !== 'service' && <><dl className="hc-gear-specs">{gear.specs.map(s => <div key={s.label}><dt>{t(s.label)}</dt><dd>{s.value}</dd></div>)}</dl>
     <h4>{t('Espresso: jak zacząć')}</h4>
     <ol className="hc-gear-steps">{gear.espresso.map(x => <li key={x}>{x}</li>)}</ol>
-    {gear.notes?.map(n => <p key={n} className="hc-k-note">{n}</p>)}
-    <h4>{t('Serwis')}{overdue > 0 && <span className="hc-gear-badge">{overdue} {t('po terminie')}</span>}</h4>
+    {gear.notes?.map(n => <p key={n} className="hc-k-note">{n}</p>)}</>}
+    {part !== 'about' && <><h4>{t('Serwis')}{overdue > 0 && <span className="hc-gear-badge">{overdue} {t('po terminie')}</span>}</h4>
     <ul className="hc-gear-tasks">{gear.service.map(task => <ServiceRow key={task.id} gear={gear} task={task} state={state} now={now} />)}</ul>
-    <p className="hc-k-note">{t('Interwały są orientacyjne dla użytku domowego. Pierwszeństwo ma instrukcja producenta Twojego modelu.')}</p>
+    <p className="hc-k-note">{t('Interwały są orientacyjne dla użytku domowego. Pierwszeństwo ma instrukcja producenta Twojego modelu.')}</p></>}
     <details className="hc-gear-sources"><summary>{t('Źródła parametrów')}</summary>
       <ul>{gear.sources.map(s => <li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></li>)}</ul></details>
   </div>;
 }
 
-function Picker({ title, list, value, onPick }: { title: string; list: CoffeeGear[]; value: string | null; onPick: (id: string | null) => void }) {
+function Options({ list, value, onPick }: { list: CoffeeGear[]; value: string | null; onPick: (id: string | null) => void }) {
+  return <div className="hc-gear-options">
+    {list.map(g => <button key={g.id} type="button" aria-pressed={value === g.id} className={value === g.id ? 'on' : ''} onClick={() => onPick(value === g.id ? null : g.id)}>
+      <b>{g.short}</b><small>{g.tagline}</small></button>)}
+  </div>;
+}
+function Picker({ title, list, value, onPick, groups }: { title: string; list: CoffeeGear[]; value: string | null; onPick: (id: string | null) => void; groups?: { label: string; list: CoffeeGear[] }[] }) {
   return <fieldset className="hc-gear-pick">
     <legend>{t(title)}</legend>
-    <div className="hc-gear-options">
-      {list.map(g => <button key={g.id} type="button" aria-pressed={value === g.id} className={value === g.id ? 'on' : ''} onClick={() => onPick(value === g.id ? null : g.id)}>
-        <b>{g.short}</b><small>{g.tagline}</small></button>)}
-    </div>
+    {groups ? groups.map(g => <div key={g.label} className="hc-gear-group"><p className="hc-gear-group-h">{t(g.label)}</p><Options list={g.list} value={value} onPick={onPick} /></div>)
+      : <Options list={list} value={value} onPick={onPick} />}
   </fieldset>;
+}
+
+/** Selected gear as shown on the "Twój warsztat" tabs (grinder / machine). */
+export function useSelectedGear() {
+  const state = useGear();
+  return { state, grinder: state.grinder ? gearById(state.grinder) : undefined, machine: state.machine ? gearById(state.machine) : undefined };
+}
+/** Card for the chosen device on a workshop tab; `part` picks parameters or service. */
+export function WorkshopGear({ kind, part }: { kind: 'grinder' | 'machine'; part: 'about' | 'service' }) {
+  const { state, grinder, machine } = useSelectedGear();
+  const gear = kind === 'grinder' ? grinder : machine;
+  return gear ? <GearDetail gear={gear} state={state} now={Date.now()} part={part} /> : null;
 }
 
 export function CoffeeGearScreen() {
@@ -73,9 +91,9 @@ export function CoffeeGearScreen() {
   const now = Date.now();
   const grinder = state.grinder ? gearById(state.grinder) : undefined, machine = state.machine ? gearById(state.machine) : undefined;
   return <div className="hc-gear">
-    <p className="subtle">{t('Wybierz swój młynek i ekspres kolbowy: zobaczysz parametry, punkt startowy espresso i harmonogram serwisu. Sprzęt z zakładek Młynek i Lelit Anna zostaje bez zmian.')}</p>
+    <p className="subtle">{t('Wybierz swój młynek i ekspres kolbowy: zobaczysz parametry, punkt startowy espresso i harmonogram serwisu. Wybrany sprzęt pojawi się w zakładkach Młynek, Ekspres i Serwis.')}</p>
     <p className="hc-k-note">{t('Wybór i daty serwisu zapisują się na tym urządzeniu. Nie trafiają do kopii danych kawy.')}</p>
-    <Picker title="Młynek" list={GRINDERS} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
+    <Picker title="Młynek" list={GRINDERS} groups={[{ label: 'Elektryczne', list: GRINDERS.filter(g => g.drive !== 'manual') }, { label: 'Ręczne', list: GRINDERS.filter(g => g.drive === 'manual') }]} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
     {grinder && <GearDetail gear={grinder} state={state} now={now} />}
     <Picker title="Ekspres kolbowy" list={MACHINES} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />
     {machine && <GearDetail gear={machine} state={state} now={now} />}

@@ -1,4 +1,4 @@
-// Coffee gear catalogue: 5 popular espresso grinders and 5 popular portafilter machines.
+// Coffee gear catalogue: 5 popular electric grinders, 5 popular hand grinders and 5 popular portafilter machines.
 // Specifications come from manufacturer pages and retailer spec sheets (see `sources`, checked 28.11.2026).
 // Service intervals are general home-use guidance, not manufacturer guarantees: the user can change them,
 // and the manual of the exact machine always wins. Nothing here talks to a device.
@@ -7,7 +7,7 @@ export interface GearSpec { label: string; value: string }
 export interface ServiceTask { id: string; title: string; detail: string; everyDays: number }
 export interface GearSource { label: string; url: string }
 export interface CoffeeGear {
-  id: string; kind: 'grinder' | 'machine'; name: string; short: string; tagline: string;
+  id: string; kind: 'grinder' | 'machine'; /** Grinders only: electric or hand grinder. */ drive?: 'electric' | 'manual'; name: string; short: string; tagline: string;
   specs: GearSpec[];
   /** How to start espresso with this device (dose, ratio, grind start point). */
   espresso: string[];
@@ -30,9 +30,11 @@ const deepGrinder: ServiceTask = { id: 'grinder-deep', title: 'Przegląd młynka
 const sageFilter: ServiceTask = { id: 'water-filter', title: 'Wymiana filtra wody', detail: 'Wkład filtra w zbiorniku (Claro Swiss) wymieniaj zgodnie z instrukcją, zwykle co ok. 3 miesiące.', everyDays: 90 };
 const sageClean: ServiceTask = { id: 'clean-cycle', title: 'Cykl czyszczenia (krążek + tabletka)', detail: 'Gumowy krążek w sitku, tabletka czyszcząca, program czyszczenia z instrukcji. Rób, gdy zapali się kontrolka czyszczenia.', everyDays: 30 };
 
+const handClean: ServiceTask = { id: 'burr-brush', title: 'Czyszczenie żaren', detail: 'Rozkręć młynek, usuń resztki pędzelkiem i dmuchawką. Bez wody i bez mycia.', everyDays: 30 };
+const handZero: ServiceTask = { id: 'zero', title: 'Kontrola punktu zerowego', detail: 'Po rozkręceniu sprawdź, czy zero na tarczy zgadza się z zamkniętymi żarnami.', everyDays: 90 };
 export const GRINDERS: CoffeeGear[] = [
   {
-    id: 'eureka-specialita', kind: 'grinder', name: 'Eureka Mignon Specialità', short: 'Mignon Specialità',
+    id: 'eureka-specialita', kind: 'grinder', drive: 'electric', name: 'Eureka Mignon Specialità', short: 'Mignon Specialità',
     tagline: 'Elektryczny, płaskie żarna 55 mm, bardzo cichy, dozowanie czasowe',
     specs: [
       { label: 'Żarna', value: 'płaskie 55 mm, stal hartowana' },
@@ -56,7 +58,7 @@ export const GRINDERS: CoffeeGear[] = [
     ],
   },
   {
-    id: 'niche-zero', kind: 'grinder', name: 'Niche Zero', short: 'Niche Zero',
+    id: 'niche-zero', kind: 'grinder', drive: 'electric', name: 'Niche Zero', short: 'Niche Zero',
     tagline: 'Elektryczny, stożkowe żarna 63 mm, single dose, prawie bez retencji',
     specs: [
       { label: 'Żarna', value: 'stożkowe 63 mm, stal hartowana' },
@@ -80,7 +82,7 @@ export const GRINDERS: CoffeeGear[] = [
     ],
   },
   {
-    id: 'df64-gen2', kind: 'grinder', name: 'DF64 Gen 2 (Turin)', short: 'DF64 Gen 2',
+    id: 'df64-gen2', kind: 'grinder', drive: 'electric', name: 'DF64 Gen 2 (Turin)', short: 'DF64 Gen 2',
     tagline: 'Elektryczny, płaskie żarna 64 mm, single dose, mieszek do wydmuchu',
     specs: [
       { label: 'Żarna', value: 'płaskie 64 mm (stalowe lub DLC, wymienne np. na SSP)' },
@@ -103,7 +105,7 @@ export const GRINDERS: CoffeeGear[] = [
     ],
   },
   {
-    id: 'sage-sgp', kind: 'grinder', name: 'Sage Smart Grinder Pro', short: 'Smart Grinder Pro',
+    id: 'sage-sgp', kind: 'grinder', drive: 'electric', name: 'Sage Smart Grinder Pro', short: 'Smart Grinder Pro',
     tagline: 'Elektryczny, stożkowe żarna, 60 ustawień, dozowanie na czas co 0,2 s',
     specs: [
       { label: 'Żarna', value: 'stożkowe, stal nierdzewna (ok. 40 mm)' },
@@ -127,7 +129,7 @@ export const GRINDERS: CoffeeGear[] = [
     ],
   },
   {
-    id: '1zpresso-jultra', kind: 'grinder', name: '1Zpresso J-Ultra', short: 'J-Ultra',
+    id: '1zpresso-jultra', kind: 'grinder', drive: 'manual', name: '1Zpresso J-Ultra', short: 'J-Ultra',
     tagline: 'Ręczny, stożkowe żarna 48 mm, 8 µm na klik, zewnętrzna tarcza',
     specs: [
       { label: 'Żarna', value: 'stożkowe 48 mm, heptagonalne, powlekane (do espresso)' },
@@ -147,6 +149,115 @@ export const GRINDERS: CoffeeGear[] = [
       { label: 'Alternative Brewing: specyfikacja', url: 'https://alternativebrewing.com.au/products/1zpresso-j-ultra-coffee-grinder' },
       { label: 'Balance Journal: zakres espresso w obrotach', url: 'https://www.balancejournal.co/food-drink/1zpresso-j-ultra-review' },
       { label: 'Complete Home Barista: tolerancja zera ±10 klików', url: 'https://completehomebarista.com/guides/1zpresso-j-ultra-vs-j-max-what-changes-for-espresso/' },
+    ],
+  },
+  {
+    id: 'baratza-encore-esp', kind: 'grinder', drive: 'electric', name: 'Baratza Encore ESP', short: 'Encore ESP',
+    tagline: 'Elektryczny, stożkowe żarna 40 mm M2, 20 nastaw espresso + 20 do przelewu',
+    specs: [
+      { label: 'Żarna', value: 'stożkowe 40 mm M2, stal' },
+      { label: 'Regulacja', value: '40 kroków: 1–20 mikro (espresso), 21–40 makro (przelew)' },
+      { label: 'Silnik', value: 'DC z przekładnią, ok. 550 obr./min' },
+      { label: 'Wydajność', value: '1,5–2,4 g/s' },
+      { label: 'Zasobnik', value: 'ok. 230 g' },
+      { label: 'W zestawie', value: 'kubek dozujący z adapterem 58 mm' },
+    ],
+    espresso: [
+      'Do espresso używaj nastaw 1–20 i kubka dozującego z zestawu.',
+      'Zacznij w połowie zakresu espresso (ok. 10) i koryguj o 1–2 kroki.',
+      'Start: 18 g → 36 g w 25–30 s.',
+    ],
+    service: [burrBrush, deepGrinder],
+    sources: [
+      { label: 'Baratza: Encore ESP karta produktu', url: 'https://cdn.shopify.com/s/files/1/0613/6823/8314/files/Baratza_EncoreESP_ProductSheet_v2.2_EN.pdf' },
+      { label: 'Eight Ounce Coffee: specyfikacja', url: 'https://www.eightouncecoffee.ca/products/baratza-encore-esp-coffee-grinder' },
+      { label: 'Seattle Coffee Gear: zakresy nastaw', url: 'https://www.seattlecoffeegear.com/pages/product-resources/baratza-encore-esp-coffee-and-espresso-grinder-product-guide' },
+    ],
+  },
+  {
+    id: 'comandante-c40', kind: 'grinder', drive: 'manual', name: 'Comandante C40 MK4', short: 'Comandante C40',
+    tagline: 'Ręczny, stożkowe żarna Nitro Blade 39 mm, ok. 30 µm na klik',
+    specs: [
+      { label: 'Żarna', value: 'stożkowe 39 mm Nitro Blade, stal wysokoazotowa' },
+      { label: 'Regulacja', value: 'kliki pod żarnem, ok. 25–30 µm na klik (Red Clix: 15 µm)' },
+      { label: 'Pojemność', value: 'ok. 40 g' },
+      { label: 'Waga', value: 'ok. 600–730 g' },
+      { label: 'Odbiornik', value: 'dwa słoiki (szkło brązowe i polimer)' },
+    ],
+    espresso: [
+      'Licz kliki od zamkniętych żaren.',
+      'Bez Red Clix kroki są duże dla espresso; dopasuj też dawkę lub czas, gdy jeden klik to za dużo.',
+      'Start: 18 g → 36 g w 25–30 s.',
+    ],
+    service: [handClean, handZero],
+    sources: [
+      { label: "Tom's Guide: specyfikacja C40 MK4", url: 'https://tomsguide.com/home/home-appliances/comandante-c40-mk4-review' },
+      { label: 'Ozone Coffee: pojemność i kliki', url: 'https://ozonecoffee.co.uk/products/comandante-c40-nitro-mk4-black' },
+    ],
+  },
+  {
+    id: '1zpresso-kultra', kind: 'grinder', drive: 'manual', name: '1Zpresso K-Ultra', short: 'K-Ultra',
+    tagline: 'Ręczny, stożkowe żarna 48 mm, 20 µm na klik, numerowana tarcza',
+    specs: [
+      { label: 'Żarna', value: 'stożkowe 48 mm, heptagonalne „K Burr”, stal' },
+      { label: 'Regulacja', value: 'zewnętrzny pierścień, 100 klików na obrót, 20 µm na klik' },
+      { label: 'Pojemność', value: '35–40 g' },
+      { label: 'Waga', value: 'ok. 700 g' },
+      { label: 'Odbiornik', value: 'magnetyczny pojemnik na kawę' },
+    ],
+    espresso: [
+      'Zapisuj nastawę z tarczy (np. 1.4 = obrót 1, cyfra 4).',
+      'Zakres espresso to dolna część pierwszego obrotu i początek drugiego; koryguj po 1–2 kliki.',
+      'Start: 18 g → 36 g w 25–30 s.',
+    ],
+    service: [handClean, handZero],
+    sources: [
+      { label: '1Zpresso: K-Ultra', url: 'https://1zpresso.coffee/product/kultra/ref/oriffee/' },
+      { label: 'JB Hi-Fi: specyfikacja', url: 'https://www.jbhifi.com.au/products/1zpresso-k-ultra-coffee-grinder-iron-grey' },
+    ],
+  },
+  {
+    id: 'kingrinder-k6', kind: 'grinder', drive: 'manual', name: 'KINGrinder K6', short: 'KINGrinder K6',
+    tagline: 'Ręczny, stożkowe żarna 48 mm, 16 µm na klik, zewnętrzna tarcza',
+    specs: [
+      { label: 'Żarna', value: 'stożkowe 48 mm, heptagonalne, stal nierdzewna' },
+      { label: 'Regulacja', value: 'zewnętrzny pierścień, 60 klików na obrót, 16 µm na klik' },
+      { label: 'Pojemność', value: '30–35 g' },
+      { label: 'Waga', value: 'ok. 630 g' },
+      { label: 'Korpus', value: 'aluminium' },
+    ],
+    espresso: [
+      'Licz kliki od zamkniętych żaren.',
+      'Espresso zwykle w okolicy 30–50 klików od zera; koryguj o 1–2 kliki.',
+      'Start: 18 g → 36 g w 25–30 s.',
+    ],
+    service: [handClean, handZero],
+    sources: [
+      { label: 'Sigma Coffee: KINGrinder K6', url: 'https://sigmacoffee.co.uk/products/kingrinder-k6' },
+      { label: 'The Basic Barista: specyfikacja', url: 'https://thebasicbarista.com/products/kingrinder-k6-coffee-grinder' },
+      { label: 'Front Desk Review: zakres klików espresso', url: 'https://frontdeskreview.com/product/coffee-grinders/kingrinder-k6/' },
+    ],
+  },
+  {
+    id: 'timemore-c3-esp', kind: 'grinder', drive: 'manual', name: 'Timemore Chestnut C3 ESP', short: 'Timemore C3 ESP',
+    tagline: 'Ręczny, stożkowe żarna S2C 38 mm, 30 klików na obrót, budżetowy',
+    specs: [
+      { label: 'Żarna', value: 'stożkowe 38 mm S2C660, stal SUS420' },
+      { label: 'Regulacja', value: 'wewnętrzna tarcza, 30 klików na obrót, ok. 23 µm na klik' },
+      { label: 'Pojemność', value: 'do 25 g' },
+      { label: 'Waga', value: 'ok. 430–530 g' },
+      { label: 'Korpus', value: 'aluminium' },
+    ],
+    espresso: [
+      'Licz kliki od zamkniętych żaren; zakres espresso to mniej więcej pierwszy obrót.',
+      'Pojemność do 25 g wystarcza na jedną podwójną dawkę.',
+      'Start: 18 g → 36 g w 25–30 s.',
+    ],
+    service: [handClean, handZero],
+    sources: [
+      { label: 'Timemore: Chestnut C3 ESP', url: 'https://www.timemore.com/products/timemore-chestnut-c3-esp-manual-coffee-grinder-1' },
+      { label: 'Slow Pour Supply: porównanie serii C', url: 'https://www.slowpoursupply.co/pages/timemore-chestnut-c-series-model-comparison' },
+      { label: 'Sigma Coffee: specyfikacja', url: 'https://sigmacoffee.co.uk/products/chestnut-c3-esp' },
     ],
   },
 ];
