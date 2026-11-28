@@ -19,7 +19,7 @@ HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19
 - Kuchnia: ekran startowy, książka 600 przepisów, wyszukiwanie według składników, wejście do zakupów i planowania, Moja lodówka oraz kontrola wydatków.
 - Thermomix TM6: 65 własnych receptur do ręcznych ustawień (w tym 50 popularnych dodanych bez Cookidoo), timery i zasady używania.
 - Książka: polskie i światowe kuchnie, popularne diety, Air Fryer/TM6, kcal na porcję, oceny, historia, ulubione i rozkład czasu. Cały kafel otwiera przepis; ulubione są grupowane na początku wyników.
-- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja. W Sprzęcie jest „Mój sprzęt”: 5 młynków, 5 ekspresów kolbowych, parametry ze źródłami i harmonogram serwisu (`homecraft.coffeegear.v1`).
+- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja. W Sprzęcie jest „Mój sprzęt”: 10 popularnych młynków, 5 popularnych ekspresów oraz kompletny katalog rodzin urządzeń LELIT opisany w README; każdy model ma parametry, punkt startowy espresso i harmonogram serwisu (`homecraft.coffeegear.v1`).
 - Air Fryer: 37 dań dla COSORI TurboBlaze 6 l, oś czasu, ulubione, timery i zasady używania.
 - TM6: przepisy, timery i zasady używania; aplikacja nie steruje urządzeniem.
 - Użyteczne: timery, stoper, jajka, czasy gotowania i miarki.
@@ -74,7 +74,7 @@ Najważniejsze klucze:
 - `homecraft.kitchen.v1`;
 - `homecraft.cookbook.favourites.v1`, `homecraft.cookbook.feedback.v1`;
 - `homecraft.fermentation.v1`;
-- `homecraft.coffeegear.v1` — Mój sprzęt (10 młynków: 5 elektrycznych + 5 ręcznych, 5 popularnych ekspresów, cała linia Lelit: 3 młynki i 10 ekspresów), wybór steruje zakładkami „Twój warsztat”;
+- `homecraft.coffeegear.v1` — Mój sprzęt (10 popularnych młynków, 5 popularnych ekspresów, LELIT: 4 aktualne rodziny młynków, 12 aktualnych rodzin ekspresów domowych, 2 starsze i 1 profesjonalny); wybór steruje zakładkami „Twój warsztat”;
 - `homecraft.profiles.v1` — profile użytkownika (Ustawienia): migawka ustawień (`cremalab.preferences.v1`, pola ustawień z `cremalab.iphone.v3` bez historii i liczników, `homecraft.coffeegear.v1`); wczytanie zapisuje te klucze i przeładowuje aplikację;
 - `homecraft.pastelDefault.v1`, `homecraft.editorialDefault.v1` — jednorazowe znaczniki migracji motywu.
 
