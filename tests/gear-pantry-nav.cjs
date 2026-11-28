@@ -90,7 +90,9 @@ let browser;
   await k.addInitScript(()=>{if(!localStorage.getItem('seeded')){localStorage.setItem('seeded','1');localStorage.setItem('homecraft.kitchen.v1',JSON.stringify({v:1,recipe:'book-010',serveAt:Date.now()+3*3600e3,cooking:true,started:{},done:{},timers:{},mise:[]}));}});
   await k.goto(url+'#plan/plan');await k.getByRole('alert').filter({hasText:'Twoje gotowanie jest bezpieczne'}).waitFor({timeout:15000});
   assert.equal(await k.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.kitchen.v1')).recipe),'book-010','not overwritten');
-  block=false;await k.getByRole('button',{name:'Spróbuj ponownie'}).click();
+  assert(await k.getByRole('button',{name:'Spróbuj ponownie'}).isVisible(),'retry offered');
+  // The button reloads the app (a failed import stays failed until reload); do the same here.
+  block=false;await k.reload();
   await k.waitForFunction(()=>!!document.querySelector('.hc-k-recipe'),null,{timeout:15000});
   assert.doesNotMatch(await k.locator('.hc-k-recipe').innerText(),/Kurczak w panko, frytki i sałatka/);
   await c3.close();}
