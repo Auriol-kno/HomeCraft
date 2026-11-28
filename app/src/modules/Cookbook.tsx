@@ -21,11 +21,12 @@ function HealthDot({recipe}:{recipe:Recipe}){
 /** The 600 recipes arrive in their own file (cookbook-load.ts); show a short status until then. */
 export function Cookbook({onPlan}:{onPlan:()=>void}){
  const ready=useCookbookReady(), [failed,setFailed]=useState(false);
- const retry=()=>{setFailed(false);loadCookbook().catch(()=>setFailed(true));};
- useEffect(()=>{if(!ready)retry();},[ready]);
+ const load=()=>{setFailed(false);loadCookbook().catch(()=>setFailed(true));};
+ useEffect(()=>{if(!ready)load();},[ready]);
  if(!ready)return <section className="screen hc-book-loading" aria-label={t('Książka kucharska')} aria-busy={!failed}>
   <p role="status" className="hc-book-intro">{failed?t('Nie udało się wczytać przepisów. Połącz się z internetem i spróbuj ponownie.'):t('Wczytywanie przepisów…')}</p>
-  {failed&&<button className="hc-primary" onClick={retry}>{t('Spróbuj ponownie')}</button>}
+  {/* A failed dynamic import stays failed until the page reloads (Safari, Chrome), so retry reloads. */}
+  {failed&&<button className="hc-primary" onClick={()=>location.reload()}>{t('Spróbuj ponownie')}</button>}
  </section>;
  return <CookbookBook onPlan={onPlan}/>;
 }

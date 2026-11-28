@@ -43,9 +43,9 @@ let browser;
 
  // 3. Mój sprzęt: pick a grinder and a machine, see specs and service, mark a task done, reload.
  await p.goto(url+'#equipment');await p.getByRole('button',{name:'Mój sprzęt'}).click();
- assert.equal(await p.getByRole('radiogroup',{name:'Młynek'}).getByRole('radio').count(),5);
- assert.equal(await p.getByRole('radiogroup',{name:'Ekspres kolbowy'}).getByRole('radio').count(),5);
- await p.getByRole('radio',{name:/Niche Zero/}).click();await p.getByRole('radio',{name:/Rancilio Silvia/}).click();
+ assert.equal(await p.locator('.hc-gear-pick').filter({hasText:'Młynek'}).getByRole('button').count(),5);
+ assert.equal(await p.locator('.hc-gear-pick').filter({hasText:'Ekspres kolbowy'}).getByRole('button').count(),5);
+ await p.getByRole('button',{name:/Niche Zero/}).click();await p.getByRole('button',{name:/Rancilio Silvia/}).click();
  const machine=p.locator('.hc-gear-detail').filter({hasText:'Rancilio Silvia V6'});
  assert.match(await machine.innerText(),/0,3 l[\s\S]*58 mm[\s\S]*Płukanie wsteczne z detergentem[\s\S]*Odkamienianie/);
  const task=machine.locator('.hc-gear-task').filter({hasText:'Płukanie wsteczne z detergentem'});
@@ -54,7 +54,7 @@ let browser;
  await task.getByRole('combobox').selectOption('14');assert.match(await task.innerText(),/za 14 dni/);
  assert(!(await overflow()),'gear screen fits');
  await p.reload();await p.getByRole('button',{name:'Mój sprzęt'}).click();
- assert.equal(await p.getByRole('radio',{name:/Rancilio Silvia/}).getAttribute('aria-checked'),'true','choice kept after reload');
+ assert.equal(await p.getByRole('button',{name:/Rancilio Silvia/}).getAttribute('aria-pressed'),'true','choice kept after reload');
  assert.match(await p.locator('.hc-gear-task').filter({hasText:'Płukanie wsteczne z detergentem'}).first().innerText(),/za 14 dni/);
  // Corrupted saved data does not break the screen.
  await p.evaluate(()=>localStorage.setItem('homecraft.coffeegear.v1','{"v":1,"grinder":"x","machine":5,"done":{"a":"b"}}'));await p.reload();
@@ -83,10 +83,21 @@ let browser;
   assert.equal(await k.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.kitchen.v1')).recipe),'book-010','saved session kept');
   assert.doesNotMatch(await k.locator('.hc-k-recipe').innerText(),/Kurczak w panko, frytki i sałatka/,'shows the saved cookbook recipe');
   await c2.close();}
+ // 4c. The recipes cannot be loaded (offline): the saved session is kept, writes are blocked, retry works.
+ {const c3=await browser.newContext({viewport:{width:390,height:844}});let block=true;
+  await c3.route(/cookbook-all[^/]*\.js/,r=>block?r.abort():r.continue());
+  const k=await c3.newPage();k.on('pageerror',e=>errors.push(e.message));
+  await k.addInitScript(()=>{if(!localStorage.getItem('seeded')){localStorage.setItem('seeded','1');localStorage.setItem('homecraft.kitchen.v1',JSON.stringify({v:1,recipe:'book-010',serveAt:Date.now()+3*3600e3,cooking:true,started:{},done:{},timers:{},mise:[]}));}});
+  await k.goto(url+'#plan/plan');await k.getByRole('alert').filter({hasText:'Twoje gotowanie jest bezpieczne'}).waitFor({timeout:15000});
+  assert.equal(await k.evaluate(()=>JSON.parse(localStorage.getItem('homecraft.kitchen.v1')).recipe),'book-010','not overwritten');
+  block=false;await k.getByRole('button',{name:'Spróbuj ponownie'}).click();
+  await k.waitForFunction(()=>!!document.querySelector('.hc-k-recipe'),null,{timeout:15000});
+  assert.doesNotMatch(await k.locator('.hc-k-recipe').innerText(),/Kurczak w panko, frytki i sałatka/);
+  await c3.close();}
  // 5. 320 px: tabs, gear and pantry without horizontal scrolling.
  const small=await browser.newContext({viewport:{width:320,height:640}});const q=await small.newPage();q.on('pageerror',e=>errors.push(e.message));
  for(const h of ['#equipment','#dom/fridge','#fryer/dishes','#plan/plan']){await q.goto(url+h);await q.waitForTimeout(300);
-  if(h==='#equipment'){await q.getByRole('button',{name:'Mój sprzęt'}).click();await q.getByRole('radio',{name:/J-Ultra/}).click();}
+  if(h==='#equipment'){await q.getByRole('button',{name:'Mój sprzęt'}).click();await q.getByRole('button',{name:/J-Ultra/}).click();}
   assert(!(await q.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1||[...document.querySelectorAll('main:not([hidden])')].some(m=>m.scrollWidth>m.clientWidth+1))),'320 px '+h);}
  await small.close();
  fs.rmSync(photo,{force:true});

@@ -8,7 +8,7 @@ export const PHOTO_SIZE = 256;
 const DB = 'homecraft-photos', STORE = 'pantry', VERSION = 1;
 
 /** Product name → photo key: case, extra spaces and Polish diacritics do not matter. */
-export const photoKey = (name: string) => name.toLocaleLowerCase('pl').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/\s+/g, ' ').trim().slice(0, 80);
+export const photoKey = (name: string) => name.toLocaleLowerCase('pl').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').replace(/\s+/g, ' ').trim().slice(0, 80);
 
 /** Centre square crop of a w × h image, as source rectangle. */
 export function squareCrop(w: number, h: number) { const side = Math.min(w, h); return { sx: Math.round((w - side) / 2), sy: Math.round((h - side) / 2), side }; }
@@ -23,10 +23,13 @@ function open(): Promise<IDBDatabase> {
     req.onerror = () => { dbPromise = null; reject(req.error); };
   });
 }
+/** Resolves only when the transaction commits (quota errors surface on abort, not on the request). */
 function tx<T>(mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRequest<T>): Promise<T> {
   return open().then(db => new Promise<T>((resolve, reject) => {
-    const r = run(db.transaction(STORE, mode).objectStore(STORE));
-    r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error);
+    const t = db.transaction(STORE, mode), r = run(t.objectStore(STORE));
+    t.oncomplete = () => resolve(r.result);
+    t.onabort = () => reject(t.error || r.error || new Error('aborted'));
+    t.onerror = () => reject(t.error || r.error);
   }));
 }
 
@@ -57,8 +60,9 @@ async function toSquareJpeg(file: Blob): Promise<Blob> {
   let source: CanvasImageSource, w: number, h: number, cleanup = () => {};
   try { const bmp = await createImageBitmap(file); source = bmp; w = bmp.width; h = bmp.height; cleanup = () => bmp.close(); }
   catch {
-    const url = URL.createObjectURL(file), img = new Image(); img.src = url;
-    await img.decode(); source = img; w = img.naturalWidth; h = img.naturalHeight; cleanup = () => URL.revokeObjectURL(url);
+    const url = URL.createObjectURL(file), img = new Image(); cleanup = () => URL.revokeObjectURL(url); img.src = url;
+    try { await img.decode(); } catch (e) { cleanup(); throw e; }
+    source = img; w = img.naturalWidth; h = img.naturalHeight;
   }
   try {
     const { sx, sy, side } = squareCrop(w, h);

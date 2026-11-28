@@ -61,8 +61,8 @@ function GearDetail({ gear, state, now }: { gear: CoffeeGear; state: GearState; 
 function Picker({ title, list, value, onPick }: { title: string; list: CoffeeGear[]; value: string | null; onPick: (id: string | null) => void }) {
   return <fieldset className="hc-gear-pick">
     <legend>{t(title)}</legend>
-    <div className="hc-gear-options" role="radiogroup" aria-label={t(title)}>
-      {list.map(g => <button key={g.id} type="button" role="radio" aria-checked={value === g.id} className={value === g.id ? 'on' : ''} onClick={() => onPick(value === g.id ? null : g.id)}>
+    <div className="hc-gear-options">
+      {list.map(g => <button key={g.id} type="button" aria-pressed={value === g.id} className={value === g.id ? 'on' : ''} onClick={() => onPick(value === g.id ? null : g.id)}>
         <b>{g.short}</b><small>{g.tagline}</small></button>)}
     </div>
   </fieldset>;
@@ -74,6 +74,7 @@ export function CoffeeGearScreen() {
   const grinder = state.grinder ? gearById(state.grinder) : undefined, machine = state.machine ? gearById(state.machine) : undefined;
   return <div className="hc-gear">
     <p className="subtle">{t('Wybierz swój młynek i ekspres kolbowy: zobaczysz parametry, punkt startowy espresso i harmonogram serwisu. Sprzęt z zakładek Młynek i Lelit Anna zostaje bez zmian.')}</p>
+    <p className="hc-k-note">{t('Wybór i daty serwisu zapisują się na tym urządzeniu. Nie trafiają do kopii danych kawy.')}</p>
     <Picker title="Młynek" list={GRINDERS} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
     {grinder && <GearDetail gear={grinder} state={state} now={now} />}
     <Picker title="Ekspres kolbowy" list={MACHINES} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />

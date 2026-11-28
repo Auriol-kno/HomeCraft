@@ -597,6 +597,8 @@ const en: Record<string, string> = {
   'Zdjęcie gotowe. Będzie ikonką tego produktu.': 'Photo ready. It will be this product\'s icon.',
   'Zdjęcie produktu (opcjonalnie). Posłuży jako ikonka.': 'Product photo (optional). Used as its icon.',
   'Zdjęcia produktów są tylko na tym urządzeniu i nie trafiają do kopii danych.': 'Product photos stay on this device and are not part of the data backup.',
+  'Nie udało się wczytać przepisu zapisanego gotowania. Twoje gotowanie jest bezpieczne. Połącz się z internetem i spróbuj ponownie.': 'Could not load the recipe of your saved cooking session. Your session is safe. Connect to the internet and try again.',
+  'Wybór i daty serwisu zapisują się na tym urządzeniu. Nie trafiają do kopii danych kawy.': 'Your choice and service dates are saved on this device. They are not part of the coffee data backup.',
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */

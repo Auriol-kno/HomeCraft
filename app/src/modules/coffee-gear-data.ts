@@ -75,6 +75,7 @@ export const GRINDERS: CoffeeGear[] = [
     service: [burrBrush, deepGrinder],
     sources: [
       { label: 'Niche Coffee: Niche Zero (cechy i parametry)', url: 'https://nichecoffee.co.uk/features' },
+      { label: 'Pull & Pour: pojemność lejka ok. 50 g', url: 'https://pullandpourcoffee.com/niche-zero-grinder-review/' },
       { label: 'Home-Barista: recenzja (330 obr./min)', url: 'https://home-barista.com/reviews/niche-zero-grinder-review-t57516.html' },
     ],
   },
@@ -145,18 +146,19 @@ export const GRINDERS: CoffeeGear[] = [
       { label: '1Zpresso: J-Ultra', url: 'https://1zpresso.coffee/products/j-ultra' },
       { label: 'Alternative Brewing: specyfikacja', url: 'https://alternativebrewing.com.au/products/1zpresso-j-ultra-coffee-grinder' },
       { label: 'Balance Journal: zakres espresso w obrotach', url: 'https://www.balancejournal.co/food-drink/1zpresso-j-ultra-review' },
+      { label: 'Complete Home Barista: tolerancja zera ±10 klików', url: 'https://completehomebarista.com/guides/1zpresso-j-ultra-vs-j-max-what-changes-for-espresso/' },
     ],
   },
 ];
 
 export const MACHINES: CoffeeGear[] = [
   {
-    id: 'gaggia-classic', kind: 'machine', name: 'Gaggia Classic Pro E24 (Evo Pro)', short: 'Gaggia Classic',
+    id: 'gaggia-classic', kind: 'machine', name: 'Gaggia Classic Pro E24', short: 'Gaggia Classic',
     tagline: 'Jeden kocioł mosiężny, kolba 58 mm, zawór 3-drożny, bez PID',
     specs: [
-      { label: 'Ogrzewanie', value: 'jeden kocioł do kawy i pary (E24: mosiężny; Evo Pro: aluminiowy ok. 105 ml roboczych)' },
+      { label: 'Ogrzewanie', value: 'jeden kocioł do kawy i pary, mosiężny (poprzednik Evo Pro: aluminiowy, ok. 105 ml roboczych)' },
       { label: 'Kolba', value: '58 mm, stal nierdzewna, profesjonalna' },
-      { label: 'Ciśnienie', value: 'pompa wibracyjna; OPV ok. 9 bar w wersjach z nową sprężyną (w UE sprawdź)' },
+      { label: 'Ciśnienie', value: 'pompa wibracyjna 15 bar (nominalnie); zawór OPV ok. 9 bar w wersjach z USA, w UE sprawdź swój egzemplarz' },
       { label: 'Temperatura', value: 'termostat, bez PID' },
       { label: 'Zawór', value: '3-drożny (suchy „puck”, można płukać wstecznie)' },
       { label: 'Zbiornik', value: '2,1 l' },
@@ -168,8 +170,7 @@ export const MACHINES: CoffeeGear[] = [
       'Bez PID: przed shotem spuść chwilę wodę z grupy, aż zgaśnie i zapali się lampka gotowości (temperature surfing).',
       'Po spienianiu mleka zrzuć wodę przez grupę, zanim zrobisz kolejny shot.',
     ],
-    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, steamWand, showerScreen, gasket, descale(90, 'Ręcznie, środkiem do odkamieniania wg instrukcji Gaggii.')],
-    notes: ['Gaggia zaleca też cotygodniowe płukanie grupy ciepłą wodą (bez mydła).'],
+    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, steamWand, showerScreen, gasket, descale(60, 'Ręcznie, środkiem do odkamieniania wg instrukcji Gaggii (producent podaje co 2 miesiące).')],
     sources: [
       { label: 'Gaggia: Classic E24 (moc, kocioł, odkamienianie)', url: 'https://www.gaggia.com/manual-machines/new-classic-e24/' },
       { label: 'CoffeeGeek: Classic Evo Pro (kocioł 105 ml, zbiornik 2,1 l)', url: 'https://coffeegeek.com/reviews/firstlooks/gaggia-classic-evo-pro-espresso-machine-first-look/' },
@@ -211,7 +212,7 @@ export const MACHINES: CoffeeGear[] = [
       { label: 'Młynek', value: 'wbudowany, stożkowe żarna stalowe, 16 ustawień' },
       { label: 'Zasobnik / zbiornik', value: '250 g ziaren / 2 l wody z filtrem' },
       { label: 'Moc', value: '1850 W' },
-      { label: 'Wymiary / waga', value: '33 × 31 × 40 cm, ok. 10,6 kg' },
+      { label: 'Wymiary / waga', value: 'ok. 33 × 31 × 40 cm (szer. × gł. × wys., wg sprzedawcy), ok. 10,6 kg' },
     ],
     espresso: [
       'Sitko jednościenne 2-shot, ok. 18 g; nadmiar zbierz narzędziem Razor.',
@@ -221,9 +222,9 @@ export const MACHINES: CoffeeGear[] = [
     service: [groupBrush, sageClean, sageFilter, steamWand, burrBrush, gasket, descale(90, 'Program odkamieniania z instrukcji Sage.')],
     notes: ['Sitka z podwójnymi ściankami (presuryzowane) są do kawy mielonej fabrycznie. Do świeżej kawy używaj jednościennych.'],
     sources: [
-      { label: 'Sage: Barista Express (moc, Thermocoil, 16 ustawień, 54 mm)', url: 'https://sageappliances.com/eu/en/products/microwaves/bes875.html' },
+      { label: 'Sage: Barista Express (Thermocoil, 16 ustawień, 54 mm)', url: 'https://sageappliances.com/eu/en/products/microwaves/bes875.html' },
       { label: 'Sage: PID 93 °C', url: 'https://sageappliances.com/no/en/products/espresso/bes875.html' },
-      { label: 'Currys: specyfikacja (2 l, 15 bar / 9 bar, wymiary)', url: 'https://www.currys.co.uk/product/10174955.html' },
+      { label: 'Currys: specyfikacja (1850 W, 2 l, 15 bar / 9 bar, wymiary)', url: 'https://www.currys.co.uk/product/10174955.html' },
     ],
   },
   {
@@ -237,7 +238,7 @@ export const MACHINES: CoffeeGear[] = [
       { label: 'Po parze', value: 'auto purge: system sam się schładza przed kolejną kawą' },
       { label: 'Zbiornik', value: '1,9 l' },
       { label: 'Moc', value: '1300–1600 W' },
-      { label: 'Wymiary / waga', value: '19,5 × 32 × 31 cm, 4,95 kg' },
+      { label: 'Wymiary / waga', value: 'ok. 19,5 × 32 × 31 cm (szer. × gł. × wys.), 4,95 kg' },
     ],
     espresso: [
       'W zestawie są sitka z podwójnymi ściankami. Ze świeżo mieloną kawą lepiej działają jednościenne 54 mm (dokup).',

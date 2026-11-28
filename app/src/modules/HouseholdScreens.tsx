@@ -26,7 +26,7 @@ function ProductPhoto({name,onNotice}:{name:string;onNotice:(m:string)=>void}){
    {url?<img src={url} alt="" />:<span aria-hidden="true">{name.trim().charAt(0).toLocaleUpperCase('pl')||'?'}</span>}
   </button>
   {open&&<div className="hc-photo-menu" role="group" aria-label={t('Zdjęcie produktu')}>
-   <label className="hc-primary hc-photo-pick">{url?t('Zmień zdjęcie'):t('Zrób lub wybierz zdjęcie')}<input type="file" accept="image/*" capture="environment" onChange={e=>{void pick(e.target.files?.[0]);e.target.value='';}} /></label>
+   <label className="hc-primary hc-photo-pick">{url?t('Zmień zdjęcie'):t('Zrób lub wybierz zdjęcie')}<input type="file" accept="image/*" onChange={e=>{void pick(e.target.files?.[0]);e.target.value='';}} /></label>
    {url&&<button type="button" className="hc-ghost" onClick={()=>void drop()}>{t('Usuń zdjęcie')}</button>}
    <button type="button" className="hc-ghost" onClick={()=>setOpen(false)}>{t('Anuluj')}</button>
   </div>}
@@ -48,7 +48,7 @@ export function PantryScreen(){
  return <section className="screen hc-household" aria-label={t('Moja lodówka')}>
   <div className="hc-metrics"><div><b>{items.length}</b><span>{t('produktów')}</span></div><div><b>{expiring.length}</b><span>{t('krótki termin')}</span></div><div><b>{low.length}</b><span>{t('do uzupełnienia')}</span></div><div><b>{money(pantryValue(items))}</b><span>{t('wartość zapasów')}</span></div></div>
   <details className="details-card" open><summary>{t('Dodaj produkt')} <span>+</span></summary><form className="hc-house-form" onSubmit={submit}>
-   <div className="hc-field hc-wide hc-photo-new"><label className={'hc-photo-btn'+(newPhotoUrl?' has-photo':'')} aria-label={newPhoto?t('Zmień zdjęcie'):t('Dodaj zdjęcie produktu (opcjonalnie)')}>{newPhotoUrl?<img src={newPhotoUrl} alt="" />:<span aria-hidden="true">+</span>}<input type="file" accept="image/*" capture="environment" onChange={e=>{setNewPhoto(e.target.files?.[0]||null);e.target.value='';}} /></label><span>{newPhoto?t('Zdjęcie gotowe. Będzie ikonką tego produktu.'):t('Zdjęcie produktu (opcjonalnie). Posłuży jako ikonka.')}</span>{newPhoto&&<button type="button" className="hc-ghost" onClick={()=>setNewPhoto(null)}>{t('Usuń')}</button>}</div>
+   <div className="hc-field hc-wide hc-photo-new"><label className={'hc-photo-btn'+(newPhotoUrl?' has-photo':'')}>{newPhotoUrl?<img src={newPhotoUrl} alt="" />:<span aria-hidden="true">+</span>}<input type="file" accept="image/*" aria-label={newPhoto?t('Zmień zdjęcie'):t('Dodaj zdjęcie produktu (opcjonalnie)')} onChange={e=>{setNewPhoto(e.target.files?.[0]||null);e.target.value='';}} /></label><span>{newPhoto?t('Zdjęcie gotowe. Będzie ikonką tego produktu.'):t('Zdjęcie produktu (opcjonalnie). Posłuży jako ikonka.')}</span>{newPhoto&&<button type="button" className="hc-ghost" onClick={()=>setNewPhoto(null)}>{t('Usuń')}</button>}</div>
    <label className="hc-field hc-wide"><span>{t('Nazwa produktu')}</span><input className="hc-input" value={name} onChange={e=>setName(e.target.value)} maxLength={80} required /></label>
    <label className="hc-field"><span>{t('Ilość')}</span><input className="hc-input" inputMode="decimal" value={quantity} onChange={e=>setQuantity(e.target.value)} required /></label>
    <label className="hc-field"><span>{t('Jednostka')}</span><select className="hc-input" value={unit} onChange={e=>setUnit(e.target.value as PantryUnit)}>{PANTRY_UNITS.map(x=><option key={x} value={x}>{t(x)}</option>)}</select></label>

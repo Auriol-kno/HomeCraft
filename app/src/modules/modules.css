@@ -593,3 +593,4 @@ html:root .app-shell .hc-photo-btn.has-photo{border-color:var(--accent)}
 .hc-photo-new>span{font-size:13.5px;color:var(--muted);line-height:1.35}
 .hc-photo-new .hc-ghost{min-height:44px}
 }
+@layer overrides{.hc-photo-pick:focus-within{outline:2px solid var(--on-accent);outline-offset:-4px}}

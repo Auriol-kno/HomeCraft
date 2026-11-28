@@ -26,7 +26,7 @@ function load(): KitchenSession {
     const recipe = raw && raw.v === 1 && typeof raw.recipe === 'string' ? recipeById(raw.recipe) : undefined;
     // A saved cookbook recipe before the cookbook chunk arrives: keep the saved session untouched,
     // load the recipes and read it again (never fall back to a fresh plan and overwrite it).
-    if (!recipe && raw && raw.v === 1 && typeof raw.recipe === 'string' && !isCookbookLoaded()) { pendingRecipe = raw.recipe; void loadCookbook().catch(() => { pendingRecipe = null; listeners.forEach(l => l()); }); return fresh(); }
+    if (!recipe && raw && raw.v === 1 && typeof raw.recipe === 'string' && !isCookbookLoaded()) { pendingRecipe = raw.recipe; fetchSaved(); return fresh(); }
     if (!recipe || !Number.isFinite(raw.serveAt)) return fresh();
     // A plan left unstarted for more than 12 h is stale: offer a new serving time instead.
     if (!raw.cooking && raw.serveAt < Date.now() - 12 * 3600e3) return fresh(recipe);
@@ -41,8 +41,18 @@ function load(): KitchenSession {
 let session: KitchenSession | null = null;
 /** Saved recipe id waiting for the cookbook chunk; writes are held back until then. */
 let pendingRecipe: string | null = null;
+/** 'failed' = the recipes could not be loaded (e.g. offline before they were ever cached). Writes stay
+ *  blocked in both states, so the saved session is never replaced by the sample dinner. */
+let pendingState: 'loading' | 'failed' = 'loading';
 export const isKitchenPending = () => pendingRecipe !== null;
+export const kitchenPendingState = () => pendingState;
 const listeners = new Set<() => void>();
+/** New snapshot object so useSyncExternalStore re-renders, then notify. */
+const touch = () => { if (session) session = { ...session }; listeners.forEach(l => l()); };
+function fetchSaved() {
+  pendingState = 'loading';
+  loadCookbook().catch(() => { if (pendingRecipe) { pendingState = 'failed'; touch(); } });
+}
 const get = () => (session ??= load());
 export const getKitchen = get;
 export function setKitchen(update: (s: KitchenSession) => KitchenSession) {
@@ -62,4 +72,5 @@ export const resetKitchen = () => setKitchen(s => fresh(recipeById(s.recipe)));
 const subscribe = (l: () => void) => { listeners.add(l); return () => { listeners.delete(l); }; };
 export const useKitchen = () => useSyncExternalStore(subscribe, get, get);
 if (typeof window !== 'undefined') window.addEventListener('storage', e => { if (e.key === KITCHEN_KEY) { pendingRecipe = null; session = load(); listeners.forEach(l => l()); } });
+// The recipes arrived: read the saved session again (also after an earlier failed attempt).
 onCookbookLoaded(() => { if (pendingRecipe) { pendingRecipe = null; session = load(); listeners.forEach(l => l()); } });

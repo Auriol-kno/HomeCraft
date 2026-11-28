@@ -20,6 +20,8 @@ void navigator.storage?.persist?.().catch(()=>false);
 // The 600 cookbook recipes are a separate file: fetch it once the first screen is up, so the book opens
 // instantly and works offline. Then cache what this version uses and drop older script/style files.
 const idle=(fn:()=>void)=>{const w=window as Window&{requestIdleCallback?:(cb:()=>void,o?:{timeout:number})=>number};if(w.requestIdleCallback)w.requestIdleCallback(fn,{timeout:4000});else setTimeout(fn,2000);};
+// Keep enough Resource Timing entries for the prune list (the default buffer is 250).
+performance.setResourceTimingBufferSize?.(1000);
 const sameOrigin=()=>performance.getEntriesByType('resource').map(e=>e.name).filter(u=>u.startsWith(location.origin));
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
  window.addEventListener('load',()=>{navigator.serviceWorker.register(import.meta.env.BASE_URL+'sw.js').then(async reg=>{
