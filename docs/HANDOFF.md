@@ -29,6 +29,8 @@ HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19
 
 ## Zasada zoptymalizowanego wykorzystania zasobów AI
 
+> **Od 28.11.2026 obowiązuje tryb oszczędny jako domyślny** (szczegóły: `docs/AGENT_PROMPT.md`, punkt 0): bez osobnych agentów i recenzentów, lokalnie tylko testy celowane, pełne testy robi CI, krótkie raporty. Pełna analiza i agenci tylko na wyraźne polecenie właściciela („pełna analiza”, „wyższe parametry”). Poniższe punkty stosuj w ramach tego trybu.
+
 Obowiązuje wszystkich agentów i asystentów pracujących nad projektem (ChatGPT, Codex, Claude i inne AI). Celem jest zachowanie wysokiej jakości wersji końcowej bez zużywania pełnego zestawu zasobów po każdej drobnej czynności.
 
 1. **Domyślnie pracuj adaptacyjnie.** Proste odczyty, małe korekty tekstu, pojedyncze style i bezpieczne zmiany dokumentacji wykonuj w trybie oszczędnym, bez uruchamiania kompletu agentów i całego zestawu testów po każdej zmianie.

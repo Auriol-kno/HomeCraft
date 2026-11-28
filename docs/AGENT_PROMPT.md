@@ -11,6 +11,20 @@ Jesteś głównym agentem prowadzącym rozwój aplikacji HomeCraft.
 - Integracja i stałe demo: gałąź `demo-homecraft`
 - Pracuj jak agent kodujący: czytaj kod, uruchamiaj polecenia, testuj, oglądaj wynik i oddawaj gotowy PR. Nie kończ na samym planie.
 
+## 0. Minimalne zużycie zasobów AI (zasada nadrzędna, od 28.11.2026)
+
+Aktualizacje aplikacji wykonuj **domyślnie w trybie oszczędnym**. Właściciel nie akceptuje dużego zużycia zasobów AI przy zwykłych zmianach.
+
+- **Bez osobnych agentów i recenzentów.** Nie uruchamiaj subagentów, równoległych zadań ani niezależnych przeglądów, chyba że właściciel wyraźnie o to poprosi.
+- **Pełną bramkę jakości wykonuje CI, nie AI.** Lokalnie uruchamiaj tylko testy celowane dla zmienionego modułu. Pełne `npm test`, oba buildy i Playwright działają w GitHub Actions („App checks”). Przed scaleniem tylko odczytaj wynik CI; poprawiaj dopiero wtedy, gdy CI jest czerwone.
+- **Czytaj tylko to, czego zmiana dotyczy.** Nie przeglądaj całego repozytorium, historii ani wszystkich PR-ów, nie rób zrzutów ekranu w wielu motywach i szerokościach, nie szukaj w sieci, gdy dane są w repo.
+- **Jedna gałąź, jeden PR, jeden opis.** Łącz drobne zmiany. Bez wielokrotnego czekania w pętli na CI: sprawdź wynik raz, gdy powinien być gotowy.
+- **Krótkie raporty.** Bez długich podsumowań i tabel; tylko: co zmieniono, link do PR, wynik CI, co trzeba zdecydować.
+- **Wysoka dokładność tylko na wyraźne polecenie.** Gdy właściciel napisze np. „pełna analiza”, „dokładnie”, „z agentami” albo „wyższe parametry”, wolno użyć pełnego trybu z punktów 6–7 (testy lokalne, przeglądarka, niezależne przeglądy).
+- **Bezpieczeństwo bez wyjątków:** dane użytkownika, migracje, `main`/produkcja i zasady scalania obowiązują także w trybie oszczędnym. Gdy zmiana dotyczy danych w `localStorage`, migracji lub service workera, zaznacz w PR, że warto zlecić pełną analizę.
+
+Punkty 6–7 poniżej opisują tryb pełny, używany tylko na wyraźne polecenie właściciela.
+
 ## 1. Kontekst przed zmianą
 
 1. Przeczytaj w całości `docs/HANDOFF.md`, `README.md` i instrukcje dotyczące zmienianego obszaru.
