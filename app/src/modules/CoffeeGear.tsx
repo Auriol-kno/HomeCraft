@@ -1,4 +1,4 @@
-// "Mój sprzęt": choose one of 10 grinders (5 electric, 5 hand) and one of 5 portafilter machines, see their parameters,
+// "Mój sprzęt": choose a grinder or portafilter machine, see its parameters,
 // how to start espresso, and a service schedule with "done today" and next due dates.
 // Own key (homecraft.coffeegear.v1); the Crema Lab gear (K-Pro, Lelit) is untouched.
 import { useSyncExternalStore } from 'react';
@@ -93,9 +93,9 @@ export function CoffeeGearScreen() {
   return <div className="hc-gear">
     <p className="subtle">{t('Wybierz swój młynek i ekspres kolbowy: zobaczysz parametry, punkt startowy espresso i harmonogram serwisu. Wybrany sprzęt pojawi się w zakładkach Młynek, Ekspres i Serwis.')}</p>
     <p className="hc-k-note">{t('Wybór i daty serwisu zapisują się na tym urządzeniu. Nie trafiają do kopii danych kawy.')}</p>
-    <Picker title="Młynek" list={GRINDERS} groups={[{ label: 'Elektryczne', list: GRINDERS.filter(g => g.drive !== 'manual') }, { label: 'Ręczne', list: GRINDERS.filter(g => g.drive === 'manual') }]} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
+    <Picker title="Młynek" list={GRINDERS} groups={[{ label: 'Elektryczne', list: GRINDERS.filter(g => g.drive !== 'manual' && !g.brand) }, { label: 'Ręczne', list: GRINDERS.filter(g => g.drive === 'manual') }, { label: 'LELIT — aktualna oferta', list: GRINDERS.filter(g => g.brand === 'lelit') }]} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
     {grinder && <GearDetail gear={grinder} state={state} now={now} />}
-    <Picker title="Ekspres kolbowy" list={MACHINES} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />
+    <Picker title="Ekspres kolbowy" list={MACHINES} groups={[{ label: 'Popularne', list: MACHINES.filter(g => !g.brand) }, { label: 'LELIT — aktualna oferta', list: MACHINES.filter(g => g.brand === 'lelit' && !g.range) }, { label: 'LELIT — starsze modele', list: MACHINES.filter(g => g.brand === 'lelit' && g.range === 'legacy') }, { label: 'LELIT — profesjonalne', list: MACHINES.filter(g => g.brand === 'lelit' && g.range === 'professional') }]} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />
     {machine && <GearDetail gear={machine} state={state} now={now} />}
   </div>;
 }
