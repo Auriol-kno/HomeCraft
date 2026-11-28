@@ -1,5 +1,5 @@
 // Coffee gear catalogue: 5 popular electric grinders, 5 popular hand grinders, 5 popular portafilter machines
-// and the Lelit range (3 grinders, 10 machines, two of them with a built-in grinder).
+// and the Lelit range (all current grinder and home-machine model families, plus legacy and professional machines).
 // Specifications come from manufacturer pages and retailer spec sheets (see `sources`, checked 28.11.2026).
 // Service intervals are general home-use guidance, not manufacturer guarantees: the user can change them,
 // and the manual of the exact machine always wins. Nothing here talks to a device.
@@ -8,7 +8,7 @@ export interface GearSpec { label: string; value: string }
 export interface ServiceTask { id: string; title: string; detail: string; everyDays: number }
 export interface GearSource { label: string; url: string }
 export interface CoffeeGear {
-  id: string; kind: 'grinder' | 'machine'; /** Grinders only: electric or hand grinder. */ drive?: 'electric' | 'manual'; /** Lelit products are grouped separately in the picker. */ brand?: 'lelit'; name: string; short: string; tagline: string;
+  id: string; kind: 'grinder' | 'machine'; /** Grinders only: electric or hand grinder. */ drive?: 'electric' | 'manual'; /** Lelit products are grouped separately in the picker. */ brand?: 'lelit'; /** Current consumer range unless explicitly marked. */ range?: 'legacy' | 'professional'; name: string; short: string; tagline: string;
   specs: GearSpec[];
   /** How to start espresso with this device (dose, ratio, grind start point). */
   espresso: string[];
@@ -393,8 +393,8 @@ export const MACHINES: CoffeeGear[] = [
   },
 ];
 
-// Lelit (Gemme Italian Producers, Castegnato): the current home range plus the discontinued Glenda.
-// Specifications from Lelit technical sheets and manuals and retailer spec sheets (checked 28.11.2026).
+// Lelit (Gemme Italian Producers, Castegnato): current consumer range, retained legacy models and GiuliettaX.
+// Model families and specifications from official Lelit product pages and technical sheets (checked 28.11.2026).
 const lelitSoftener = (litres: number): ServiceTask => ({ id: 'softener', title: 'Filtr zmiękczający w zbiorniku', detail: `Wkład z zestawu starcza na ok. ${litres} l wody: wymień go po tej ilości (przy ok. 1 l dziennie co ${litres} dni) albo wcześniej przy twardej wodzie.`, everyDays: litres });
 const lelitDescale = (days: number): ServiceTask => descale(days, 'Tylko środkiem i procedurą z instrukcji Lelit. Najlepsza ochrona to miękka lub filtrowana woda.');
 const lelitBoilerCare: ServiceTask = { id: 'boiler-care', title: 'Kamień w kotłach (serwis)', detail: 'W maszynach z wymiennikiem ciepła i dwoma kotłami nie odkamieniaj kwasem samodzielnie, jeśli instrukcja tego nie opisuje. Używaj filtra zmiękczającego, a kontrolę kotłów zlecaj serwisowi.', everyDays: 365 };
@@ -456,6 +456,7 @@ export const LELIT_GRINDERS: CoffeeGear[] = [
       { label: 'Dozowanie', value: 'LCC: czas dla 1 lub 2 porcji, przycisk dosypania lub zatrzymania' },
       { label: 'Silnik', value: '150 W' },
       { label: 'Zasobnik', value: '350 g' },
+      { label: 'Warianty', value: 'PL72 stal szczotkowana, PL72-P stal polerowana' },
       { label: 'Wymiary / waga', value: '14 × 22,5 × 38,5 cm, 6,6 kg' },
       { label: 'Wylot', value: 'regulowana wysokość rynienki i podpórki kolby' },
     ],
@@ -470,9 +471,54 @@ export const LELIT_GRINDERS: CoffeeGear[] = [
       { label: 'Lelit: William PL72 (strona produktu)', url: 'https://lelit.com/product/william-pl72/' },
     ],
   },
+  {
+    id: 'lelit-steve', kind: 'grinder', drive: 'electric', brand: 'lelit', name: 'Lelit Steve PM20', short: 'Lelit Steve',
+    tagline: 'Elektryczny, płaskie żarna 64 mm, wyświetlacz LED i dwa tryby dozowania',
+    specs: [
+      { label: 'Żarna', value: 'płaskie 64 mm, opracowane z Keber' },
+      { label: 'Regulacja', value: 'bezstopniowa mikroregulacja' },
+      { label: 'Dozowanie', value: 'czas dla 1 i 2 porcji albo ręczne on-demand do 20 s' },
+      { label: 'Sterowanie', value: 'wyświetlacz LED 7-segmentowy, 2 przyciski, tryb stand-by' },
+      { label: 'Zasobnik', value: '250 g' },
+      { label: 'Wylot', value: 'klapka antystatyczna, regulowana podpórka kolby' },
+      { label: 'Warianty', value: 'stal szczotkowana lub polerowana, czarny, biały i złoty' },
+      { label: 'Wymiary / waga', value: '14 × 23 × 39 cm, 6,6 kg' },
+    ],
+    espresso: [
+      'Ustaw czas podwójnej dawki tak, aby młynek podawał 18 g; po zmianie grubości ponownie sprawdź masę.',
+      'W trybie on-demand przytrzymuj przycisk i zatrzymaj mielenie na wadze; limit jednego cyklu to 20 s.',
+      'Start: 18 g → 36 g espresso w 25–30 s; koryguj mikroregulacją małymi krokami.',
+    ],
+    service: [burrBrush, deepGrinder],
+    sources: [
+      { label: 'Lelit: Steve PM20 (oficjalna karta produktu)', url: 'https://www.lelit.com/product/steve-pm20/' },
+    ],
+  },
 ];
 
 export const LELIT_MACHINES: CoffeeGear[] = [
+  {
+    id: 'lelit-anna-em', kind: 'machine', brand: 'lelit', name: 'Lelit Anna PL41EM', short: 'Anna PL41EM',
+    tagline: 'Jeden kocioł 0,25 l bez PID, grupa LELIT57, manometr i zawór 3-drożny',
+    specs: [
+      { label: 'Ogrzewanie', value: 'jeden mosiężny kocioł 0,25 l, bez PID' },
+      { label: 'Grupa / kolba', value: lelitGroup57 },
+      { label: 'Ciśnienie', value: 'pompa wibracyjna, manometr ekstrakcji' },
+      { label: 'Zawór', value: '3-drożny (suchy placek, płukanie wsteczne)' },
+      { label: 'Zbiornik', value: '2,7 l, boczne okienko poziomu wody' },
+      { label: 'Sterowanie', value: 'chromowane przyciski; kawa, gorąca woda i para' },
+      { label: 'Wymiary / waga', value: '23 × 38 × 34 cm, 7,5 kg' },
+    ],
+    espresso: [
+      'Bez PID temperaturą sterujesz czasem: po nagrzaniu przepłucz grupę krótko i zacznij parzenie po zgaśnięciu kontrolki grzania.',
+      'Sitko LELIT57 na 2 porcje przyjmuje 14–18 g; zacznij od 16 g → 32 g w 25–30 s.',
+      'Manometr ma pomóc ocenić ekstrakcję, ale o smaku decydują przede wszystkim mielenie, dawka i uzysk.',
+    ],
+    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, lelitWand, showerScreen, gasket, lelitDescale(90)],
+    sources: [
+      { label: 'Lelit: Anna PL41EM (oficjalna karta produktu)', url: 'https://www.lelit.com/product/anna-pl41em/' },
+    ],
+  },
   {
     id: 'lelit-anna', kind: 'machine', brand: 'lelit', name: 'Lelit Anna PL41TEM', short: 'Lelit Anna',
     tagline: 'Jeden kocioł 0,25 l z PID, grupa LELIT57, zawór 3-drożny, kompaktowa',
@@ -495,6 +541,29 @@ export const LELIT_MACHINES: CoffeeGear[] = [
       lelitSrc.anna,
       { label: 'Whole Latte Love: Anna (kocioł 0,25 l, 57 mm)', url: 'https://www.wholelattelove.com/collections/lelit/products/lelit-anna-espresso-machine' },
       { label: 'Galaxus: Anna (1050 W)', url: 'https://www.galaxus.nl/en/s2/product/lelit-anna-espresso-machines-10885765' },
+    ],
+  },
+  {
+    id: 'lelit-anita-em', kind: 'machine', brand: 'lelit', name: 'Lelit Anita PL042EM', short: 'Anita PL042EM',
+    tagline: 'Anna bez PID z młynkiem 38 mm: kompaktowy zestaw all-in-one',
+    specs: [
+      { label: 'Ogrzewanie', value: 'jeden mosiężny kocioł 0,25 l, bez PID' },
+      { label: 'Młynek', value: 'wbudowany, stożkowe żarna 38 mm, bezstopniowa mikroregulacja' },
+      { label: 'Zasobnik', value: '150 g' },
+      { label: 'Grupa / kolba', value: lelitGroup57 },
+      { label: 'Ciśnienie', value: 'pompa wibracyjna, manometr ekstrakcji' },
+      { label: 'Zawór', value: '3-drożny' },
+      { label: 'Zbiornik', value: '2,7 l, boczne i przednie okienko poziomu wody' },
+      { label: 'Wymiary / waga', value: '31,5 × 26,5 × 37 cm, 10,2 kg' },
+    ],
+    espresso: [
+      'Oprzyj kolbę o przycisk młynka i waż dawkę, bo PL042EM nie ma programowania czasu mielenia.',
+      'Zacznij od 16 g → 32 g w 25–30 s; bez PID temperaturą sterujesz krótkim płukaniem i momentem po cyklu grzania.',
+      'Wbudowany ubijak pomaga rozpocząć pracę, ale osobny tamper LELIT57 ułatwia równe ubijanie.',
+    ],
+    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, lelitWand, gasket, builtInGrinder, lelitDescale(90)],
+    sources: [
+      { label: 'Lelit: Anita PL042EM (oficjalna karta produktu)', url: 'https://www.lelit.com/product/anita-pl042em/' },
     ],
   },
   {
@@ -521,7 +590,7 @@ export const LELIT_MACHINES: CoffeeGear[] = [
     ],
   },
   {
-    id: 'lelit-grace', kind: 'machine', brand: 'lelit', name: 'Lelit Grace PL81T', short: 'Lelit Grace',
+    id: 'lelit-grace', kind: 'machine', brand: 'lelit', range: 'legacy', name: 'Lelit Grace PL81T', short: 'Lelit Grace',
     tagline: 'Jeden kocioł 0,25 l, LCC z PID i preinfuzją, grupa LELIT57',
     specs: [
       { label: 'Ogrzewanie', value: 'jeden kocioł 0,25 l, mosiądz' },
@@ -544,7 +613,7 @@ export const LELIT_MACHINES: CoffeeGear[] = [
     ],
   },
   {
-    id: 'lelit-glenda', kind: 'machine', brand: 'lelit', name: 'Lelit Glenda PL41PLUST', short: 'Lelit Glenda',
+    id: 'lelit-glenda', kind: 'machine', brand: 'lelit', range: 'legacy', name: 'Lelit Glenda PL41PLUST', short: 'Lelit Glenda',
     tagline: 'Jeden kocioł 0,3 l z PID, kolba 58 mm, wycofana z produkcji',
     specs: [
       { label: 'Ogrzewanie', value: 'jeden kocioł 0,3 l, mosiądz, PID' },
@@ -564,6 +633,30 @@ export const LELIT_MACHINES: CoffeeGear[] = [
       { label: '1st-line: Glenda PL41PLUST (58 mm, 1200 W)', url: 'https://www.1st-line.com/buy/rrpl41plust/' },
       { label: 'Green Plantation: Glenda (kocioł 0,3 l)', url: 'https://www.greenplantation.com/p/lelit-glenda-pl41plust' },
       { label: 'Kaffeemacher: Glenda wycofana', url: 'https://kaffeemacher.de/fr/blogs/kaffeewissen/lelit' },
+    ],
+  },
+  {
+    id: 'lelit-victoria3', kind: 'machine', brand: 'lelit', name: 'Lelit Victoria3 PL91T3', short: 'Lelit Victoria3',
+    tagline: 'Nowa grupa nasycona LELIT58, Pagaia, profile przepływu i cicha pompa',
+    specs: [
+      { label: 'Ogrzewanie', value: 'mosiężny kocioł kawy 0,2 l, regulowana temperatura kawy i pary' },
+      { label: 'Grupa / kolba', value: 'nowa nasycona LELIT58 z grzałką ze stali nierdzewnej' },
+      { label: 'Profilowanie', value: 'Pagaia: automatyczne profile, do 5 programowanych kroków lub freestyle' },
+      { label: 'Sterowanie', value: 'LCC OLED, 2 programowane przyciski, automatyczne płukanie' },
+      { label: 'Pompa', value: 'nowa cicha pompa; manometr ciśnienia ekstrakcji' },
+      { label: 'Para', value: 'lanca anti-burn z dyszą 3-otworową' },
+      { label: 'Zbiornik', value: '2,5 l, tryb rezerwy' },
+      { label: 'Warianty', value: 'stal szczotkowana, czarny lub biały; detale z drewna zebrano' },
+      { label: 'Wymiary / waga', value: '27 × 38 × 38 cm, 11,3 kg' },
+    ],
+    espresso: [
+      'Na początek wybierz profil automatyczny „Modern shot” i ustaw 18 g → 36 g w około 25–30 s.',
+      'Po opanowaniu bazowego shota zaprogramuj do 5 kroków przepływu albo steruj Pagaią w trybie freestyle.',
+      'Zmieniaj jeden parametr naraz i zapisuj profil dopiero po powtarzalnych ekstrakcjach.',
+    ],
+    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, lelitWand, showerScreen, gasket, lelitSoftener(70), lelitDescale(120)],
+    sources: [
+      { label: 'Lelit: Victoria3 PL91T3 (oficjalna karta produktu)', url: 'https://www.lelit.com/product/victoria3-pl91t3/' },
     ],
   },
   {
@@ -639,6 +732,30 @@ export const LELIT_MACHINES: CoffeeGear[] = [
     ],
   },
   {
+    id: 'lelit-elizabeth3', kind: 'machine', brand: 'lelit', name: 'Lelit Elizabeth3 PL92T3', short: 'Lelit Elizabeth3',
+    tagline: 'Dwa kotły, nasycona grupa LELIT58, Pagaia i pełne profilowanie przepływu',
+    specs: [
+      { label: 'Kotły', value: 'mosiężny kocioł kawy 0,2 l i kocioł pary/gorącej wody 0,6 l' },
+      { label: 'Grupa / kolba', value: 'nowa nasycona LELIT58 z grzałką ze stali nierdzewnej' },
+      { label: 'Profilowanie', value: 'Pagaia: automatyczne profile, do 5 programowanych kroków lub freestyle' },
+      { label: 'Sterowanie', value: 'LCC OLED, 2 programowane przyciski, możliwość wyłączenia kotła pary' },
+      { label: 'Pompa', value: 'nowa cicha pompa; manometr ciśnienia ekstrakcji' },
+      { label: 'Para', value: 'oddzielna lanca anti-burn z dyszą 3-otworową; stała wylewka wody' },
+      { label: 'Zbiornik', value: '2,5 l, tryb rezerwy' },
+      { label: 'Warianty', value: 'stal szczotkowana, czarny lub biały; detale z drewna zebrano' },
+      { label: 'Wymiary / waga', value: '36 × 38 × 38 cm, 15,3 kg' },
+    ],
+    espresso: [
+      'Ustaw 93–94 °C i zacznij od profilu „Modern shot”: 18 g → 36 g w około 25–30 s.',
+      'Pagaia może prowadzić automatyczny profil, 5 własnych kroków albo przepływ freestyle obserwowany w LCC.',
+      'Dwa kotły pozwalają spieniać podczas ekstrakcji; wyłącz kocioł pary, gdy przygotowujesz tylko espresso.',
+    ],
+    service: [groupBrush, backflushWater, backflushDetergent, soakBaskets, lelitWand, showerScreen, gasket, lelitSoftener(70), lelitBoilerCare],
+    sources: [
+      { label: 'Lelit: Elizabeth3 PL92T3 (oficjalna karta produktu)', url: 'https://www.lelit.com/product/elizabeth3-pl92t3/' },
+    ],
+  },
+  {
     id: 'lelit-mara-x', kind: 'machine', brand: 'lelit', name: 'Lelit Mara X V2 PL62X', short: 'Lelit Mara X',
     tagline: 'Wymiennik ciepła, kocioł 1,8 l, grupa E61 (L58E), dwa czujniki temperatury',
     specs: [
@@ -705,6 +822,40 @@ export const LELIT_MACHINES: CoffeeGear[] = [
       { label: 'Lelit: Bianca (karta techniczna)', url: 'https://lelit.com/wp-content/uploads/2024/09/EN-Bianca.pdf' },
       { label: 'Lelit: Bianca V3 zmiany i ustawienia fabryczne', url: 'https://lelit.com/l3t1l/uploads/2022/02/BiancaV3-updates-WEB.pdf' },
       { label: 'Clive Coffee: Bianca V3 (moc grzałek)', url: 'https://clivecoffee.com/products/lelit-bianca-dual-boiler-espresso-machine?hsLang=en' },
+    ],
+  },
+  {
+    id: 'lelit-giuliettax', kind: 'machine', brand: 'lelit', range: 'professional', name: 'Lelit GiuliettaX PL2SVX', short: 'Lelit GiuliettaX',
+    tagline: 'Profesjonalny ekspres 2-grupowy, kocioł 10 l, pompa rotacyjna i automatyczne dawki',
+    specs: [
+      { label: 'Zastosowanie', value: 'profesjonalne; dwie grupy i bezpośrednie podłączenie wody oraz odpływu' },
+      { label: 'Ogrzewanie', value: 'miedziany kocioł 10 l, podwójny system HX z obiegiem termosyfonowym' },
+      { label: 'Grupy / kolby', value: '2 × L58E, kompatybilne z akcesoriami LELIT58' },
+      { label: 'Pompa', value: 'rotacyjna; podwójny manometr pompy i pary' },
+      { label: 'Sterowanie', value: 'LCD, programowane dawki każdej grupy, preinfuzja, liczniki i ECO' },
+      { label: 'Temperatura', value: 'programowana przez LTS; wyświetlanie °C lub °F' },
+      { label: 'Para i woda', value: 'wielokierunkowe lance anti-burn, podwójna klawiatura wydawania' },
+      { label: 'Wymiary / waga', value: '58 × 56 × 46 cm, 47 kg' },
+    ],
+    espresso: [
+      'Model wymaga montażu przez fachowca: stałego przyłącza wody, odpływu i instalacji zgodnej z lokalnymi wymaganiami.',
+      'Dla sitka 14–18 g zacznij od 18 g → 36 g w 25–30 s i zaprogramuj dawkę osobno dla każdej grupy.',
+      'Ustaw temperaturę LTS oraz preinfuzję do mieszanki; sprawdzaj wynik na wadze mimo automatycznego dozowania.',
+    ],
+    service: [
+      groupBrush,
+      { ...backflushWater, everyDays: 1 },
+      { ...backflushDetergent, everyDays: 7 },
+      { ...soakBaskets, everyDays: 7 },
+      lelitWand,
+      showerScreen,
+      gasket,
+      { id: 'water-filter', title: 'Filtr instalacji wodnej', detail: 'Kontroluj wkład i twardość zgodnie z licznikiem maszyny oraz zaleceniem instalatora; wymiana zależy od wydajności wkładu i zużycia.', everyDays: 90 },
+      lelitBoilerCare,
+    ],
+    notes: ['To urządzenie profesjonalne. Interwały w aplikacji są punktem startowym; obowiązuje plan HACCP, instrukcja i harmonogram autoryzowanego serwisu.'],
+    sources: [
+      { label: 'Lelit: GiuliettaX PL2SVX (oficjalna karta techniczna)', url: 'https://www.lelit.com/wp-content/uploads/2024/09/EN-GiuliettaX.pdf' },
     ],
   },
 ];

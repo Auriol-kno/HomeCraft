@@ -1,5 +1,5 @@
 // Browser test: one bottom menu with section tabs, lazily loaded cookbook, "Mój sprzęt"
-// (10 grinders: 5 electric + 5 hand, 5 portafilter machines, service schedule, workshop tabs follow the choice) and product photos in "Moja lodówka".
+// (10 popular grinders and machines plus complete Lelit model families, service schedule, workshop tabs follow the choice) and product photos in "Moja lodówka".
 const {chromium}=require('@playwright/test');
 const {spawn}=require('node:child_process');
 const assert=require('node:assert/strict');
@@ -47,13 +47,15 @@ let browser;
  // 3. Mój sprzęt: pick a grinder and a machine, see specs and service, mark a task done, reload.
  await p.goto(url+'#equipment');await p.getByRole('button',{name:'Mój sprzęt'}).click();
  const gp=p.locator('.hc-gear-pick').filter({hasText:'Młynek'});
- assert.equal(await gp.getByRole('button').count(),13);
- assert.equal(await gp.locator('.hc-gear-group').filter({hasText:'Lelit'}).getByRole('button').count(),3);
+ assert.equal(await gp.getByRole('button').count(),14);
+ assert.equal(await gp.locator('.hc-gear-group').filter({hasText:'LELIT — aktualna oferta'}).getByRole('button').count(),4);
  assert.equal(await gp.locator('.hc-gear-group').filter({hasText:'Elektryczne'}).getByRole('button').count(),5);
  assert.equal(await gp.locator('.hc-gear-group').filter({hasText:'Ręczne'}).getByRole('button').count(),5);
  const mp=p.locator('.hc-gear-pick').filter({hasText:'Ekspres kolbowy'});
- assert.equal(await mp.getByRole('button').count(),15);
- assert.equal(await mp.locator('.hc-gear-group').filter({hasText:'Lelit'}).getByRole('button').count(),10);
+ assert.equal(await mp.getByRole('button').count(),20);
+ assert.equal(await mp.locator('.hc-gear-group').filter({hasText:'LELIT — aktualna oferta'}).getByRole('button').count(),12);
+ assert.equal(await mp.locator('.hc-gear-group').filter({hasText:'LELIT — starsze modele'}).getByRole('button').count(),2);
+ assert.equal(await mp.locator('.hc-gear-group').filter({hasText:'LELIT — profesjonalne'}).getByRole('button').count(),1);
  const pick=p.locator('.hc-gear-pick');await pick.getByRole('button',{name:/Niche Zero/}).click();await pick.getByRole('button',{name:/Rancilio Silvia/}).click();
  const machine=p.locator('.hc-gear-detail').filter({hasText:'Rancilio Silvia V6'});
  assert.match(await machine.innerText(),/0,3 l[\s\S]*58 mm[\s\S]*Płukanie wsteczne z detergentem[\s\S]*Odkamienianie/);
@@ -140,5 +142,5 @@ let browser;
  await small.close();
  fs.rmSync(photo,{force:true});
  assert.deepEqual(errors,[]);
- console.log(`PASS: section menu above the main menu, lazy 600-recipe cookbook, Mój sprzęt (10 grinders + Lelit range, 15 machines, workshop tabs, service schedule, reload, corrupted data), pantry photos (256 px round icon, reload, reuse by name, remove), user profiles, 320/390 px. Base ${base}`);
+ console.log(`PASS: section menu above the main menu, lazy 600-recipe cookbook, Mój sprzęt (10 popular grinders + complete Lelit range, 20 machines, workshop tabs, service schedule, reload, corrupted data), pantry photos (256 px round icon, reload, reuse by name, remove), user profiles, 320/390 px. Base ${base}`);
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(async()=>{await browser?.close();server.kill();});
