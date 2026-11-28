@@ -93,9 +93,9 @@ export function CoffeeGearScreen() {
   return <div className="hc-gear">
     <p className="subtle">{t('Wybierz swój młynek i ekspres kolbowy: zobaczysz parametry, punkt startowy espresso i harmonogram serwisu. Wybrany sprzęt pojawi się w zakładkach Młynek, Ekspres i Serwis.')}</p>
     <p className="hc-k-note">{t('Wybór i daty serwisu zapisują się na tym urządzeniu. Nie trafiają do kopii danych kawy.')}</p>
-    <Picker title="Młynek" list={GRINDERS} groups={[{ label: 'Elektryczne', list: GRINDERS.filter(g => g.drive !== 'manual') }, { label: 'Ręczne', list: GRINDERS.filter(g => g.drive === 'manual') }]} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
+    <Picker title="Młynek" list={GRINDERS} groups={[{ label: 'Elektryczne', list: GRINDERS.filter(g => g.drive !== 'manual' && !g.brand) }, { label: 'Ręczne', list: GRINDERS.filter(g => g.drive === 'manual') }, { label: 'Lelit', list: GRINDERS.filter(g => g.brand === 'lelit') }]} value={state.grinder} onPick={id => save(x => ({ ...x, grinder: id }))} />
     {grinder && <GearDetail gear={grinder} state={state} now={now} />}
-    <Picker title="Ekspres kolbowy" list={MACHINES} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />
+    <Picker title="Ekspres kolbowy" list={MACHINES} groups={[{ label: 'Popularne', list: MACHINES.filter(g => !g.brand) }, { label: 'Lelit', list: MACHINES.filter(g => g.brand === 'lelit') }]} value={state.machine} onPick={id => save(x => ({ ...x, machine: id }))} />
     {machine && <GearDetail gear={machine} state={state} now={now} />}
   </div>;
 }

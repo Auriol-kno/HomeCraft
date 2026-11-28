@@ -74,7 +74,7 @@ Najważniejsze klucze:
 - `homecraft.kitchen.v1`;
 - `homecraft.cookbook.favourites.v1`, `homecraft.cookbook.feedback.v1`;
 - `homecraft.fermentation.v1`;
-- `homecraft.coffeegear.v1` — Mój sprzęt (10 młynków: 5 elektrycznych + 5 ręcznych, 5 ekspresów), wybór steruje zakładkami „Twój warsztat”;
+- `homecraft.coffeegear.v1` — Mój sprzęt (10 młynków: 5 elektrycznych + 5 ręcznych, 5 popularnych ekspresów, cała linia Lelit: 3 młynki i 10 ekspresów), wybór steruje zakładkami „Twój warsztat”;
 - `homecraft.profiles.v1` — profile użytkownika (Ustawienia): migawka ustawień (`cremalab.preferences.v1`, pola ustawień z `cremalab.iphone.v3` bez historii i liczników, `homecraft.coffeegear.v1`); wczytanie zapisuje te klucze i przeładowuje aplikację;
 - `homecraft.pastelDefault.v1`, `homecraft.editorialDefault.v1` — jednorazowe znaczniki migracji motywu.
 

@@ -1,11 +1,13 @@
-// Coffee gear catalogue: 10 grinders (5 electric, 5 hand), 5 portafilter machines, validated saved state and service dates.
+// Coffee gear catalogue: 10 grinders (5 electric, 5 hand) + Lelit (3 grinders, 10 machines), 5 portafilter machines, validated saved state and service dates.
 import assert from 'node:assert/strict';
 import { GRINDERS, MACHINES, GEAR, parseGear, taskStatus, overdueCount, taskKey, gearById } from '../app/src/modules/coffee-gear-data.ts';
 
-assert.equal(GRINDERS.length, 10); assert.equal(MACHINES.length, 5);
+assert.equal(GRINDERS.length, 13); assert.equal(MACHINES.length, 15);
+assert.equal(GRINDERS.filter(g => g.brand === 'lelit').length, 3, 'Lelit grinders: Fred Prima, Fred Tempo, William');
+assert.equal(MACHINES.filter(g => g.brand === 'lelit').length, 10, 'Lelit machines');
 assert.equal(GRINDERS.filter(g => g.drive === 'manual').length, 5, '5 hand grinders');
-assert.equal(GRINDERS.filter(g => g.drive === 'electric').length, 5, '5 electric grinders');
-assert.equal(new Set(GEAR.map(g => g.id)).size, 15, 'unique ids');
+assert.equal(GRINDERS.filter(g => g.drive === 'electric' && !g.brand).length, 5, '5 electric grinders');
+assert.equal(new Set(GEAR.map(g => g.id)).size, 28, 'unique ids');
 for (const g of GEAR) {
   assert(g.specs.length >= 5, g.id + ' has specifications');
   assert(g.espresso.length >= 2, g.id + ' has an espresso start');
@@ -35,4 +37,4 @@ assert.equal(taskStatus(at(18), g, task, now).state, 'soon');
 assert.equal(taskStatus(at(25), g, task, now).state, 'overdue');
 assert.equal(taskStatus({ ...at(25), every: { [taskKey(g, task)]: 30 } }, g, task, now).state, 'soon', 'user interval wins');
 assert.equal(overdueCount(at(25), now), 1);
-console.log('PASS: coffee gear (10 grinders: 5 electric + 5 hand, 5 machines, sources, safe saved state, service due dates)');
+console.log('PASS: coffee gear (10 grinders: 5 electric + 5 hand, Lelit 3 grinders + 10 machines, 5 popular machines, sources, safe saved state, service due dates)');

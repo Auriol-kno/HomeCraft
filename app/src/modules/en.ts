@@ -624,7 +624,8 @@ const en: Record<string, string> = {
   'Masz już maksymalną liczbę profili.': 'You already have the maximum number of profiles.',
   'Podaj nazwę profilu.': 'Enter a profile name.',
   'Nie udało się zapisać profilu: brak miejsca w pamięci.': 'Could not save the profile: storage is full.',
-  'Nie udało się wczytać profilu.': 'Could not load the profile.'
+  'Nie udało się wczytać profilu.': 'Could not load the profile.',
+  'Popularne': 'Popular'
 };
 export const isEnglish = () => document.documentElement.lang === 'en';
 /** Translate a whole UI phrase; unknown phrases stay Polish. */
