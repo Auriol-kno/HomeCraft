@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { TM_RECIPES } from '../app/src/modules/thermomix-data.ts';
 import { TM_POPULAR_RECIPES } from '../app/src/modules/thermomix-recipes-extra.ts';
 import { categoryTotals, daysUntil, expenseEnvelope, isLow, loadExpenses, loadPantry, monthTotal, pantryEnvelope, pantryValue, validateExpenses, validatePantry } from '../app/src/modules/household-store.ts';
+import '../app/src/modules/cookbook-all.ts'; // registers the 600 lazily loaded cookbook recipes
 
 assert.equal(TM_POPULAR_RECIPES.length,50,'exactly 50 new TM6 recipes');
 assert.equal(TM_RECIPES.length,65,'15 retained + 50 new TM6 recipes');

@@ -15,17 +15,30 @@ HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19
 
 ## Aktualny produkt
 
-- Stałe dolne menu: **Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy**. Nie może znikać na ekranach modułów.
+- Stałe dolne menu: **Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy**. Nie może znikać na ekranach modułów. Menu działu nie jest drugim dolnym paskiem, tylko przewijanym rzędem zakładek pod nagłówkiem (`.section-nav`).
 - Kuchnia: ekran startowy, książka 600 przepisów, wyszukiwanie według składników, wejście do zakupów i planowania, Moja lodówka oraz kontrola wydatków.
 - Thermomix TM6: 65 własnych receptur do ręcznych ustawień (w tym 50 popularnych dodanych bez Cookidoo), timery i zasady używania.
 - Książka: polskie i światowe kuchnie, popularne diety, Air Fryer/TM6, kcal na porcję, oceny, historia, ulubione i rozkład czasu. Cały kafel otwiera przepis; ulubione są grupowane na początku wyników.
-- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja.
+- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja. W Sprzęcie jest „Mój sprzęt”: 5 młynków, 5 ekspresów kolbowych, parametry ze źródłami i harmonogram serwisu (`homecraft.coffeegear.v1`).
 - Air Fryer: 37 dań dla COSORI TurboBlaze 6 l, oś czasu, ulubione, timery i zasady używania.
 - TM6: przepisy, timery i zasady używania; aplikacja nie steruje urządzeniem.
 - Użyteczne: timery, stoper, jajka, czasy gotowania i miarki.
 - Zakupy: lista z działami sklepu, ilościami, szybkim dodawaniem i zapisem lokalnym.
 - Kitchen OS: Plan → Przygotuj → Gotuj, harmonogram wstecz od godziny podania, checklisty, wspólne zasoby i timery.
 - Fermentacja: kombucha, zakwasy i kiszonki, kalendarz oraz dziennik.
+
+## Zasada zoptymalizowanego wykorzystania zasobów AI
+
+Obowiązuje wszystkich agentów i asystentów pracujących nad projektem (ChatGPT, Codex, Claude i inne AI). Celem jest zachowanie wysokiej jakości wersji końcowej bez zużywania pełnego zestawu zasobów po każdej drobnej czynności.
+
+1. **Domyślnie pracuj adaptacyjnie.** Proste odczyty, małe korekty tekstu, pojedyncze style i bezpieczne zmiany dokumentacji wykonuj w trybie oszczędnym, bez uruchamiania kompletu agentów i całego zestawu testów po każdej zmianie.
+2. **Najpierw zbieraj materiał, potem zmieniaj kod.** Łącz powiązane drobne poprawki w jeden logiczny pakiet, aby nie powtarzać tych samych analiz, instalacji, buildów i testów.
+3. **W trakcie pracy uruchamiaj testy celowane.** Po logicznym pakiecie zmian sprawdź bezpośrednio dotknięty moduł, typy lub odpowiedni scenariusz. Pełny `npm run build`, `npm test`, testy obu baz URL i przeglądy agentów wykonuj przed PR, przed scaleniem albo wcześniej, gdy zmiana jest ryzykowna.
+4. **Od razu używaj wysokiej dokładności dla zmian wysokiego ryzyka:** danych użytkownika i `localStorage`, migracji, routingu i nawigacji globalnej, service workera, wdrożeń, timerów, harmonogramów, dostępności, bezpieczeństwa żywności oraz czasów i temperatur przepisów.
+5. **Osobnych agentów uruchamiaj celowo.** Korzystaj z nich, gdy wymaga tego zadanie lub kontrola końcowa i gdy mogą niezależnie ocenić kod, QA, dostępność, dane/wdrożenie albo bezpieczeństwo żywności. Nie powielaj nimi prostego odczytu ani tej samej drobnej kontroli.
+6. **Pełna bramka jakości pozostaje obowiązkowa.** Optymalizacja nie zwalnia z końcowych testów, przeglądu w przeglądarce i wymaganych recenzji przed wydaniem. Uwagi krytyczne i ważne trzeba poprawić, a kontrole powtórzyć.
+7. **Raportuj uczciwie zakres weryfikacji.** Zawsze rozdziel to, co faktycznie uruchomiono, od tego, czego jeszcze nie sprawdzono. Brak zasobów lub niedostępne środowisko nie może być przedstawiane jako zaliczony test.
+8. **Wyraźne polecenie właściciela ma pierwszeństwo.** Jeśli właściciel prosi o pełną weryfikację, dodatkowych agentów albo maksymalną dokładność na wcześniejszym etapie, wykonaj ją wtedy.
 
 ## Wygląd
 
@@ -116,6 +129,7 @@ Przy przepisach i temperaturach sprawdź bezpieczeństwo żywności. COSORI ma z
 
 - Alarm, wibracje i wake lock wymagają osobnego testu na fizycznym iPhonie/Safari/PWA.
 - Czasy, temperatury oraz kcal są redakcyjnymi wartościami orientacyjnymi.
+- Produkty w Mojej lodówce mogą mieć zdjęcie jako okrągłą ikonkę (IndexedDB `homecraft-photos`, klucz = nazwa produktu, poza kopią JSON).
 - „Moja lodówka” działa pod `#dom/fridge`: zapasy, terminy, minima, wartość i przekazywanie braków do Zakupów. Kontrola wydatków działa pod `#dom/expenses`: budżet miesięczny, transakcje i kategorie. Dane są rozdzielone na `homecraft.pantry.v1` i `homecraft.expenses.v1`, bez migracji istniejących kluczy.
 - Kitchen OS nadal zapisuje jedną aktywną sesję.
 

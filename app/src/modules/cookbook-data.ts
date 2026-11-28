@@ -1,5 +1,5 @@
 // Pure cookbook queries and validation; no browser dependencies.
-import { RECIPES, totalMinutes, handsMinutes } from './kitchen-data.ts';
+import { RECIPES, totalMinutes, handsMinutes, isCookbookLoaded } from './kitchen-data.ts';
 import type { Recipe } from './kitchen-types.ts';
 import type { CookbookInfo, CookbookRecipe } from './cookbook-recipes.ts';
 export const BOOK_KEY = 'homecraft.cookbook.favourites.v1';
@@ -39,9 +39,11 @@ export function filterRecipes(filters: BookFilters, favourites: readonly string[
   return favouriteDiff||diff||a.name.localeCompare(b.name,'pl')||a.id.localeCompare(b.id);
  });
 }
-export function parseFavourites(raw: string | null, known = new Set(RECIPES.map(r=>r.id))): string[] {
+/** `known` = valid recipe ids. Before the cookbook chunk is loaded, ids are only format-checked, so saved
+ *  favourites are never dropped just because the recipes have not arrived yet. */
+export function parseFavourites(raw: string | null, known: Set<string> | null = isCookbookLoaded() ? new Set(RECIPES.map(r=>r.id)) : null): string[] {
  try { const value:unknown=JSON.parse(raw||'null');
   if(!value||typeof value!=='object'||!('v' in value)||value.v!==1||!('ids' in value)||!Array.isArray(value.ids))return [];
-  return [...new Set(value.ids.filter((id:unknown):id is string=>typeof id==='string'&&known.has(id)))];
+  return [...new Set(value.ids.filter((id:unknown):id is string=>typeof id==='string'&&(known?known.has(id):/^[a-z0-9-]{1,40}$/.test(id))))];
  }catch{return [];}
 }

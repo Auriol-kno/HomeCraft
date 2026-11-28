@@ -5,6 +5,7 @@ import { DISHES, MODES, MODE_ORDER, FRYER_CATEGORIES, norm } from '../app/src/mo
 import { settingText, TM_CATEGORIES, TM_RECIPES } from '../app/src/modules/thermomix-data.ts';
 import { CATS, STAPLES, guessCat, parseEntry, listText } from '../app/src/modules/shopping-data.ts';
 import { convert, INGREDIENTS, eggSeconds, EGG_BOIL, FOODS, FOOD_CATEGORIES, METHODS, cToF, fToC, num, kitchenGrams } from '../app/src/modules/home-data.ts';
+import '../app/src/modules/cookbook-all.ts'; // registers the 600 lazily loaded cookbook recipes
 
 // --- Air Fryer: the 37 dishes of the original cheat sheet ---
 assert.equal(DISHES.length, 37);

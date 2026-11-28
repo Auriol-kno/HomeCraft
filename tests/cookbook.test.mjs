@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { RECIPES, schedule, totalMinutes, handsMinutes, PANKO_DINNER } from '../app/src/modules/kitchen-data.ts';
 import { bookInfo, recipeKcal, filterRecipes, EMPTY_FILTERS, parseFavourites, normalizeBook } from '../app/src/modules/cookbook-data.ts';
+import '../app/src/modules/cookbook-all.ts'; // registers the 600 lazily loaded cookbook recipes
 assert.equal(RECIPES.length,600);
 assert.equal(new Set(RECIPES.map(r=>r.id)).size,600);
 assert.equal(new Set(RECIPES.map(r=>r.name)).size,600);

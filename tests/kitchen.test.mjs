@@ -1,6 +1,7 @@
 // Unit tests for the Kitchen OS planner (pure TypeScript, no browser).
 import assert from 'node:assert/strict';
 import { PANKO_DINNER as R, RECIPES, schedule, status, totalMinutes, handsMinutes, defaultServeAt, earliestServeAt, timeToday, hhmm } from '../app/src/modules/kitchen-data.ts';
+import '../app/src/modules/cookbook-all.ts'; // registers the 600 lazily loaded cookbook recipes
 
 const MIN = 60000;
 const serve = new Date(2026, 10, 24, 18, 30).getTime();
