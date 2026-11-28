@@ -15,11 +15,11 @@ HomeCraft to polskojęzyczna, instalowalna PWA dla iPhone'a, napisana w React 19
 
 ## Aktualny produkt
 
-- Stałe dolne menu: **Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy**. Nie może znikać na ekranach modułów.
+- Stałe dolne menu: **Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy**. Nie może znikać na ekranach modułów. Menu działu nie jest drugim dolnym paskiem, tylko przewijanym rzędem zakładek pod nagłówkiem (`.section-nav`).
 - Kuchnia: ekran startowy, książka 600 przepisów, wyszukiwanie według składników, wejście do zakupów i planowania, Moja lodówka oraz kontrola wydatków.
 - Thermomix TM6: 65 własnych receptur do ręcznych ustawień (w tym 50 popularnych dodanych bez Cookidoo), timery i zasady używania.
 - Książka: polskie i światowe kuchnie, popularne diety, Air Fryer/TM6, kcal na porcję, oceny, historia, ulubione i rozkład czasu. Cały kafel otwiera przepis; ulubione są grupowane na początku wyników.
-- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja.
+- Napoje: Kawa, Parzenie, Sprzęt, Historia, Herbata i Fermentacja. W Sprzęcie jest „Mój sprzęt”: 5 młynków, 5 ekspresów kolbowych, parametry ze źródłami i harmonogram serwisu (`homecraft.coffeegear.v1`).
 - Air Fryer: 37 dań dla COSORI TurboBlaze 6 l, oś czasu, ulubione, timery i zasady używania.
 - TM6: przepisy, timery i zasady używania; aplikacja nie steruje urządzeniem.
 - Użyteczne: timery, stoper, jajka, czasy gotowania i miarki.
@@ -116,6 +116,7 @@ Przy przepisach i temperaturach sprawdź bezpieczeństwo żywności. COSORI ma z
 
 - Alarm, wibracje i wake lock wymagają osobnego testu na fizycznym iPhonie/Safari/PWA.
 - Czasy, temperatury oraz kcal są redakcyjnymi wartościami orientacyjnymi.
+- Produkty w Mojej lodówce mogą mieć zdjęcie jako okrągłą ikonkę (IndexedDB `homecraft-photos`, klucz = nazwa produktu, poza kopią JSON).
 - „Moja lodówka” działa pod `#dom/fridge`: zapasy, terminy, minima, wartość i przekazywanie braków do Zakupów. Kontrola wydatków działa pod `#dom/expenses`: budżet miesięczny, transakcje i kategorie. Dane są rozdzielone na `homecraft.pantry.v1` i `homecraft.expenses.v1`, bez migracji istniejących kluczy.
 - Kitchen OS nadal zapisuje jedną aktywną sesję.
 

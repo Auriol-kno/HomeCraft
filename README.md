@@ -11,6 +11,8 @@ Polskojęzyczny pomocnik kuchenny na iPhone'a (PWA, React + TypeScript + Vite), 
   - **Miarki:** przelicznik objętości i masy dla 30 produktów, tabela miarek, °C ↔ °F i bezpieczne temperatury mięs.
 - **Thermomix TM6:** 65 przepisów (15 dotychczasowych i 50 nowych popularnych receptur) z ustawieniami czasu, temperatury i obrotów do ręcznego ustawienia na urządzeniu, bez Cookidoo i bez internetu. Duże przyciski Przepisy / Timery / Zasady używania działają wewnątrz ekranu TM6; ich adresy `#dom/thermomix/recipes|timers|rules` obsługują odświeżenie oraz Wstecz/Dalej.
 - **Napoje:** Kawa, Parzenie, Sprzęt, Historia, 24 herbaty i napary oraz Fermentacja z przepisami, kalendarzem nastawów i dziennikiem.
+- **Mój sprzęt** (Napoje → Sprzęt → Mój sprzęt): wybór jednego z 5 młynków (Eureka Mignon Specialità, Niche Zero, DF64 Gen 2, Sage Smart Grinder Pro, 1Zpresso J-Ultra) i 5 ekspresów kolbowych (Gaggia Classic Pro E24, Rancilio Silvia V6, Sage Barista Express, Sage Bambino Plus, De'Longhi Dedica EC685): parametry ze źródłami, start espresso i harmonogram serwisu z „Zrobione dziś” i własnymi interwałami. Klucz `homecraft.coffeegear.v1`. Sprzęt Crema Lab (K-Pro, Lelit William, Lelit Anna) bez zmian.
+- **Zdjęcia produktów w Mojej lodówce:** zdjęcie (aparat lub galeria) staje się okrągłą ikonką produktu. Przycinane do 256 × 256 px JPEG, zapisywane w IndexedDB (`homecraft-photos`) według nazwy produktu, więc wraca przy ponownym dodaniu. Zdjęcia zostają na urządzeniu i nie trafiają do kopii JSON.
 - **Zaplanuj gotowanie (Kitchen OS, demo):** dostępne z Air Fryera i Kuchni. Plan liczy harmonogram wstecz od godziny podania, a widoki Przygotuj i Gotuj obsługują checklisty, zakupy, równoległe kroki i wspólne timery. Ustawienia urządzeń są do wpisania ręcznie; aplikacja nie steruje sprzętem.
 - **Zakupy:** lista zakupów z podziałem na działy sklepu, ilościami („2 l mleko”), odhaczaniem, szybkim dodawaniem częstych produktów, kopiowaniem/udostępnianiem i zapisem na urządzeniu.
 
@@ -141,7 +143,7 @@ zamkniętej aplikacji lub zablokowanym ekranie; wake lock zależy od wsparcia sy
 
 Stałe dolne menu: Kuchnia / Napoje / Fryer / TM6 / Użyteczne / Zakupy. Dawny dział
 Dom nosi nazwę **Kuchnia** i ma własny ekran startowy. Air Fryer oraz TM6 otwierają
-się bezpośrednio z dolnego paska; ich menu kontekstowe pojawia się nad nim. Zachowane
+się bezpośrednio z dolnego paska; ich menu kontekstowe to przewijany rząd zakładek pod nagłówkiem (od 28.11.2026 jest tylko jeden dolny pasek). Zachowane
 są stare adresy `#dom/...` i `#fryer/...` oraz wszystkie
 klucze localStorage; zmiana nazwy nie wymaga migracji. W EN sekcja to „Kitchen”,
 a filtr kuchni pochodzenia przepisów pozostaje „Cuisine”.
@@ -169,3 +171,7 @@ istniejący etap BROIL 230 °C / 4 min; przypomnienia osi zachowują dokładnoś
 
 ### Rozbudowana książka kucharska
 600 przepisów obejmuje kuchnie świata, polskie klasyki, popularne diety oraz 50 wypieków (20 ciast, 10 chlebów, 10 bułek i 10 innych wypieków). Oceny smaku 1–5, ulubione, historia przygotowań i sortowanie są lokalne. Trudność i wskaźnik składników są orientacyjne; przepisy nieprzetestowane w kuchni. Menu główne: Kuchnia, Napoje, Fryer, TM6, Użyteczne, Zakupy.
+
+## Ładowanie i pamięć offline
+
+600 przepisów książki jest w osobnym pliku (`app/src/modules/cookbook-all.ts`, ładowany przez `cookbook-load.ts`). Pobiera się chwilę po pierwszym ekranie albo od razu przy otwarciu książki; do tego czasu ulubione są sprawdzane tylko co do formatu, a zapisana sesja „Zaplanuj gotowanie” z przepisem z książki czeka na wczytanie i nie jest nadpisywana. Główny skrypt zmniejszył się o ok. 29%. Po wczytaniu, gdy urządzenie jest online, strona wysyła do service workera listę plików tej wersji, a ten usuwa starsze skrypty i style z `assets/` (zdjęcia zostają). Testy: `tests/lazy-cookbook.test.mjs`, `tests/coffee-gear.test.mjs`, `tests/gear-pantry-nav.cjs`.
